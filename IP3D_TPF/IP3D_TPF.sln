@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IP3D_TPF", "IP3D_TPF\IP3D_TPF.csproj", "{98B9E785-AFC1-4F83-9D02-4C1D40CDE4F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{98B9E785-AFC1-4F83-9D02-4C1D40CDE4F4}.Debug|x86.ActiveCfg = Debug|x86
+		{98B9E785-AFC1-4F83-9D02-4C1D40CDE4F4}.Debug|x86.Build.0 = Debug|x86
+		{98B9E785-AFC1-4F83-9D02-4C1D40CDE4F4}.Release|x86.ActiveCfg = Release|x86
+		{98B9E785-AFC1-4F83-9D02-4C1D40CDE4F4}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5F2A1750-74B6-4759-80AA-86F02ADBF788}
+	EndGlobalSection
+EndGlobal

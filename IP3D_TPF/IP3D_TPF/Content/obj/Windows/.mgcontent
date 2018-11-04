@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/jose_/Desktop/IP3D_TPFMeshModel2/IP3D_TPF/IP3D_TPF/Content/Sand.jpg</File>
+    <File>C:/Users/jose_/Desktop/IP3D_TPFMeshModel2/IP3D_TPF/IP3D_TPF/Content/lh3d1.jpg</File>
+    <File>C:/Users/jose_/Desktop/IP3D_TPFMeshModel2/IP3D_TPF/IP3D_TPF/Content/transferir.png</File>
+    <File>C:/Users/jose_/Desktop/IP3D_TPFMeshModel2/IP3D_TPF/IP3D_TPF/Content/transferir2.jpg</File>
+    <File>C:/Users/jose_/Desktop/IP3D_TPFMeshModel2/IP3D_TPF/IP3D_TPF/Content/Font.spritefont</File>
+    <File>C:/Users/jose_/Desktop/IP3D_TPFMeshModel2/IP3D_TPF/IP3D_TPF/Content/GridTexture.png</File>
+    <File>C:/Users/jose_/Desktop/IP3D_TPFMeshModel2/IP3D_TPF/IP3D_TPF/Content/sky2.jpg</File>
+    <File>C:/Users/jose_/Desktop/IP3D_TPFMeshModel2/IP3D_TPF/IP3D_TPF/Content/sky3.jpg</File>
+    <File>C:/Users/jose_/Desktop/IP3D_TPFMeshModel2/IP3D_TPF/IP3D_TPF/Content/sky4.png</File>
+    <File>C:/Users/jose_/Desktop/IP3D_TPFMeshModel2/IP3D_TPF/IP3D_TPF/Content/sky5.jpg</File>
+    <File>C:/Users/jose_/Desktop/IP3D_TPFMeshModel2/IP3D_TPF/IP3D_TPF/Content/Sun.DAE</File>
+    <File>C:/Users/jose_/Desktop/IP3D_TPFMeshModel2/IP3D_TPF/IP3D_TPF/Content/Sunteste.png</File>
+    <File>C:/Users/jose_/Desktop/IP3D_TPFMeshModel2/IP3D_TPF/IP3D_TPF/Content/TankUnity.FBX</File>
+  </SourceFiles>
+</SourceFileCollection>
