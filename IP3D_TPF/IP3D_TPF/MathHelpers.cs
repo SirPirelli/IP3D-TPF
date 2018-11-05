@@ -30,6 +30,30 @@ namespace IP3D_TPF
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="x1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y1"></param>
+        /// <param name="y2"></param>
+        /// <param name="weight11"></param>
+        /// <param name="weight21"></param>
+        /// <param name="weight12"></param>
+        /// <param name="weight22"></param>
+        /// <returns></returns>
+        /// //TENHO QUE FAZER A INTERPOLAÇAO PARA CADA PESO EM SEPARADO, PRIMEIRO X, Y E Z. NAO APENAS COMO VECTOR 3
+        public static Vector3 BiLerp(Vector3 pos, float x1, float x2, float y1, float y2, Vector3 weight11, Vector3 weight21, Vector3 weight12, Vector3 weight22)
+        {
+            Vector3 p1 = (((x2 - pos.X) * (y2 - pos.Y)) / ((x2 - x1) * (y2 - y1))) * weight11;
+            Vector3 p2 = (((pos.X - x1) * (y2 - pos.Y)) / ((x2 - x1) * (y2 - y1))) * weight21;
+            Vector3 p3 = (((x2 - pos.X) * (pos.Y - y1)) / ((x2 - x1) * (y2 - y1))) * weight12;
+            Vector3 p4 = (((pos.X - x1) * (pos.Y - y1)) / ((x2 - x1) * (y2 - y1))) * weight22;
+
+            return p1 + p2 + p3 + p4;
+        }
+
+        /// <summary>
         /// Calculates a normal vector.
         /// </summary>
         /// <param name="neighbourVectors">Array of Vector3 sorted clockwise around the point we want to know the normal of.</param>

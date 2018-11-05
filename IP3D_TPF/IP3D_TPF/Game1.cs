@@ -18,15 +18,14 @@ namespace IP3D_TPF
         FPSCounter fpsCounter;
         Texture2D sky;
         Texture2D CubeTexture;
-        Model tank;
-        MeshLoader tankLoader;
+        Model tankModel;
         Texture2D tankTexture;
         Texture2D tankTextureTurret;
 
-        Tank tanque;
+        Tank tank;
 
+        float aspectRatio;
 
-        VertexPositionColor[] debugNormal = new VertexPositionColor[2];
 
         public Game1()
         {
@@ -47,10 +46,11 @@ namespace IP3D_TPF
         protected override void Initialize()
         {
 
-            graphics.PreferredBackBufferWidth = 640;
-            graphics.PreferredBackBufferHeight =480;
+            graphics.PreferredBackBufferWidth = 896;
+            graphics.PreferredBackBufferHeight =504;
             graphics.ApplyChanges();
-            // TODO: Add your initialization logic here
+
+            aspectRatio = graphics.PreferredBackBufferWidth / graphics.PreferredBackBufferHeight;
 
             base.Initialize();
         }
@@ -68,23 +68,20 @@ namespace IP3D_TPF
             fpsCounter = new FPSCounter();
             fpsCounter.LoadContent(Content);
 
+            /* initialize terrain */
+            float planeLength = 2f;
+            float heightRatio = 0.08f;
+            Texture2D heightMapTex = Content.Load<Texture2D>("lh3d1");
+            Texture2D terrainTex = Content.Load<Texture2D>("GridTexture");
+            terrainGen = new TerrainGenerator(GraphicsDevice, planeLength, heightRatio, heightMapTex, terrainTex);
+
             /* load meshes */
             tankTexture = Content.Load<Texture2D>("engine_diff_tex");
             tankTextureTurret = Content.Load<Texture2D>("turret_alt_diff_tex");
             CubeTexture = Content.Load<Texture2D>("Sunteste");
-           // teapotModel = Content.Load<Model>("Sun");
-            tank = Content.Load<Model>("tank");
+            tankModel = Content.Load<Model>("tank");
             sky = Content.Load<Texture2D>("sky5");
-            //tankLoader = new MeshLoader(tank, new Vector3(300f, 40f, 200f));
-            tanque = new Tank(tank, new Vector3(300f, 40f, 200f), Vector3.Zero);
-
-            float planeLength = 10f;
-            float heightRatio = 0.4f;
-
-            /* initialize terrain */
-            Texture2D heightMapTex = Content.Load<Texture2D>("lh3d1");
-            Texture2D terrainTex = Content.Load<Texture2D>("GridTexture");
-            terrainGen = new TerrainGenerator(GraphicsDevice, planeLength, heightRatio, heightMapTex, terrainTex);
+            tank = new Tank(tankModel, new Vector3(50f, 40f, 50f), Vector3.Zero, terrainGen);
 
             /* initialize camera */
             Vector3 startCamPos = new Vector3(100f, 100f, 100f);
@@ -99,7 +96,7 @@ namespace IP3D_TPF
 
             inputs = new Inputs();
             //tankLoader.LoadContent();
-            tanque.LoadContent(Content);
+            tank.LoadContent(Content);
         }
 
         /// <summary>
@@ -126,7 +123,7 @@ namespace IP3D_TPF
             cam.Update(gameTime, terrainGen, inputs);
             fpsCounter.Update(gameTime);
             //tankLoader.Update(gameTime, cam, inputs, terrainGen);
-            tanque.Update(gameTime, inputs, cam);
+            tank.Update(gameTime, inputs, cam);
             
             base.Update(gameTime);
         }
@@ -146,9 +143,7 @@ namespace IP3D_TPF
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             
             terrainGen.Draw(GraphicsDevice, cam.ViewMatrix);
-            //  mesh.DrawModel( GraphicsDevice,teapotModel,Matrix.Identity* Matrix.CreateTranslation(2,23,2), cam.ViewMatrix, CubeTexture);
-            //tankLoader.DrawModel(GraphicsDevice, Matrix.Identity, cam.ViewMatrix, tankTexture,tankTextureTurret);
-            tanque.Draw(GraphicsDevice, Matrix.Identity, cam.ViewMatrix, tankTexture, tankTextureTurret);
+            tank.Draw(GraphicsDevice, Matrix.Identity, cam.ViewMatrix, tankTexture, tankTextureTurret, aspectRatio);
             fpsCounter.Draw(spriteBatch);
 
 

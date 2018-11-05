@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/jose_/Desktop/IP3D_TPFMeshModel2/IP3D_TPF/IP3D_TPF/Content/Font.spritefont</SourceFile>
+  <SourceFile>C:/Users/jose_/Desktop/EDJD/2 Ano/1 Semestre/Introdução à Programação 3D/IP3D - TPF/IP3D_TPFMeshModel2/IP3D - TPF/IP3D_TPF/IP3D_TPF/Content/Font.spritefont</SourceFile>
   <SourceTime>2017-03-01T15:05:30+00:00</SourceTime>
-  <DestFile>C:/Users/jose_/Desktop/IP3D_TPFMeshModel2/IP3D_TPF/IP3D_TPF/Content/bin/Windows/Font.xnb</DestFile>
-  <DestTime>2018-11-04T18:41:06.8411914+00:00</DestTime>
+  <DestFile>C:/Users/jose_/Desktop/EDJD/2 Ano/1 Semestre/Introdução à Programação 3D/IP3D - TPF/IP3D_TPFMeshModel2/IP3D - TPF/IP3D_TPF/IP3D_TPF/Content/bin/Windows/Font.xnb</DestFile>
+  <DestTime>2018-11-04T19:01:00.6367542+00:00</DestTime>
   <Importer>FontDescriptionImporter</Importer>
   <ImporterTime>2017-03-01T15:05:36+00:00</ImporterTime>
   <Processor>FontDescriptionProcessor</Processor>

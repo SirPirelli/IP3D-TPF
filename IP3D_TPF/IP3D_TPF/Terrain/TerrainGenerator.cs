@@ -414,12 +414,17 @@ namespace IP3D_TPF
             positions[3] = new Vector3(position.X + planeLength, position.Y, position.Z + planeLength);
 
             Vector3[] normals = new Vector3[4];
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 normals[i] = GetNormalAtVertice(positions[i]);
             }
 
-            return MathHelpersCls.Average(normals);
+            //tem que ser interpolaçao bilinear e nao apenas uma media
+            return new Vector3(MathHelpersCls.BiLerp(new Vector2(position.X, position.Z), position.X, positions[3].X, position.Z, positions[3].Z, normals[0].X, normals[1].X, normals[2].X, normals[3].X),
+                               MathHelpersCls.BiLerp(new Vector2(position.X, position.Z), position.X, positions[3].X, position.Z, positions[3].Z, normals[0].Y, normals[1].Y, normals[2].Y, normals[3].Y),
+                               MathHelpersCls.BiLerp(new Vector2(position.X, position.Z), position.X, positions[3].X, position.Z, positions[3].Z, normals[0].Z, normals[1].Z, normals[2].Z, normals[3].Z));
+
+            //return MathHelpersCls.Average(normals);
         }
 
         public Vector3 GetNormalAtVertice(Vector3 position)

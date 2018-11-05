@@ -26,7 +26,7 @@ namespace IP3D_TPF
 
         public abstract void Update(GameTime gameTime, Inputs inputs, Camera cam);
         public abstract void LoadContent(ContentManager content);
-        public abstract void Draw(GraphicsDevice graphics, Matrix world, Matrix view, Texture2D texture, Texture2D textureTurret);
+        public abstract void Draw(GraphicsDevice graphics, Matrix world, Matrix view, Texture2D texture, Texture2D textureTurret, float aspectRatio);
 
         /// <summary>
         /// Function that returns the Model's <see cref="WorldMatrix"/> based on class properties:<see cref="Rotation"/>, 

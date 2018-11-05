@@ -42,11 +42,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
-    <Compile Include="FPSCounter.cs" />
+    <Compile Include="Utilities\FPSCounter.cs" />
     <Compile Include="Terrain\HeightMap.cs" />
-    <Compile Include="Inputs.cs" />
+    <Compile Include="Utilities\Inputs.cs" />
     <Compile Include="MathHelpers.cs" />
-    <Compile Include="MeshLoader.cs" />
     <Compile Include="Models\ModelObject.cs" />
     <Compile Include="Models\Tank.cs" />
     <Compile Include="Terrain\TerrainGenerator.cs" />
