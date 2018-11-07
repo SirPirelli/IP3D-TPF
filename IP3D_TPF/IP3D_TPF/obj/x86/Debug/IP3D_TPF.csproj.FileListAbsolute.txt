@@ -355,3 +355,4 @@ C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP
 C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\obj\x86\Debug\IP3D_TPF.csproj.CopyComplete
 C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\obj\x86\Debug\IP3D_TPF.exe
 C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\obj\x86\Debug\IP3D_TPF.pdb
+C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\tankCorrected.xnb

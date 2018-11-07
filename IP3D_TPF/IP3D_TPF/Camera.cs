@@ -147,10 +147,10 @@ namespace IP3D_TPF
 
             /* Para nao termos de fazer a multiplicaçao do heightRatio todos os frames, podemos introduzir no heightMap logo os valores finais,
              * depois construimos outra vez o terreno. */
-            yA = heightMap.GetValueFromHeightMap(heightMap.GetIndexFromPosition(new Vector3(x1, 0, z1), planeLength)) * heightRatio;
-            yB = heightMap.GetValueFromHeightMap(heightMap.GetIndexFromPosition(new Vector3(x2, 0, z1), planeLength)) * heightRatio;
-            yC = heightMap.GetValueFromHeightMap(heightMap.GetIndexFromPosition(new Vector3(x1, 0, z2), planeLength)) * heightRatio;
-            yD = heightMap.GetValueFromHeightMap(heightMap.GetIndexFromPosition(new Vector3(x2, 0, z2), planeLength)) * heightRatio;
+            yA = heightMap.GetValueFromHeightMap(heightMap.CalculateIndexFromPosition(new Vector3(x1, 0, z1), planeLength)) * heightRatio;
+            yB = heightMap.GetValueFromHeightMap(heightMap.CalculateIndexFromPosition(new Vector3(x2, 0, z1), planeLength)) * heightRatio;
+            yC = heightMap.GetValueFromHeightMap(heightMap.CalculateIndexFromPosition(new Vector3(x1, 0, z2), planeLength)) * heightRatio;
+            yD = heightMap.GetValueFromHeightMap(heightMap.CalculateIndexFromPosition(new Vector3(x2, 0, z2), planeLength)) * heightRatio;
 
             return MathHelpersCls.BiLerp(new Vector2(x, z), x1, x2, z1, z2, yA, yB, yC, yD);
         }           

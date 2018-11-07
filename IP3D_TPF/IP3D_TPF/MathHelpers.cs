@@ -21,12 +21,21 @@ namespace IP3D_TPF
         /// <returns>Floating-point precision value.</returns>
         public static float BiLerp(Vector2 pos, float x1, float x2, float y1, float y2, float weight11, float weight21, float weight12, float weight22)
         {
+
             float p1 = (((x2 - pos.X) * (y2 - pos.Y)) / ((x2 - x1) * (y2 - y1))) * weight11;
             float p2 = (((pos.X - x1) * (y2 - pos.Y)) / ((x2 - x1) * (y2 - y1))) * weight21;
             float p3 = (((x2 - pos.X) * (pos.Y - y1)) / ((x2 - x1) * (y2 - y1))) * weight12;
             float p4 = (((pos.X - x1) * (pos.Y - y1)) / ((x2 - x1) * (y2 - y1))) * weight22;
 
             return p1 + p2 + p3 + p4;
+
+
+
+        }
+
+        public static float Lerp(float t, float v0, float v1)
+        {
+            return (1 - t) * v0 + t * v1;
         }
 
         /// <summary>
@@ -37,7 +46,7 @@ namespace IP3D_TPF
         /// <param name="x2"></param>
         /// <param name="y1"></param>
         /// <param name="y2"></param>
-        /// <param name="weight11"></param>
+        /// <param name="weight11"></param>3
         /// <param name="weight21"></param>
         /// <param name="weight12"></param>
         /// <param name="weight22"></param>
@@ -52,6 +61,7 @@ namespace IP3D_TPF
 
             return p1 + p2 + p3 + p4;
         }
+
 
         /// <summary>
         /// Calculates a normal vector.
@@ -104,7 +114,7 @@ namespace IP3D_TPF
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when numOfRows is less than one or other args less than 0.</exception>
         public static int CalculateIndex(int column, int row, int numOfRows)
         {
-            if (numOfRows < 1 || column < 0 || row < 0) throw new System.ArgumentOutOfRangeException();
+            if (numOfRows < 1 || column < 0 || row < 0 || row > numOfRows) throw new System.ArgumentOutOfRangeException();
             return column * numOfRows + row;
         }
 
@@ -121,8 +131,8 @@ namespace IP3D_TPF
                                (float)Math.Atan2(matrix.M21, matrix.M22));
         }
 
-        
-        }
+
     }
+}
 
 

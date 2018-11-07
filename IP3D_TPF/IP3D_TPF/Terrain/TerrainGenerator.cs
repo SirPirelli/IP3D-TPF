@@ -99,7 +99,18 @@ namespace IP3D_TPF
 
             }
 
-
+            /* DEBUG NORMALS */
+            //for (int j = 0; j < heightMap.Size.X; j++)
+            //{
+            //    for (int k = 0; k < heightMap.Size.Y; k++)
+            //    {
+            //        int index = MathHelpersCls.CalculateIndex(j, k, (int)heightMap.Size.X);
+            //        VertexPositionNormalTexture[] vertex = new VertexPositionNormalTexture[2];
+            //        vertex[0] = new VertexPositionNormalTexture(vertices[index].Position, Vector3.Zero, Vector2.Zero);
+            //        vertex[1] = new VertexPositionNormalTexture(vertices[index].Position + (vertices[index].Normal * 1f), Vector3.Zero, Vector2.One);
+            //        graphics.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.LineList, vertex, 0, 1);
+            //    }
+            //}
 
         }
 
@@ -413,21 +424,37 @@ namespace IP3D_TPF
             positions[2] = new Vector3(position.X, position.Y, position.Z + planeLength);
             positions[3] = new Vector3(position.X + planeLength, position.Y, position.Z + planeLength);
 
+            for(int j = 0; j < 4; j++)
+            {
+                Vector2 vec = heightMap.GetNearRightVertice(positions[j], planeLength);
+                positions[j].X = vec.X;
+                positions[j].Z = vec.Y;
+            }
+
             Vector3[] normals = new Vector3[4];
             for (int i = 0; i < 4; i++)
             {
                 normals[i] = GetNormalAtVertice(positions[i]);
+                normals[i].Normalize();
             }
 
             //tem que ser interpolaçao bilinear e nao apenas uma media
-            return new Vector3(MathHelpersCls.BiLerp(new Vector2(position.X, position.Z), position.X, positions[3].X, position.Z, positions[3].Z, normals[0].X, normals[1].X, normals[2].X, normals[3].X),
-                               MathHelpersCls.BiLerp(new Vector2(position.X, position.Z), position.X, positions[3].X, position.Z, positions[3].Z, normals[0].Y, normals[1].Y, normals[2].Y, normals[3].Y),
-                               MathHelpersCls.BiLerp(new Vector2(position.X, position.Z), position.X, positions[3].X, position.Z, positions[3].Z, normals[0].Z, normals[1].Z, normals[2].Z, normals[3].Z));
+            return new Vector3(MathHelpersCls.BiLerp(new Vector2(position.X, position.Z), positions[0].X, positions[3].X, positions[0].Z, positions[3].Z, normals[0].X, normals[1].X, normals[2].X, normals[3].X),
+                               MathHelpersCls.BiLerp(new Vector2(position.X, position.Z), positions[0].X, positions[3].X, positions[0].Z, positions[3].Z, normals[0].Y, normals[1].Y, normals[2].Y, normals[3].Y),
+                               MathHelpersCls.BiLerp(new Vector2(position.X, position.Z), positions[0].X, positions[3].X, positions[0].Z, positions[3].Z, normals[0].Z, normals[1].Z, normals[2].Z, normals[3].Z));
         }
 
         public Vector3 GetNormalAtVertice(Vector3 position)
         {
-            return vertices[heightMap.GetIndexFromPosition(position, PlaneLength)].Normal;
+            try
+            {
+                return vertices[heightMap.CalculateIndexFromPosition(position, PlaneLength)].Normal;
+            }
+            catch (Exception e)
+            {
+                e.Data.ToString();
+                return Vector3.UnitY;
+            }
         }
 
     }

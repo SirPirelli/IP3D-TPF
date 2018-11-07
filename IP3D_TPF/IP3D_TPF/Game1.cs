@@ -56,35 +56,36 @@ namespace IP3D_TPF
         /// all of your content.
         /// </summary>
         protected override void LoadContent()
-        {
-            //mesh = new MeshLoader();
-         
+        {         
             spriteBatch = new SpriteBatch(GraphicsDevice);
             
+            /* FPS COUNTER */
             fpsCounter = new FPSCounter();
             fpsCounter.LoadContent(Content);
+            /*--------------------*/
 
             /* initialize terrain */
-            float planeLength = 1f;
-            float heightRatio = 0.08f;
+            float planeLength = 10f;
+            float heightRatio = 0.4f;
             Texture2D heightMapTex = Content.Load<Texture2D>("lh3d1");
             Texture2D terrainTex = Content.Load<Texture2D>("GridTexture");
             terrainGen = new TerrainGenerator(GraphicsDevice, planeLength, heightRatio, heightMapTex, terrainTex);
+            /* ----------------------------------- */
 
             /* load meshes */
             CubeTexture = Content.Load<Texture2D>("Sunteste");
             tankModel = Content.Load<Model>("tank");
             sky = Content.Load<Texture2D>("sky5");
 
-            tank = new Tank(tankModel, new Vector3(50f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 1);
+            tank = new Tank(tankModel, new Vector3(139.5f, 40f, 99.5f), Vector3.Zero, terrainGen, 0.008f, 1);
 
             /* initialize camera */
-            Vector3 startCamPos = new Vector3(100f, 100f, 100f);
-            Vector3 camTarget = new Vector3(300f, 70f, 220f);
+            Vector3 startCamPos = new Vector3(50f, 30f, 68f);
+            Vector3 camTarget = new Vector3(50f, 10f, 50f);
             Vector2 viewportCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
             float radiansPP = MathHelper.Pi / 1000f;
-            float camVelocity = 200f;
-            float offsetY = 25f;
+            float camVelocity = 50f;
+            float offsetY = 5f;
 
             cam = new Camera(startCamPos, camTarget, viewportCenter, radiansPP, camVelocity, terrainGen, offsetY);
             /*-------------------------------------*/

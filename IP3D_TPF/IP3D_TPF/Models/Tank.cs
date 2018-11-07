@@ -27,6 +27,9 @@ namespace IP3D_TPF.Models
 
         int player;
 
+        Matrix previousRotation;
+        float deltaTime = 0f;
+
         public int Player { get { return player; } }
 
 
@@ -38,7 +41,7 @@ namespace IP3D_TPF.Models
             WorldMatrix = this.Translation * this.Rotation;
             this.terrain = terrain;
             this.Scale = Matrix.CreateScale(scale);
-            moveVelocity = 5f;
+            moveVelocity = 10f;
 
             if (playerNum > 2 || playerNum < 1) throw new ArgumentOutOfRangeException("player");
             else this.player = playerNum;
@@ -72,6 +75,9 @@ namespace IP3D_TPF.Models
 
         public override void Update(GameTime gameTime, Inputs inputs, Camera cam)
         {
+            bool positionMoved = false;
+
+
             KeyboardState kb = inputs.currentKeyboardState;
             //Inicialização das matrizes de translação e de rotação
 
@@ -117,57 +123,58 @@ namespace IP3D_TPF.Models
 
             if (kb.IsKeyDown(Keys.W))
             {
+                positionMoved = true;
                 //Translation equivale a uma translação, sendo o seu vector de translação o nosso vector mundo, mais especificamente o vector que define a componente de traseira do mundo
-                pos -= moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                pos += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
             if (kb.IsKeyDown(Keys.S))
             {
+                positionMoved = true;
                 //Translation equivale a uma translação, sendo o seu vector de translação o nosso vector mundo, mais especificamente o vector que define a frente do mundo
-                pos += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                pos -= moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
+
+            
 
             amount = MathHelper.Clamp(amount, -1.5f, 1.5f);
             amountCannon = MathHelper.Clamp(amountCannon, -1f, -0.3f);
 
 
             /* RODAR O TANQUE CONFORME O TERRENO */
-            var normal = terrain.GetNormalAtPosition(WorldMatrix.Translation); normal.Normalize();
-            var forward = Vector3.Cross(Vector3.Transform(Vector3.UnitX, Matrix.CreateRotationY(yaw)), normal); forward.Normalize();
+            Vector3 normal = terrain.GetNormalAtPosition(WorldMatrix.Translation); normal.Normalize();
+
+            var forward = Vector3.Cross(Vector3.Transform(Vector3.UnitX, Matrix.CreateRotationY(yaw)), normal); /*forward = -forward;*/ forward.Normalize();
             var right = Vector3.Cross(forward, normal); right.Normalize();
 
             //No final de cada frame equalizamos a nossa matriz à função getWorldMatrixPosition(), que nos multiplica rotation pela Worldmatrix+translation, nesta ordem especifica
             Rotation.Up = normal;
-            //Rotation.Down = -normal;
-            Rotation.Forward = forward;
+            //Rotation.Down = -normal; 
+            Rotation.Forward = -forward;
             //Rotation.Backward = -forward;
-            Rotation.Right = right;
+            Rotation.Right = -right;
             //Rotation.Left = -right;
+
             Translation = Matrix.CreateTranslation(Rotation.Forward * pos);
 
             WorldMatrix = GetWorldMatrix();
 
             float height = cam.CalculateHeightOfTerrain(WorldMatrix.Translation);
             Vector3 trans = WorldMatrix.Translation;
+            trans.X = MathHelper.Clamp(trans.X, 0, terrain.TerrainBounds.X - terrain.PlaneLength - (terrain.PlaneLength/2f));
+            trans.Z = MathHelper.Clamp(trans.Z, 0, terrain.TerrainBounds.Y - terrain.PlaneLength - (terrain.PlaneLength/2f));
             trans.Y = height + 0.1f;
             WorldMatrix.Translation = trans;
-
 
             WorldMatrix.Up = normal;
             WorldMatrix.Forward = forward;
             WorldMatrix.Right = right;
-            WorldMatrix.Down = -normal;
-            WorldMatrix.Left = -right;
-            WorldMatrix.Backward = -forward;
+            //WorldMatrix.Down = -normal;
+            //WorldMatrix.Left = -right;
+            //WorldMatrix.Backward = -forward;
 
             WorldMatrix = Scale * WorldMatrix;
 
-
-        }
-
-        /* as texturas a utilizar guardamos no objecto, e nao no game. Depois mudar */
-        public override void Draw(GraphicsDevice graphics, Matrix world, Matrix view, float aspectRatio)
-        {
             Model.Root.Transform = WorldMatrix;
             Model.Bones["turret_geo"].Transform = -turretTransform + Matrix.CreateRotationY(amount) + Matrix.CreateTranslation(new Vector3(0f, 450f, -80));
             Model.Bones["canon_geo"].Transform = cannonTransform + Matrix.CreateRotationX(amountCannon) + Matrix.CreateTranslation(new Vector3(0, 200f, 140));
@@ -176,6 +183,13 @@ namespace IP3D_TPF.Models
 
             Model.CopyAbsoluteBoneTransformsTo(BoneTransforms);
 
+
+        }
+
+        /* as texturas a utilizar guardamos no objecto, e nao no game. Depois mudar */
+        public override void Draw(GraphicsDevice graphics, Matrix world, Matrix view, float aspectRatio)
+        {
+            
             foreach (ModelMesh mesh in Model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
@@ -201,6 +215,12 @@ namespace IP3D_TPF.Models
                         //    pass.Apply();
                         //}
 
+                        /* debug normals */
+                        VertexPositionNormalTexture[] debug = new VertexPositionNormalTexture[2];
+                        debug[0] = new VertexPositionNormalTexture(WorldMatrix.Translation, Vector3.Zero, Vector2.Zero);
+                        debug[1] = new VertexPositionNormalTexture(WorldMatrix.Translation + Rotation.Forward * 20f, Vector3.Zero, Vector2.UnitX);
+                        graphics.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.LineList, debug, 0, 1);
+                        /* ----------------------------------------------------------------------------------------------------------------------------*/
 
                         effect.LightingEnabled = true;
 
@@ -217,7 +237,7 @@ namespace IP3D_TPF.Models
 
                         mesh.Draw();
 
-                    }
+                    }                  
                 }
             }
         }
