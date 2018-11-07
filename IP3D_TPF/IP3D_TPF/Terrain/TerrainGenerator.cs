@@ -423,8 +423,6 @@ namespace IP3D_TPF
             return new Vector3(MathHelpersCls.BiLerp(new Vector2(position.X, position.Z), position.X, positions[3].X, position.Z, positions[3].Z, normals[0].X, normals[1].X, normals[2].X, normals[3].X),
                                MathHelpersCls.BiLerp(new Vector2(position.X, position.Z), position.X, positions[3].X, position.Z, positions[3].Z, normals[0].Y, normals[1].Y, normals[2].Y, normals[3].Y),
                                MathHelpersCls.BiLerp(new Vector2(position.X, position.Z), position.X, positions[3].X, position.Z, positions[3].Z, normals[0].Z, normals[1].Z, normals[2].Z, normals[3].Z));
-
-            //return MathHelpersCls.Average(normals);
         }
 
         public Vector3 GetNormalAtVertice(Vector3 position)

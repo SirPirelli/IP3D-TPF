@@ -9,21 +9,34 @@ using System.Threading.Tasks;
 namespace IP3D_TPF
 {
     //nesta classe é q temos q ter metodos para confirmar se uma tecla esta a ser pressionada
-    class Inputs
+    public class Inputs
     {
 
-        KeyboardState keyboardState;
-        MouseState mouseState;
+        public KeyboardState currentKeyboardState;
+        KeyboardState previousKeyboardState;
 
-        public KeyboardState KeyboardState { get { return keyboardState; } }
-        public MouseState MouseState { get { return mouseState; } }
+        public MouseState currentMouseState;
+        MouseState previousMouseState;
 
-        public Inputs() { }
-
-        public void Update(GameTime gameTime)
+        public Inputs()
         {
-            keyboardState = Keyboard.GetState();
-            mouseState = Mouse.GetState();
+            currentKeyboardState = Keyboard.GetState();
+            currentMouseState = Mouse.GetState();
+        }
+
+
+        public void Update()
+        {
+
+            previousKeyboardState = currentKeyboardState;
+            previousMouseState = currentMouseState;
+
+            currentKeyboardState = Keyboard.GetState();
+            currentMouseState = Mouse.GetState();
+
+
         }
     }
+
+
 }

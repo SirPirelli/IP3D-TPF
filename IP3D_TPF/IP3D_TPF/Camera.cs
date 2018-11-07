@@ -75,8 +75,8 @@ namespace IP3D_TPF
         {
 
             Vector3 direction;
-            KeyboardState keyboardState = inputs.KeyboardState;
-            MouseState mouseState = inputs.MouseState;
+            KeyboardState keyboardState = inputs.currentKeyboardState;
+            MouseState mouseState = inputs.currentMouseState;
 
             //System.Diagnostics.Debug.WriteLine("MousePos: " + mouseState.Position);
             //System.Diagnostics.Debug.WriteLine("ViewCenter: " + viewportCenter);

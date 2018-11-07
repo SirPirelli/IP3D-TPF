@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -23,10 +18,12 @@ namespace IP3D_TPF
         public Matrix WorldMatrix;
         public Matrix Translation;
         public Matrix Rotation;
+        public Matrix Scale;
+
 
         public abstract void Update(GameTime gameTime, Inputs inputs, Camera cam);
         public abstract void LoadContent(ContentManager content);
-        public abstract void Draw(GraphicsDevice graphics, Matrix world, Matrix view, Texture2D texture, Texture2D textureTurret, float aspectRatio);
+        public abstract void Draw(GraphicsDevice graphics, Matrix world, Matrix view, float aspectRatio);
 
         /// <summary>
         /// Function that returns the Model's <see cref="WorldMatrix"/> based on class properties:<see cref="Rotation"/>, 
@@ -34,9 +31,9 @@ namespace IP3D_TPF
         /// 
         /// </summary>
         /// <returns></returns>
-        internal virtual Matrix GetWorldMatrixPosition()
+        internal virtual Matrix GetWorldMatrix()
         {
-            return Rotation * WorldMatrix * Translation;
+            return (Rotation * WorldMatrix * Translation);
         }
     }
 }

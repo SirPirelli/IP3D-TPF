@@ -19,8 +19,6 @@ namespace IP3D_TPF
         Texture2D sky;
         Texture2D CubeTexture;
         Model tankModel;
-        Texture2D tankTexture;
-        Texture2D tankTextureTurret;
 
         Tank tank;
 
@@ -30,10 +28,7 @@ namespace IP3D_TPF
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-      
-            
-          
+            Content.RootDirectory = "Content";   
 
         }
 
@@ -46,11 +41,12 @@ namespace IP3D_TPF
         protected override void Initialize()
         {
 
-            graphics.PreferredBackBufferWidth = 896;
-            graphics.PreferredBackBufferHeight =504;
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight =720;
+            graphics.GraphicsProfile = GraphicsProfile.HiDef;
             graphics.ApplyChanges();
 
-            aspectRatio = graphics.PreferredBackBufferWidth / graphics.PreferredBackBufferHeight;
+            aspectRatio = (float)graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight;
 
             base.Initialize();
         }
@@ -69,25 +65,24 @@ namespace IP3D_TPF
             fpsCounter.LoadContent(Content);
 
             /* initialize terrain */
-            float planeLength = 2f;
+            float planeLength = 1f;
             float heightRatio = 0.08f;
             Texture2D heightMapTex = Content.Load<Texture2D>("lh3d1");
             Texture2D terrainTex = Content.Load<Texture2D>("GridTexture");
             terrainGen = new TerrainGenerator(GraphicsDevice, planeLength, heightRatio, heightMapTex, terrainTex);
 
             /* load meshes */
-            tankTexture = Content.Load<Texture2D>("engine_diff_tex");
-            tankTextureTurret = Content.Load<Texture2D>("turret_alt_diff_tex");
             CubeTexture = Content.Load<Texture2D>("Sunteste");
             tankModel = Content.Load<Model>("tank");
             sky = Content.Load<Texture2D>("sky5");
-            tank = new Tank(tankModel, new Vector3(50f, 40f, 50f), Vector3.Zero, terrainGen);
+
+            tank = new Tank(tankModel, new Vector3(50f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 1);
 
             /* initialize camera */
             Vector3 startCamPos = new Vector3(100f, 100f, 100f);
             Vector3 camTarget = new Vector3(300f, 70f, 220f);
             Vector2 viewportCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
-            float radiansPP = MathHelper.Pi / 750f;
+            float radiansPP = MathHelper.Pi / 1000f;
             float camVelocity = 200f;
             float offsetY = 25f;
 
@@ -119,7 +114,7 @@ namespace IP3D_TPF
                 Exit();
 
             // TODO: Add your update logic here
-            inputs.Update(gameTime);
+            inputs.Update();
             cam.Update(gameTime, terrainGen, inputs);
             fpsCounter.Update(gameTime);
             //tankLoader.Update(gameTime, cam, inputs, terrainGen);
@@ -143,7 +138,7 @@ namespace IP3D_TPF
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             
             terrainGen.Draw(GraphicsDevice, cam.ViewMatrix);
-            tank.Draw(GraphicsDevice, Matrix.Identity, cam.ViewMatrix, tankTexture, tankTextureTurret, aspectRatio);
+            tank.Draw(GraphicsDevice, Matrix.Identity, cam.ViewMatrix, aspectRatio);
             fpsCounter.Draw(spriteBatch);
 
 
