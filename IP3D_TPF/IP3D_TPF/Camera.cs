@@ -71,12 +71,12 @@ namespace IP3D_TPF
         }
         #endregion
 
-        public void Update(GameTime gameTime, TerrainGenerator terrain, Inputs inputs)
+        public void Update(GameTime gameTime, TerrainGenerator terrain)
         {
 
-            Vector3 direction;
-            KeyboardState keyboardState = inputs.currentKeyboardState;
-            MouseState mouseState = inputs.currentMouseState;
+            Vector3         direction;
+            KeyboardState   keyboardState   =   Game1.inputs.CurrentKeyboardState;
+            MouseState      mouseState      =   Game1.inputs.CurrentMouseState;
 
             //System.Diagnostics.Debug.WriteLine("MousePos: " + mouseState.Position);
             //System.Diagnostics.Debug.WriteLine("ViewCenter: " + viewportCenter);

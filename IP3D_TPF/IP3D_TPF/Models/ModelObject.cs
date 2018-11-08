@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿/* Created by José Pereira on 06/11/2018 
+    jose_miguel_pereira@hotmail.com        */
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,20 +13,28 @@ namespace IP3D_TPF
     /// </summary>
     abstract class ModelObject
     {
+
+
         public Model Model { get; internal set; }
         /// <summary>
         /// Matrix array to store all the Bone Transforms of the <see cref="Microsoft.Xna.Framework.Graphics.Model"/>
         /// </summary>
-        public Matrix[] BoneTransforms;
-        public Matrix WorldMatrix;
-        public Matrix Translation;
-        public Matrix Rotation;
-        public Matrix Scale;
+        public Matrix[] BoneTransforms { get;protected set; }
+        public Matrix WorldMatrix { get;protected set; }
+        public Matrix Translation { get;protected set; }
+        public Matrix Rotation { get;protected set; }
+        public Matrix Scale { get;protected set; }
 
+        protected TerrainGenerator Terrain { get; set; }
 
-        public abstract void Update(GameTime gameTime, Inputs inputs, Camera cam);
+        protected float yaw, pitch, roll;
+
+        public Vector3 GetPosition { get { return Translation.Translation; } }
+
+        public abstract void Update(GameTime gameTime, Camera cam);
         public abstract void LoadContent(ContentManager content);
         public abstract void Draw(GraphicsDevice graphics, Matrix world, Matrix view, float aspectRatio);
+
 
         /// <summary>
         /// Function that returns the Model's <see cref="WorldMatrix"/> based on class properties:<see cref="Rotation"/>, 
@@ -31,9 +42,9 @@ namespace IP3D_TPF
         /// 
         /// </summary>
         /// <returns></returns>
-        internal virtual Matrix GetWorldMatrix()
+        internal protected virtual Matrix GetWorldMatrix()
         {
-            return (Rotation * WorldMatrix * Translation);
+            return  (Rotation * WorldMatrix * Translation);
         }
     }
 }

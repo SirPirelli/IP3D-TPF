@@ -1,4 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿/* Created by José Pereira and Igor Lima */
+
+
+/* TO DO: 
+ * 
+ * - Na class Tank, implementar os restantes inputs para o jogador 2;
+ * - Camera System, para gerir a camara apresentada;
+ * - Player Manager (?);
+ * 
+ * */
+
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using IP3D_TPF.Models;
@@ -12,24 +24,22 @@ namespace IP3D_TPF
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        TerrainGenerator terrainGen;
-        Camera cam;
-        Inputs inputs;
         FPSCounter fpsCounter;
-        Texture2D sky;
-        Texture2D CubeTexture;
-        Model tankModel;
-
-        Tank tank;
+        public static Inputs inputs;
 
         float aspectRatio;
 
+        TerrainGenerator terrainGen;
+        Camera cam;
+        Tank tank;
+        Tank tank2;
+
+        Texture2D sky;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";   
-
         }
 
         /// <summary>
@@ -65,19 +75,20 @@ namespace IP3D_TPF
             /*--------------------*/
 
             /* initialize terrain */
-            float planeLength = 10f;
-            float heightRatio = 0.4f;
+            float planeLength = 1f;
+            float heightRatio = 0.06f;
             Texture2D heightMapTex = Content.Load<Texture2D>("lh3d1");
             Texture2D terrainTex = Content.Load<Texture2D>("GridTexture");
             terrainGen = new TerrainGenerator(GraphicsDevice, planeLength, heightRatio, heightMapTex, terrainTex);
             /* ----------------------------------- */
 
             /* load meshes */
-            CubeTexture = Content.Load<Texture2D>("Sunteste");
-            tankModel = Content.Load<Model>("tank");
+            Texture2D CubeTexture = Content.Load<Texture2D>("Sunteste");
+            Model tankModel = Content.Load<Model>("tank");
             sky = Content.Load<Texture2D>("sky5");
 
-            tank = new Tank(tankModel, new Vector3(139.5f, 40f, 99.5f), Vector3.Zero, terrainGen, 0.008f, 1);
+            tank = new Tank(tankModel, new Vector3(50f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 15f, 1);
+            tank2 = new Tank(tankModel, new Vector3(90f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 15f, 2);
 
             /* initialize camera */
             Vector3 startCamPos = new Vector3(50f, 30f, 68f);
@@ -91,8 +102,8 @@ namespace IP3D_TPF
             /*-------------------------------------*/
 
             inputs = new Inputs();
-            //tankLoader.LoadContent();
             tank.LoadContent(Content);
+            tank2.LoadContent(Content);
         }
 
         /// <summary>
@@ -116,11 +127,11 @@ namespace IP3D_TPF
 
             // TODO: Add your update logic here
             inputs.Update();
-            cam.Update(gameTime, terrainGen, inputs);
+            cam.Update(gameTime, terrainGen);
             fpsCounter.Update(gameTime);
-            //tankLoader.Update(gameTime, cam, inputs, terrainGen);
-            tank.Update(gameTime, inputs, cam);
-            
+            tank.Update(gameTime, cam);
+            tank2.Update(gameTime, cam);
+
             base.Update(gameTime);
         }
 
@@ -131,17 +142,20 @@ namespace IP3D_TPF
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Gray);
+
             spriteBatch.Begin();
             spriteBatch.Draw(sky, Vector2.Zero, Color.White);
             spriteBatch.End();
+
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+
             
             terrainGen.Draw(GraphicsDevice, cam.ViewMatrix);
             tank.Draw(GraphicsDevice, Matrix.Identity, cam.ViewMatrix, aspectRatio);
+            tank2.Draw(GraphicsDevice, Matrix.Identity, cam.ViewMatrix, aspectRatio);
             fpsCounter.Draw(spriteBatch);
-
 
             base.Draw(gameTime);
         }

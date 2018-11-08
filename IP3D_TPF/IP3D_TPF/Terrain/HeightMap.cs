@@ -76,12 +76,5 @@ namespace IP3D_TPF
             return indexX * (int)size.Y + indexY;
         }
 
-        public Vector2 GetNearRightVertice(Vector3 position, float planeLength)
-        {
-            float x = position.X - (position.X % planeLength);
-            float z = position.Z - (position.Z % planeLength);
-
-            return new Vector2(x, z);
-        }
     }
 }

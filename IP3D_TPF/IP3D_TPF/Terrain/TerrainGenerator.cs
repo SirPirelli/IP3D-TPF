@@ -15,7 +15,7 @@ namespace IP3D_TPF
         VertexBuffer vertexBuffer;
         int vertexCount;
         IndexBuffer indexBuffer;
-        int primitiveCount;
+        readonly int primitiveCount;
 
         BasicEffect effect;
         HeightMap heightMap;
@@ -406,8 +406,6 @@ namespace IP3D_TPF
             // Calcula a aspectRatio, a view matrix e a projeção
             float aspectRatio = (float)graphics.Viewport.Width / graphics.Viewport.Height;
 
-            //effect.View = Matrix.CreateLookAt(new Vector3(0f, 200f, 800f), Vector3.Zero, Vector3.Up);
-
             effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), aspectRatio, 0.1f, 2000.0f);
             effect.World = worldMatrix;
             effect.VertexColorEnabled = false;
@@ -426,7 +424,7 @@ namespace IP3D_TPF
 
             for(int j = 0; j < 4; j++)
             {
-                Vector2 vec = heightMap.GetNearRightVertice(positions[j], planeLength);
+                Vector2 vec = GetNearRightVertice(positions[j]);
                 positions[j].X = vec.X;
                 positions[j].Z = vec.Y;
             }
@@ -455,6 +453,14 @@ namespace IP3D_TPF
                 e.Data.ToString();
                 return Vector3.UnitY;
             }
+        }
+
+        public Vector2 GetNearRightVertice(Vector3 position)
+        {
+            float x = position.X - (position.X % planeLength);
+            float z = position.Z - (position.Z % planeLength);
+
+            return new Vector2(x, z);
         }
 
     }

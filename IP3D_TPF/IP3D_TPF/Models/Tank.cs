@@ -11,55 +11,47 @@ using Microsoft.Xna.Framework.Input;
 
 namespace IP3D_TPF.Models
 {
-    class Tank : ModelObject
+    class Tank : ModelObject, IPlayer
     {
-        TerrainGenerator terrain;
+        /* FIELDS */
+        private int player;
 
-        ModelBone turretBone;
-        ModelBone cannonBone;
-        Texture2D tankTexture, tankTurretTexture;
+        ModelBone   turretBone, cannonBone;
 
-        Matrix turretTransform;
-        Matrix cannonTransform;
+        Texture2D   tankTexture, tankTurretTexture;
 
-        float amount, amountCannon, yaw, pitch, roll, rotationVelocity, pos,
-              moveVelocity;
+        Matrix      turretTransform, cannonTransform;
 
-        int player;
+        float       turretRot, cannonPitch,
+                    rotationVelocity, forwardMoveRatio,
+                    moveVelocity, rotationVelocityFactor;
 
-        Matrix previousRotation;
-        float deltaTime = 0f;
+        /* ------------------------------------------*/
+        public int Player { get => player; protected set { player = value; } }
 
-        public int Player { get { return player; } }
+        /* -----------------------------------------------*/
 
-
-        public Tank(Model model, Vector3 startPosition, Vector3 rotation, TerrainGenerator terrain, float scale, int playerNum)
+        public Tank(Model model, Vector3 startPosition, Vector3 rotation, TerrainGenerator terrain, float scale, float moveVelocity, int playerNum)
         {
             Model = model;
             Translation = Matrix.CreateTranslation(startPosition);
             Rotation = Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z);
             WorldMatrix = this.Translation * this.Rotation;
-            this.terrain = terrain;
+            base.Terrain = terrain;
             this.Scale = Matrix.CreateScale(scale);
-            moveVelocity = 10f;
+            this.moveVelocity = moveVelocity;
+            rotationVelocityFactor = 50f;
 
+            //player construtor
             if (playerNum > 2 || playerNum < 1) throw new ArgumentOutOfRangeException("player");
-            else this.player = playerNum;
+            else Player = playerNum;
+            /*--------------------------*/
         }
 
         public override void LoadContent(ContentManager content)
         {
-            switch(player)
-            {
-                case 1:
-                    tankTexture = content.Load<Texture2D>("engine_diff_tex");
-                    tankTurretTexture = content.Load<Texture2D>("turret_alt_diff_tex");
-                    break;
-
-                case 2:
-                    //diferentes texturas
-                    break;
-            }
+            tankTexture = content.Load<Texture2D>("engine_diff_tex");
+            tankTurretTexture = content.Load<Texture2D>("turret_alt_diff_tex");
 
 
             turretBone = Model.Bones["turret_geo"];
@@ -70,126 +62,41 @@ namespace IP3D_TPF.Models
 
             BoneTransforms = new Matrix[Model.Bones.Count];
 
-            yaw = pitch = roll = pos = 0f;
+            base.yaw = base.pitch = base.roll = forwardMoveRatio = 0f;
         }
 
-        public override void Update(GameTime gameTime, Inputs inputs, Camera cam)
+        public override void Update(GameTime gameTime, Camera cam)
         {
-            bool positionMoved = false;
+            //update fields
+            rotationVelocity = (float)gameTime.ElapsedGameTime.TotalSeconds * MathHelper.PiOver2 * rotationVelocityFactor;
+            forwardMoveRatio = 0f;
+            /* ----------------*/
 
 
-            KeyboardState kb = inputs.currentKeyboardState;
-            //Inicialização das matrizes de translação e de rotação
+            UpdateInputs(Game1.inputs, gameTime);
 
-            rotationVelocity = (float)gameTime.ElapsedGameTime.TotalSeconds * MathHelper.PiOver2;
-            pos = 0f;
+            CalculateAndSetRotationVectors();
 
-            //Inicialização do keyboardState
-            kb = Keyboard.GetState();
+            Translation = Matrix.CreateTranslation(Rotation.Forward * forwardMoveRatio);
 
-            if (kb.IsKeyDown(Keys.Q))
-            {
-                amount += 0.04f;
-            }
+            WorldMatrix = CalculateWorldMatrix(cam);
 
-            if (kb.IsKeyDown(Keys.E))
-            {
-                amount -= 0.04f;
-            }
-
-
-            if (kb.IsKeyDown(Keys.T))
-            {
-                amountCannon += 0.04f;
-            }
-
-            if (kb.IsKeyDown(Keys.Y))
-            {
-                amountCannon -= 0.04f;
-            }
-
-
-            if (kb.IsKeyDown(Keys.A))
-            {
-                //Rotation equivale a uma rotação sobre o eixo Y 
-                yaw += rotationVelocity;
-            }
-
-            if (kb.IsKeyDown(Keys.D))
-            {
-                //Rotation equivale a uma rotação sobre o eixo Y ,desta vez de valor negativo
-                yaw -= rotationVelocity;
-            }
-
-            if (kb.IsKeyDown(Keys.W))
-            {
-                positionMoved = true;
-                //Translation equivale a uma translação, sendo o seu vector de translação o nosso vector mundo, mais especificamente o vector que define a componente de traseira do mundo
-                pos += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-
-            if (kb.IsKeyDown(Keys.S))
-            {
-                positionMoved = true;
-                //Translation equivale a uma translação, sendo o seu vector de translação o nosso vector mundo, mais especificamente o vector que define a frente do mundo
-                pos -= moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-
-            
-
-            amount = MathHelper.Clamp(amount, -1.5f, 1.5f);
-            amountCannon = MathHelper.Clamp(amountCannon, -1f, -0.3f);
-
-
-            /* RODAR O TANQUE CONFORME O TERRENO */
-            Vector3 normal = terrain.GetNormalAtPosition(WorldMatrix.Translation); normal.Normalize();
-
-            var forward = Vector3.Cross(Vector3.Transform(Vector3.UnitX, Matrix.CreateRotationY(yaw)), normal); /*forward = -forward;*/ forward.Normalize();
-            var right = Vector3.Cross(forward, normal); right.Normalize();
-
-            //No final de cada frame equalizamos a nossa matriz à função getWorldMatrixPosition(), que nos multiplica rotation pela Worldmatrix+translation, nesta ordem especifica
-            Rotation.Up = normal;
-            //Rotation.Down = -normal; 
-            Rotation.Forward = -forward;
-            //Rotation.Backward = -forward;
-            Rotation.Right = -right;
-            //Rotation.Left = -right;
-
-            Translation = Matrix.CreateTranslation(Rotation.Forward * pos);
-
-            WorldMatrix = GetWorldMatrix();
-
-            float height = cam.CalculateHeightOfTerrain(WorldMatrix.Translation);
-            Vector3 trans = WorldMatrix.Translation;
-            trans.X = MathHelper.Clamp(trans.X, 0, terrain.TerrainBounds.X - terrain.PlaneLength - (terrain.PlaneLength/2f));
-            trans.Z = MathHelper.Clamp(trans.Z, 0, terrain.TerrainBounds.Y - terrain.PlaneLength - (terrain.PlaneLength/2f));
-            trans.Y = height + 0.1f;
-            WorldMatrix.Translation = trans;
-
-            WorldMatrix.Up = normal;
-            WorldMatrix.Forward = forward;
-            WorldMatrix.Right = right;
-            //WorldMatrix.Down = -normal;
-            //WorldMatrix.Left = -right;
-            //WorldMatrix.Backward = -forward;
-
-            WorldMatrix = Scale * WorldMatrix;
+            /* SEPARATE MESHES TRANSFORMS AND ROTATIONS (TURRET AND CANNON) */
+            turretRot = MathHelper.Clamp(turretRot, -1.5f, 1.5f);
+            cannonPitch = MathHelper.Clamp(cannonPitch, -1f, -0.3f);
 
             Model.Root.Transform = WorldMatrix;
-            Model.Bones["turret_geo"].Transform = -turretTransform + Matrix.CreateRotationY(amount) + Matrix.CreateTranslation(new Vector3(0f, 450f, -80));
-            Model.Bones["canon_geo"].Transform = cannonTransform + Matrix.CreateRotationX(amountCannon) + Matrix.CreateTranslation(new Vector3(0, 200f, 140));
-
-            cannonTransform = /*Matrix.CreateScale(1f) * */Matrix.CreateTranslation(new Vector3(5f, 100f, 100f));
+            turretBone.Transform = -turretTransform + Matrix.CreateRotationY(turretRot) + Matrix.CreateTranslation(new Vector3(0f, 450f, -80));
+            cannonBone.Transform = cannonTransform + Matrix.CreateRotationX(cannonPitch) + Matrix.CreateTranslation(new Vector3(0, 200f, 140));
+            cannonTransform = Matrix.CreateTranslation(new Vector3(5f, 100f, 100f));
 
             Model.CopyAbsoluteBoneTransformsTo(BoneTransforms);
-
 
         }
 
         /* as texturas a utilizar guardamos no objecto, e nao no game. Depois mudar */
         public override void Draw(GraphicsDevice graphics, Matrix world, Matrix view, float aspectRatio)
-        {
-            
+        {           
             foreach (ModelMesh mesh in Model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
@@ -200,27 +107,14 @@ namespace IP3D_TPF.Models
                         effect.World = BoneTransforms[mesh.ParentBone.Index];
                         effect.View = view;
 
-                        //effect.TextureEnabled = true;
-
-
-                        //if (mesh.ParentBone.Index >= 1 && mesh.ParentBone.Index <= 4)
-                        //{
-                        //    effect.Texture = tankTexture;
-                        //    pass.Apply();
-                        //}
-
-                        //if (mesh.ParentBone.Index == 0)
-                        //{
-                        //    //effect.Texture = tankTurretTexture;
-                        //    pass.Apply();
-                        //}
-
-                        /* debug normals */
-                        VertexPositionNormalTexture[] debug = new VertexPositionNormalTexture[2];
-                        debug[0] = new VertexPositionNormalTexture(WorldMatrix.Translation, Vector3.Zero, Vector2.Zero);
-                        debug[1] = new VertexPositionNormalTexture(WorldMatrix.Translation + Rotation.Forward * 20f, Vector3.Zero, Vector2.UnitX);
-                        graphics.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.LineList, debug, 0, 1);
-                        /* ----------------------------------------------------------------------------------------------------------------------------*/
+                        #region DEBUG NORMALS
+                        ///* debug normals */
+                        //VertexPositionNormalTexture[] debug = new VertexPositionNormalTexture[2];
+                        //debug[0] = new VertexPositionNormalTexture(WorldMatrix.Translation, Vector3.Zero, Vector2.Zero);
+                        //debug[1] = new VertexPositionNormalTexture(WorldMatrix.Translation + Rotation.Forward * 20f, Vector3.Zero, Vector2.UnitX);
+                        //graphics.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.LineList, debug, 0, 1);
+                        ///* ----------------------------------------------------------------------------------------------------------------------------*/
+                        #endregion
 
                         effect.LightingEnabled = true;
 
@@ -241,5 +135,89 @@ namespace IP3D_TPF.Models
                 }
             }
         }
+
+        #region ROTATION AND WORLD MATRIX CALC
+
+        /// <summary>
+        /// Calculates and updates the Rotation property and the turretRot and cannonPitch fields
+        /// </summary>
+        private void CalculateAndSetRotationVectors()
+        {
+            Vector3 normal = base.Terrain.GetNormalAtPosition(WorldMatrix.Translation);                                 normal.Normalize();
+            Vector3 forward = Vector3.Cross(Vector3.Transform(Vector3.UnitX, Matrix.CreateRotationY(yaw)), normal);     forward.Normalize();
+            Vector3 right = Vector3.Cross(forward, normal);                                                             right.Normalize();
+
+            Matrix rot = Rotation;
+            rot.Up = normal;
+            rot.Forward = -forward;
+            rot.Right = -right;
+
+            Rotation = rot;
+
+        }
+
+        private Matrix CalculateWorldMatrix(Camera cam)
+        {
+            // calcula se a nova world matrix para sabermos a nova posiçao do tanque
+            WorldMatrix = GetWorldMatrix();
+
+            float height = cam.CalculateHeightOfTerrain(WorldMatrix.Translation);
+            Vector3 trans = WorldMatrix.Translation;
+            trans.X = MathHelper.Clamp(trans.X, 0, base.Terrain.TerrainBounds.X - base.Terrain.PlaneLength - (base.Terrain.PlaneLength / 2f));
+            trans.Z = MathHelper.Clamp(trans.Z, 0, base.Terrain.TerrainBounds.Y - base.Terrain.PlaneLength - (base.Terrain.PlaneLength / 2f));
+            trans.Y = height + 0.1f;
+
+            // create new world matrix to append new translation values and vectors according to rotation
+            Matrix worldM = WorldMatrix;
+            worldM.Translation = trans;
+            worldM.Up = Rotation.Up;
+            worldM.Forward = -Rotation.Forward;
+            worldM.Right = -Rotation.Right;
+            worldM = Scale * worldM;
+
+            return worldM;
+        }
+
+        #endregion
+
+        #region IPLAYER IMPLEMENTATION
+        public void UpdateInputs(Inputs inputs, GameTime gameTime)
+        {
+            switch(Player)
+            {
+                case 1:
+                    /* Turret Rotation inputs */
+                    if (inputs.Check(Keys.Q)) turretRot += 0.04f;
+                    if (inputs.Check(Keys.E)) turretRot -= 0.04f;
+
+                    /* Cannon Pitch inputs */
+                    if (inputs.Check(Keys.T)) cannonPitch += 0.04f;
+                    if (inputs.Check(Keys.Y)) cannonPitch -= 0.04f;
+
+
+                    /* Tank rotation inputs */
+                    if (inputs.Check(Keys.A)) base.yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (inputs.Check(Keys.D)) base.yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    /* Tank forward movement input  - Translation equivale a uma translação, 
+                     * sendo o seu vector de translação o nosso vector mundo */
+                    if (inputs.Check(Keys.W)) forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (inputs.Check(Keys.S)) forwardMoveRatio -= moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    break;
+
+                case 2:
+                    if (inputs.Check(Keys.Up)) forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (inputs.Check(Keys.Down)) forwardMoveRatio -= moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    break;
+
+                default:
+                    throw new Exception("Player number is not assigned to a valid number.");
+            }
+
+            
+        }
+        #endregion
+
     }
 }
