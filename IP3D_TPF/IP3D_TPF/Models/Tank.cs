@@ -28,6 +28,7 @@ namespace IP3D_TPF.Models
 
         /* ------------------------------------------*/
         public int Player { get => player; protected set { player = value; } }
+        public Vector3 CameraRotationalTarget { get { return Rotation.Forward; } }
 
         /* -----------------------------------------------*/
 

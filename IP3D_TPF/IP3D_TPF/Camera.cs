@@ -71,12 +71,14 @@ namespace IP3D_TPF
         }
         #endregion
 
-        public void Update(GameTime gameTime, TerrainGenerator terrain)
-        {
+        // criar uma interface para camaras, metodo update (pelo menos) tem que ser virtual
+        //visto q cada camara precisa de argumentos diferentes
 
-            Vector3         direction;
-            KeyboardState   keyboardState   =   Game1.inputs.CurrentKeyboardState;
-            MouseState      mouseState      =   Game1.inputs.CurrentMouseState;
+        public void UpdateFreeCamera(GameTime gameTime, TerrainGenerator terrain)
+        {
+            Vector3 direction;
+            KeyboardState keyboardState = Game1.inputs.CurrentKeyboardState;
+            MouseState mouseState = Game1.inputs.CurrentMouseState;
 
             //System.Diagnostics.Debug.WriteLine("MousePos: " + mouseState.Position);
             //System.Diagnostics.Debug.WriteLine("ViewCenter: " + viewportCenter);
@@ -105,11 +107,11 @@ namespace IP3D_TPF
             {
                 position -= direction * velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-            if(keyboardState.IsKeyDown(Keys.NumPad4))
+            if (keyboardState.IsKeyDown(Keys.NumPad4))
             {
                 position -= right * velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-            else if(keyboardState.IsKeyDown(Keys.NumPad6))
+            else if (keyboardState.IsKeyDown(Keys.NumPad6))
             {
                 position += right * velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
@@ -121,9 +123,83 @@ namespace IP3D_TPF
             viewMatrix = Matrix.CreateLookAt(position, target, Vector3.Up);
             Mouse.SetPosition((int)viewportCenter.X, (int)viewportCenter.Y);
 
+            float heightMin = terrain.HeightMap.GetValueFromHeightMap(terrain.HeightMap.CalculateIndexFromPosition(position,
+                                                                                terrain.PlaneLength)) * terrain.HeightRatio;
+
             position.X = MathHelper.Clamp(position.X, 0, terrain.TerrainBounds.X - terrain.PlaneLength - 1);
             position.Z = MathHelper.Clamp(position.Z, 0, terrain.TerrainBounds.Y - terrain.PlaneLength - 1);
-            //position.Y = CalculateHeightOfTerrain(position) + offsetY;
+            position.Y = MathHelper.Clamp(position.Y, heightMin + 2f, 3000f);
+
+        }
+
+        public void UpdateFollow(GameTime gameTime, Vector3 tankPosition, Vector3 cameraRotationalTarget)
+        {
+
+            Vector3 Offset = new Vector3(0, 5, 0);
+            Vector3 BackwardsCorrected = (cameraRotationalTarget * 40) + Offset;
+            BackwardsCorrected.Y = 30; tankPosition.Y = 0;
+
+            position = tankPosition + (BackwardsCorrected);
+
+            viewMatrix = Matrix.CreateLookAt(position, tankPosition, Vector3.Up);
+        }
+
+        public void UpdateSurfaceFollow(GameTime gameTime, TerrainGenerator terrain, Inputs inputs)
+        {
+            Vector3 direction;
+            KeyboardState keyboardState = inputs.CurrentKeyboardState;
+            MouseState mouseState = inputs.CurrentMouseState;
+
+            //System.Diagnostics.Debug.WriteLine("MousePos: " + mouseState.Position);
+            //System.Diagnostics.Debug.WriteLine("ViewCenter: " + viewportCenter);
+            //System.Diagnostics.Debug.WriteLine("Position: " + position);
+
+            #region MOUSE STATE
+            int deltaX = mouseState.X - (int)viewportCenter.X;
+            int deltaY = mouseState.Y - (int)viewportCenter.Y;
+
+            yaw -= deltaX * ScaleRadiansPerPixel;
+            pitch -= deltaY * ScaleRadiansPerPixel;
+            Pitch = MathHelper.Clamp(pitch, -1f, 1f);
+
+            Matrix rotation = Matrix.CreateFromYawPitchRoll(yaw, pitch, 0f);
+
+            direction = Vector3.Transform(-Vector3.UnitZ, rotation);
+            #endregion
+
+            #region KEYBOARD STATE
+            Vector3 right = Vector3.Cross(direction, Vector3.Up);
+
+            if (keyboardState.IsKeyDown(Keys.NumPad8))
+            {
+                position += direction * velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else if (keyboardState.IsKeyDown(Keys.NumPad5))
+            {
+                position -= direction * velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            if (keyboardState.IsKeyDown(Keys.NumPad4))
+            {
+                position -= right * velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else if (keyboardState.IsKeyDown(Keys.NumPad6))
+            {
+                position += right * velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            #endregion
+
+            target = position + direction;
+            //Debug Logic of target
+            //System.Diagnostics.Debug.WriteLine(target);
+
+            viewMatrix = Matrix.CreateLookAt(position, target, Vector3.Up);
+            Mouse.SetPosition((int)viewportCenter.X, (int)viewportCenter.Y);
+
+            //Fixação dos valores de boundary do terreno
+            position.X = MathHelper.Clamp(position.X, 0, terrain.TerrainBounds.X - terrain.PlaneLength - 1);
+            position.Z = MathHelper.Clamp(position.Z, 0, terrain.TerrainBounds.Y - terrain.PlaneLength - 1);
+            position.Y = CalculateHeightOfTerrain(position) + offsetY;
 
         }
 

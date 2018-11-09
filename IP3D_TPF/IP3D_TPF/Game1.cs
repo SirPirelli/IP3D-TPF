@@ -26,6 +26,9 @@ namespace IP3D_TPF
         SpriteBatch spriteBatch;
         FPSCounter fpsCounter;
         public static Inputs inputs;
+        int cameraTypeIndex = 1;
+        Viewport viewport;
+        bool hasCollided;
 
         float aspectRatio;
 
@@ -68,7 +71,9 @@ namespace IP3D_TPF
         protected override void LoadContent()
         {         
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
+            hasCollided = false;
+
             /* FPS COUNTER */
             fpsCounter = new FPSCounter();
             fpsCounter.LoadContent(Content);
@@ -127,10 +132,40 @@ namespace IP3D_TPF
 
             // TODO: Add your update logic here
             inputs.Update();
-            cam.Update(gameTime, terrainGen);
+
+            #region CameraSelection
+            //Logic for cameraSelection
+            if (inputs.CurrentKeyboardState.IsKeyDown(Keys.Z)) cameraTypeIndex = 1;
+            if (inputs.CurrentKeyboardState.IsKeyDown(Keys.X)) cameraTypeIndex = 2;
+            if (inputs.CurrentKeyboardState.IsKeyDown(Keys.C)) cameraTypeIndex = 3;
+            if (inputs.CurrentKeyboardState.IsKeyDown(Keys.V)) cameraTypeIndex = 4;
+            // Switch Logic for camera update()
+            switch (cameraTypeIndex)
+            {
+                case 1:
+                    cam.UpdateFreeCamera(gameTime, terrainGen);
+                    break;
+                case 2:
+                    cam.UpdateFollow(gameTime, tank.WorldMatrix.Translation, tank.CameraRotationalTarget);
+                    break;
+                case 3:
+                    cam.UpdateSurfaceFollow(gameTime, terrainGen, inputs);
+                    break;
+                case 4:
+                    cam.UpdateFollow(gameTime, tank2.WorldMatrix.Translation, tank2.CameraRotationalTarget);
+                    break;
+                default:
+
+                    break;
+            }
+            #endregion
+
             fpsCounter.Update(gameTime);
             tank.Update(gameTime, cam);
             tank2.Update(gameTime, cam);
+
+            if (CollisionHandler.IsCollision(tank.Model, tank.WorldMatrix, tank2.Model, tank2.WorldMatrix) == true) hasCollided = true;
+            else hasCollided = false;
 
             base.Update(gameTime);
         }
@@ -155,7 +190,7 @@ namespace IP3D_TPF
             terrainGen.Draw(GraphicsDevice, cam.ViewMatrix);
             tank.Draw(GraphicsDevice, Matrix.Identity, cam.ViewMatrix, aspectRatio);
             tank2.Draw(GraphicsDevice, Matrix.Identity, cam.ViewMatrix, aspectRatio);
-            fpsCounter.Draw(spriteBatch);
+            fpsCounter.Draw(spriteBatch, hasCollided, cameraTypeIndex);
 
             base.Draw(gameTime);
         }

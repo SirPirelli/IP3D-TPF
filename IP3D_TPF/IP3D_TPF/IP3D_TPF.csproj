@@ -42,6 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="CollisionHandler.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="Utilities\FPSCounter.cs" />
     <Compile Include="Terrain\HeightMap.cs" />
