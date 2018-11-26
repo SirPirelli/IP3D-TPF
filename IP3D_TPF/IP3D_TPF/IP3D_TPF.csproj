@@ -44,7 +44,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="CollisionHandler.cs" />
     <Compile Include="IPlayer.cs" />
-    <Compile Include="PlayerLabel.cs" />
+    <Compile Include="Utilities\PlayerLabel.cs" />
     <Compile Include="Utilities\FPSCounter.cs" />
     <Compile Include="Terrain\HeightMap.cs" />
     <Compile Include="Utilities\Inputs.cs" />

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace IP3D_TPF
@@ -19,7 +12,7 @@ namespace IP3D_TPF
             Vector3 vector = device.Viewport.Project(tank.WorldMatrix.Translation, Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), aspectRatio, 0.1f, 4000.0f), cam.ViewMatrix, Matrix.CreateTranslation(0, 10, 0));
             clientResult.X = vector.X;
             clientResult.Y = vector.Y;
-            Vector2 clientResultV2 = new Vector2(clientResult.X - 35, clientResult.Y - 80);
+            Vector2 clientResultV2 = new Vector2(clientResult.X - 50, clientResult.Y + 175);
             return clientResultV2;
         }
 
