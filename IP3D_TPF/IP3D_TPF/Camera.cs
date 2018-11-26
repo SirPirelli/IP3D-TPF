@@ -134,12 +134,15 @@ namespace IP3D_TPF
 
         public void UpdateFollow(GameTime gameTime, Vector3 tankPosition, Vector3 cameraRotationalTarget)
         {
+            //position = tankPosition + (cameraRotationalTarget * 20) + (Vector3.UnitY * 10);
 
-            Vector3 Offset = new Vector3(0, 5, 0);
-            Vector3 BackwardsCorrected = (cameraRotationalTarget * 40) + Offset;
-            BackwardsCorrected.Y = 30; tankPosition.Y = 0;
+            Vector3 Offset = new Vector3(0, -50, 0);
+            cameraRotationalTarget.Normalize();
+            Vector3 BackwardsCorrected = (cameraRotationalTarget * 20) + Offset;
+            BackwardsCorrected.Y = 30; tankPosition.Y += 5;
 
             position = tankPosition + (BackwardsCorrected);
+            position.Y = MathHelper.Clamp(position.Y, terrain.CalculateHeightOfTerrain(position)+2f, 20f);
 
             viewMatrix = Matrix.CreateLookAt(position, tankPosition, Vector3.Up);
         }
@@ -199,36 +202,11 @@ namespace IP3D_TPF
             //Fixação dos valores de boundary do terreno
             position.X = MathHelper.Clamp(position.X, 0, terrain.TerrainBounds.X - terrain.PlaneLength - 1);
             position.Z = MathHelper.Clamp(position.Z, 0, terrain.TerrainBounds.Y - terrain.PlaneLength - 1);
-            position.Y = CalculateHeightOfTerrain(position) + offsetY;
+            position.Y = terrain.CalculateHeightOfTerrain(position) + offsetY;
 
         }
 
 
-        /// <summary>
-        /// Returns the height of the terrain at a given position.
-        /// </summary>
-        /// <param name="position">The position where we want to know the height</param>
-        /// <returns>float height</returns>
-        public float CalculateHeightOfTerrain(Vector3 position)
-        {
-            HeightMap heightMap = terrain.HeightMap;
-            float planeLength = terrain.PlaneLength;
-            float heightRatio = terrain.HeightRatio;
-            float yA, yB, yC, yD;
-
-            float x = position.X;                                               float z = position.Z;
-            float x1 = (position.X - (position.X % planeLength));            float x2 = x1 + planeLength;
-            float z1 = (position.Z - (position.Z % planeLength));            float z2 = z1 + planeLength;
-
-
-            /* Para nao termos de fazer a multiplicaçao do heightRatio todos os frames, podemos introduzir no heightMap logo os valores finais,
-             * depois construimos outra vez o terreno. */
-            yA = heightMap.GetValueFromHeightMap(heightMap.CalculateIndexFromPosition(new Vector3(x1, 0, z1), planeLength)) * heightRatio;
-            yB = heightMap.GetValueFromHeightMap(heightMap.CalculateIndexFromPosition(new Vector3(x2, 0, z1), planeLength)) * heightRatio;
-            yC = heightMap.GetValueFromHeightMap(heightMap.CalculateIndexFromPosition(new Vector3(x1, 0, z2), planeLength)) * heightRatio;
-            yD = heightMap.GetValueFromHeightMap(heightMap.CalculateIndexFromPosition(new Vector3(x2, 0, z2), planeLength)) * heightRatio;
-
-            return MathHelpersCls.BiLerp(new Vector2(x, z), x1, x2, z1, z2, yA, yB, yC, yD);
-        }           
+                 
     }
 }

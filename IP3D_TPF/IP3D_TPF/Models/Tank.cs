@@ -28,7 +28,7 @@ namespace IP3D_TPF.Models
 
         /* ------------------------------------------*/
         public int Player { get => player; protected set { player = value; } }
-        public Vector3 CameraRotationalTarget { get { return Rotation.Forward; } }
+        public Vector3 CameraRotationalTarget { get { return -Rotation.Forward; } }
 
         /* -----------------------------------------------*/
 
@@ -80,7 +80,7 @@ namespace IP3D_TPF.Models
 
             Translation = Matrix.CreateTranslation(Rotation.Forward * forwardMoveRatio);
 
-            WorldMatrix = CalculateWorldMatrix(cam);
+            WorldMatrix = CalculateWorldMatrix();
 
             /* SEPARATE MESHES TRANSFORMS AND ROTATIONS (TURRET AND CANNON) */
             turretRot = MathHelper.Clamp(turretRot, -1.5f, 1.5f);
@@ -157,12 +157,12 @@ namespace IP3D_TPF.Models
 
         }
 
-        private Matrix CalculateWorldMatrix(Camera cam)
+        private Matrix CalculateWorldMatrix()
         {
             // calcula se a nova world matrix para sabermos a nova posiçao do tanque
             WorldMatrix = GetWorldMatrix();
 
-            float height = cam.CalculateHeightOfTerrain(WorldMatrix.Translation);
+            float height = base.Terrain.CalculateHeightOfTerrain(WorldMatrix.Translation);
             Vector3 trans = WorldMatrix.Translation;
             trans.X = MathHelper.Clamp(trans.X, 0, base.Terrain.TerrainBounds.X - base.Terrain.PlaneLength - (base.Terrain.PlaneLength / 2f));
             trans.Z = MathHelper.Clamp(trans.Z, 0, base.Terrain.TerrainBounds.Y - base.Terrain.PlaneLength - (base.Terrain.PlaneLength / 2f));

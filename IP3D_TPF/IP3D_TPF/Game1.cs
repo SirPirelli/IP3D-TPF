@@ -37,7 +37,12 @@ namespace IP3D_TPF
         Tank tank;
         Tank tank2;
 
+        PlayerLabel playerLabel;
+        Texture2D label, label2;
+
         Texture2D sky;
+
+        Vector2 clientResult;
 
         public Game1()
         {
@@ -83,7 +88,7 @@ namespace IP3D_TPF
             float planeLength = 1f;
             float heightRatio = 0.06f;
             Texture2D heightMapTex = Content.Load<Texture2D>("lh3d1");
-            Texture2D terrainTex = Content.Load<Texture2D>("GridTexture");
+            Texture2D terrainTex = Content.Load<Texture2D>("Diffuse2");
             terrainGen = new TerrainGenerator(GraphicsDevice, planeLength, heightRatio, heightMapTex, terrainTex);
             /* ----------------------------------- */
 
@@ -109,6 +114,11 @@ namespace IP3D_TPF
             inputs = new Inputs();
             tank.LoadContent(Content);
             tank2.LoadContent(Content);
+
+            playerLabel = new PlayerLabel();
+            label = Content.Load<Texture2D>("label");
+            label2 = Content.Load<Texture2D>("label2");
+
         }
 
         /// <summary>
@@ -135,10 +145,10 @@ namespace IP3D_TPF
 
             #region CameraSelection
             //Logic for cameraSelection
-            if (inputs.CurrentKeyboardState.IsKeyDown(Keys.Z)) cameraTypeIndex = 1;
-            if (inputs.CurrentKeyboardState.IsKeyDown(Keys.X)) cameraTypeIndex = 2;
-            if (inputs.CurrentKeyboardState.IsKeyDown(Keys.C)) cameraTypeIndex = 3;
-            if (inputs.CurrentKeyboardState.IsKeyDown(Keys.V)) cameraTypeIndex = 4;
+            if (inputs.CurrentKeyboardState.IsKeyDown(Keys.F1)) cameraTypeIndex = 1;
+            if (inputs.CurrentKeyboardState.IsKeyDown(Keys.F2)) cameraTypeIndex = 2;
+            if (inputs.CurrentKeyboardState.IsKeyDown(Keys.F3)) cameraTypeIndex = 3;
+            if (inputs.CurrentKeyboardState.IsKeyDown(Keys.F4)) cameraTypeIndex = 4;
             // Switch Logic for camera update()
             switch (cameraTypeIndex)
             {
@@ -160,6 +170,11 @@ namespace IP3D_TPF
             }
             #endregion
 
+            Vector3 TankSpace = new Vector3(tank.WorldMatrix.Translation.X, tank.WorldMatrix.Translation.Y + 120, tank.WorldMatrix.Translation.Z);
+            Vector3 vector = viewport.Project(tank.WorldMatrix.Translation, Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), aspectRatio, 0.1f, 4000.0f), cam.ViewMatrix, Matrix.CreateTranslation(0, 10, 0));
+            clientResult.X = vector.X;
+            clientResult.Y = vector.Y;
+
             fpsCounter.Update(gameTime);
             tank.Update(gameTime, cam);
             tank2.Update(gameTime, cam);
@@ -178,6 +193,7 @@ namespace IP3D_TPF
         {
             GraphicsDevice.Clear(Color.Gray);
 
+
             spriteBatch.Begin();
             spriteBatch.Draw(sky, Vector2.Zero, Color.White);
             spriteBatch.End();
@@ -191,6 +207,9 @@ namespace IP3D_TPF
             tank.Draw(GraphicsDevice, Matrix.Identity, cam.ViewMatrix, aspectRatio);
             tank2.Draw(GraphicsDevice, Matrix.Identity, cam.ViewMatrix, aspectRatio);
             fpsCounter.Draw(spriteBatch, hasCollided, cameraTypeIndex);
+
+            playerLabel.DrawLabel(GraphicsDevice, spriteBatch, cameraTypeIndex, label, label2, cam, aspectRatio, tank, tank2);
+
 
             base.Draw(gameTime);
         }

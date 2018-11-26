@@ -380,9 +380,6 @@ namespace IP3D_TPF
 
         }
 
-
-
-
         #region EFFECTS AND LIGHTING
         private void SetLighting()
         {
@@ -414,6 +411,7 @@ namespace IP3D_TPF
         }
         #endregion
 
+        #region HELPERS
         public Vector3 GetNormalAtPosition(Vector3 position)
         {
             Vector3[] positions = new Vector3[4];
@@ -463,5 +461,30 @@ namespace IP3D_TPF
             return new Vector2(x, z);
         }
 
+        /// <summary>
+        /// Returns the height of the terrain at a given position.
+        /// </summary>
+        /// <param name="position">The position where we want to know the height</param>
+        /// <returns>float height</returns>
+        public float CalculateHeightOfTerrain(Vector3 position)
+        {
+            float yA, yB, yC, yD;
+
+            float x = position.X; float z = position.Z;
+            float x1 = (position.X - (position.X % planeLength)); float x2 = x1 + planeLength;
+            float z1 = (position.Z - (position.Z % planeLength)); float z2 = z1 + planeLength;
+
+
+            /* Para nao termos de fazer a multiplicaçao do heightRatio todos os frames, podemos introduzir no heightMap logo os valores finais,
+             * depois construimos outra vez o terreno. */
+            yA = heightMap.GetValueFromHeightMap(heightMap.CalculateIndexFromPosition(new Vector3(x1, 0, z1), planeLength)) * heightRatio;
+            yB = heightMap.GetValueFromHeightMap(heightMap.CalculateIndexFromPosition(new Vector3(x2, 0, z1), planeLength)) * heightRatio;
+            yC = heightMap.GetValueFromHeightMap(heightMap.CalculateIndexFromPosition(new Vector3(x1, 0, z2), planeLength)) * heightRatio;
+            yD = heightMap.GetValueFromHeightMap(heightMap.CalculateIndexFromPosition(new Vector3(x2, 0, z2), planeLength)) * heightRatio;
+
+            return MathHelpersCls.BiLerp(new Vector2(x, z), x1, x2, z1, z2, yA, yB, yC, yD);
+        }
+
+        #endregion
     }
 }
