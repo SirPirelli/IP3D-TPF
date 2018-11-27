@@ -96,7 +96,7 @@ namespace IP3D_TPF.Models
         }
 
         /* as texturas a utilizar guardamos no objecto, e nao no game. Depois mudar */
-        public override void Draw(GraphicsDevice graphics, Matrix world, Matrix view, float aspectRatio)
+        public override void Draw(GraphicsDevice graphics, Matrix view, Matrix projection, float aspectRatio)
         {           
             foreach (ModelMesh mesh in Model.Meshes)
             {
@@ -120,7 +120,7 @@ namespace IP3D_TPF.Models
                         effect.LightingEnabled = true;
 
                         effect.DirectionalLight1.Enabled = true;
-                        effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), aspectRatio, 0.1f, 4000.0f);
+                        effect.Projection = projection;
                         effect.DirectionalLight0.DiffuseColor = new Vector3(0.3f, 0.3f, 0.3f);
                         effect.DirectionalLight0.Direction = new Vector3(0.25f, 1, 0.25f);
                         effect.DirectionalLight0.SpecularColor = new Vector3(0.1f, 0.1f, 0.1f);

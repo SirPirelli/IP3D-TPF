@@ -18,6 +18,7 @@ namespace IP3D_TPF
         private Vector3 position;
         private Vector3 target;
         private Matrix viewMatrix;
+        private Matrix projectionMatrix;
         private float yaw;
         private float pitch;
         private float velocity;
@@ -33,6 +34,7 @@ namespace IP3D_TPF
         public Vector3 Position { get { return position; } set { position = value; } }
         public Vector3 Target { get { return target; } set { target = value; } }
         public Matrix ViewMatrix { get { return viewMatrix; } set { viewMatrix = value; } }
+        public Matrix ProjectionMatrix { get => projectionMatrix; set => projectionMatrix = value; }
         public float Yaw { get { return yaw; } set { yaw = value; } }
         public float Pitch { get { return pitch; } set { pitch = value; } }
         public float Velocity { get { return velocity; } set { velocity = value; } }
@@ -50,12 +52,14 @@ namespace IP3D_TPF
         /// <param name="a_velocity"></param>
         /// <param name="a_terrain"></param>
         /// <param name="a_offsetY"></param>
-        public Camera(Vector3 a_position, Vector3 a_target, Vector2 a_viewportCenter, float a_radiansPP, float a_velocity, TerrainGenerator a_terrain, float a_offsetY)
+        public Camera(Vector3 a_position, Vector3 a_target, Vector2 a_viewportCenter, float a_radiansPP, float a_velocity, TerrainGenerator a_terrain, float a_offsetY,
+                        float fovAngleDeg, float nearPlane, float farPlane, float aspectRatio)
         {
             position = a_position;
             target = a_target;
             viewportCenter = a_viewportCenter;
             viewMatrix = Matrix.CreateLookAt(position, target, Vector3.Up);
+            projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fovAngleDeg), aspectRatio, nearPlane, farPlane);
             ScaleRadiansPerPixel = a_radiansPP;
             velocity = a_velocity;
             terrain = a_terrain;

@@ -89,7 +89,7 @@ namespace IP3D_TPF
 
             /* initialize terrain */
             float planeLength = 1f;
-            float heightRatio = 0.001f;
+            float heightRatio = 0.06f;
             Texture2D heightMapTex = Content.Load<Texture2D>("lh3d1");
             Texture2D terrainTex = Content.Load<Texture2D>("Diffuse2");
             terrainGen = new TerrainGenerator(GraphicsDevice, planeLength, heightRatio, heightMapTex, terrainTex);
@@ -110,8 +110,11 @@ namespace IP3D_TPF
             float radiansPP = MathHelper.Pi / 1000f;
             float camVelocity = 30f;
             float offsetY = 3f;
-
-            cam = new Camera(startCamPos, camTarget, viewportCenter, radiansPP, camVelocity, terrainGen, offsetY);
+            float nearPlane = 0.1f;
+            float farPlane = 2000f;
+            float fovAngleDeg = 45f;
+            cam = new Camera(startCamPos, camTarget, viewportCenter, radiansPP, camVelocity, terrainGen, offsetY,
+                            fovAngleDeg, nearPlane, farPlane, aspectRatio);
             /*-------------------------------------*/
 
             inputs = new Inputs();
@@ -213,16 +216,15 @@ namespace IP3D_TPF
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-
-            
+      
             terrainGen.Draw(GraphicsDevice, cam.ViewMatrix);
-            tank.Draw(GraphicsDevice, Matrix.Identity, cam.ViewMatrix, aspectRatio);
-            tank2.Draw(GraphicsDevice, Matrix.Identity, cam.ViewMatrix, aspectRatio);
+            tank.Draw(GraphicsDevice, cam.ViewMatrix, cam.ProjectionMatrix, aspectRatio);
+            tank2.Draw(GraphicsDevice, cam.ViewMatrix, cam.ProjectionMatrix, aspectRatio);
             fpsCounter.Draw(spriteBatch, hasCollided, cameraTypeIndex);
 
             playerLabel.DrawLabel(GraphicsDevice, spriteBatch, cameraTypeIndex, label, label2, cam, aspectRatio, tank, tank2);
 
-            sphere.Draw(GraphicsDevice, cam.ViewMatrix, Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), aspectRatio, 0.1f, 2000.0f));
+            sphere.Draw(GraphicsDevice, cam.ViewMatrix, cam.ProjectionMatrix);
 
             base.Draw(gameTime);
         }
