@@ -220,5 +220,10 @@ namespace IP3D_TPF.Models
         }
         #endregion
 
+        public void SetMoveVelocity(float moveVel)
+        {
+            moveVelocity = moveVel;
+        }
+
     }
 }

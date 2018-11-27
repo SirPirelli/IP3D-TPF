@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BoundingSphereCls.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="CollisionHandler.cs" />
     <Compile Include="IPlayer.cs" />

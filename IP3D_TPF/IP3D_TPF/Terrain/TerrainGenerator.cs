@@ -1,15 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IP3D_TPF
 {
+    /// <summary>
+    /// <see langword="class"/> that generates a terrain in a 3D space. Needs a <see cref="IP3D_TPF.HeightMap"/> along with a <see cref="Texture2D"/> to draw in the terrain.
+    /// Sends terrain data to the graphics card, using <see cref="VertexBuffer"/> and a <see cref="IndexBuffer"/>.
+    /// </summary>
     class TerrainGenerator
     {
         VertexBuffer vertexBuffer;
@@ -51,6 +50,32 @@ namespace IP3D_TPF
             #endregion
 
             heightMap = HeightMap.TextureToHeightMap(texHeightMap);
+            planeLength = a_planeLength;
+            heightRatio = a_heightRatio;
+
+            terrainBounds = new Vector2(planeLength * (int)heightMap.Size.X, (planeLength * (int)heightMap.Size.Y));
+
+            primitiveCount = 2 * (int)heightMap.Size.X - 2;
+            vertexCount = heightMap.Values.Length;
+
+            CreateTerrain(graphics);
+        }
+
+        public TerrainGenerator(GraphicsDevice graphics, float a_planeLength, float a_heightRatio, HeightMap heightMap, Texture2D texture)
+        {
+            effect = new BasicEffect(graphics);
+
+            SetEffect(graphics, texture, Matrix.Identity);
+            SetLighting();
+
+            #region RASTERIZERSTATE PARAMETERS (NOT NEEDED)
+
+            RasterizerState rasterizerState1 = new RasterizerState();
+            rasterizerState1.CullMode = CullMode.None;
+            //rasterizerState1.FillMode = FillMode.WireFrame;
+            graphics.RasterizerState = rasterizerState1;
+            #endregion
+
             planeLength = a_planeLength;
             heightRatio = a_heightRatio;
 
@@ -124,6 +149,10 @@ namespace IP3D_TPF
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vertices"></param>
         private void CalculateNormals(VertexPositionNormalTexture[] vertices)
         {
             int index;

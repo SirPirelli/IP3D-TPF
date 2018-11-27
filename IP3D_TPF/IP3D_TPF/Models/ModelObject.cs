@@ -25,11 +25,12 @@ namespace IP3D_TPF
         public Matrix Rotation { get;protected set; }
         public Matrix Scale { get;protected set; }
 
-        protected TerrainGenerator Terrain { get; set; }
+        protected TerrainGenerator Terrain { get; set; }    /*como noutros projectos podemos nao utilizar o terrainGenerator,
+                                                                é melhor ir buscar a referencia ao terreno fora desta classe */
 
         protected float yaw, pitch, roll;
 
-        public Vector3 GetPosition { get { return Translation.Translation; } }
+        public Vector3 GetPosition { get { return WorldMatrix.Translation; } }
 
         public abstract void Update(GameTime gameTime, Camera cam);
         public abstract void LoadContent(ContentManager content);

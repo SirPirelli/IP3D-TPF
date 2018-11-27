@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using IP3D_TPF.Models;
+using BoundingSpheresTest;
 
 namespace IP3D_TPF
 {
@@ -43,6 +44,8 @@ namespace IP3D_TPF
         Texture2D sky;
 
         Vector2 clientResult;
+
+        BoundingSphereCls sphere;
 
         public Game1()
         {
@@ -86,7 +89,7 @@ namespace IP3D_TPF
 
             /* initialize terrain */
             float planeLength = 1f;
-            float heightRatio = 0.06f;
+            float heightRatio = 0.001f;
             Texture2D heightMapTex = Content.Load<Texture2D>("lh3d1");
             Texture2D terrainTex = Content.Load<Texture2D>("Diffuse2");
             terrainGen = new TerrainGenerator(GraphicsDevice, planeLength, heightRatio, heightMapTex, terrainTex);
@@ -105,8 +108,8 @@ namespace IP3D_TPF
             Vector3 camTarget = new Vector3(50f, 10f, 50f);
             Vector2 viewportCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
             float radiansPP = MathHelper.Pi / 1000f;
-            float camVelocity = 50f;
-            float offsetY = 5f;
+            float camVelocity = 30f;
+            float offsetY = 3f;
 
             cam = new Camera(startCamPos, camTarget, viewportCenter, radiansPP, camVelocity, terrainGen, offsetY);
             /*-------------------------------------*/
@@ -118,6 +121,9 @@ namespace IP3D_TPF
             playerLabel = new PlayerLabel();
             label = Content.Load<Texture2D>("label");
             label2 = Content.Load<Texture2D>("label2");
+
+
+            sphere = new BoundingSphereCls(tank.GetPosition + Vector3.UnitY, 2.5f);
 
         }
 
@@ -182,6 +188,12 @@ namespace IP3D_TPF
             if (CollisionHandler.IsCollision(tank.Model, tank.WorldMatrix, tank2.Model, tank2.WorldMatrix) == true) hasCollided = true;
             else hasCollided = false;
 
+            if (hasCollided) tank.SetMoveVelocity(0);
+
+            sphere.Center = tank.GetPosition + Vector3.Up;
+
+            System.Diagnostics.Debug.WriteLine(tank.GetPosition);
+
             base.Update(gameTime);
         }
 
@@ -210,6 +222,7 @@ namespace IP3D_TPF
 
             playerLabel.DrawLabel(GraphicsDevice, spriteBatch, cameraTypeIndex, label, label2, cam, aspectRatio, tank, tank2);
 
+            sphere.Draw(GraphicsDevice, cam.ViewMatrix, Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), aspectRatio, 0.1f, 2000.0f));
 
             base.Draw(gameTime);
         }

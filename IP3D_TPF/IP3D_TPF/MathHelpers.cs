@@ -131,7 +131,20 @@ namespace IP3D_TPF
                                (float)Math.Atan2(matrix.M21, matrix.M22));
         }
 
+        /* funçao estatica que devolve um vector2 a partir de um angulo */
+        public static Vector2 GetPositionFromAngle(double angle)
+        {
+            float x = (float)Math.Cos(angle);
+            float z = (float)Math.Sin(angle);
 
+            return new Vector2(x, z);
+        }
+
+        /* funçao estatica que itera sobre um circulo e devolve o angulo */
+        public static double GetAngleFromCircle(int numOfDivisions, float iteration)
+        {
+            return (2 * Math.PI / numOfDivisions) * iteration;
+        }
     }
 }
 
