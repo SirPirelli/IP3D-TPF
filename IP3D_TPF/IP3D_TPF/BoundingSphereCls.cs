@@ -1,6 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿/*Custom BoundingSphere class */
+
 using IP3D_TPF;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace BoundingSpheresTest
 {

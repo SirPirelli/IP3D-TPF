@@ -89,7 +89,7 @@ namespace IP3D_TPF
 
             /* initialize terrain */
             float planeLength = 1f;
-            float heightRatio = 0.06f;
+            float heightRatio = 0.0006f;
             Texture2D heightMapTex = Content.Load<Texture2D>("lh3d1");
             Texture2D terrainTex = Content.Load<Texture2D>("Diffuse2");
             terrainGen = new TerrainGenerator(GraphicsDevice, planeLength, heightRatio, heightMapTex, terrainTex);
@@ -188,14 +188,22 @@ namespace IP3D_TPF
             tank.Update(gameTime, cam);
             tank2.Update(gameTime, cam);
 
-            if (CollisionHandler.IsCollision(tank.Model, tank.WorldMatrix, tank2.Model, tank2.WorldMatrix) == true) hasCollided = true;
-            else hasCollided = false;
+            hasCollided = CollisionHandler.IsColliding(tank.BoundingSphere, tank2.BoundingSphere);
+            if (hasCollided)
+            {
+                Vector3 tankDir = tank.Velocity;
+                if (tankDir != Vector3.Zero) tankDir.Normalize();
+                Vector3 tankPos = tank.WorldMatrix.Translation;
+                Vector3 newTankPos = tankPos - tank.Velocity;
+                tank.SetPosition(newTankPos);
 
-            if (hasCollided) tank.SetMoveVelocity(0);
 
-            sphere.Center = tank.GetPosition + Vector3.Up;
-
-            System.Diagnostics.Debug.WriteLine(tank.GetPosition);
+                Vector3 tankDir2 = tank2.Velocity;
+                if (tankDir2 != Vector3.Zero) tankDir2.Normalize();
+                Vector3 tankPos2 = tank2.WorldMatrix.Translation;
+                Vector3 newTankPos2 = tankPos2 + (tankDir2 * -tank2.Velocity * 1.1f);
+                tank2.SetPosition(newTankPos2);
+            }
 
             base.Update(gameTime);
         }
@@ -224,7 +232,6 @@ namespace IP3D_TPF
 
             playerLabel.DrawLabel(GraphicsDevice, spriteBatch, cameraTypeIndex, label, label2, cam, aspectRatio, tank, tank2);
 
-            sphere.Draw(GraphicsDevice, cam.ViewMatrix, cam.ProjectionMatrix);
 
             base.Draw(gameTime);
         }
