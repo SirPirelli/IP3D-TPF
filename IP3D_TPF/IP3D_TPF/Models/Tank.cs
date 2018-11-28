@@ -1,9 +1,6 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using BoundingSpheresTest;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,11 +23,18 @@ namespace IP3D_TPF.Models
                     rotationVelocity, forwardMoveRatio,
                     moveVelocity, rotationVelocityFactor;
 
+        BoundingSphereCls boundingSphere;
+        Vector3 sphereOffset;
+
         /* ------------------------------------------*/
         public int Player { get => player; protected set { player = value; } }
         public Vector3 CameraRotationalTarget { get { return -Rotation.Forward; } }
+        public BoundingSphereCls BoundingSphere { get => boundingSphere; }
+        public Vector3 Velocity { get => Rotation.Forward * forwardMoveRatio; }
+        public Vector3 Direction { get => Rotation.Forward; }
 
         /* -----------------------------------------------*/
+        #region CONSTRUCTORS
 
         public Tank(Model model, Vector3 startPosition, Vector3 rotation, TerrainGenerator terrain, float scale, float moveVelocity, int playerNum)
         {
@@ -38,29 +42,38 @@ namespace IP3D_TPF.Models
             Translation = Matrix.CreateTranslation(startPosition);
             Rotation = Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z);
             WorldMatrix = this.Translation * this.Rotation;
-            base.Terrain = terrain;
             this.Scale = Matrix.CreateScale(scale);
             this.moveVelocity = moveVelocity;
             rotationVelocityFactor = 50f;
+            // bounding sphere initialization
+            sphereOffset = new Vector3(0, 0.5f, 0);
+            boundingSphere = new BoundingSphereCls(GetPosition + sphereOffset, 2.8f);
 
             //player construtor
             if (playerNum > 2 || playerNum < 1) throw new ArgumentOutOfRangeException("player");
             else Player = playerNum;
             /*--------------------------*/
+            //terrain reference
+            base.Terrain = terrain;
         }
+
+        #endregion
+
+        #region MAIN METHODS
 
         public override void LoadContent(ContentManager content)
         {
+            //load tank textures
             tankTexture = content.Load<Texture2D>("engine_diff_tex");
             tankTurretTexture = content.Load<Texture2D>("turret_alt_diff_tex");
 
-
+            //store model bones
             turretBone = Model.Bones["turret_geo"];
             cannonBone = Model.Bones["canon_geo"];
 
+            //store bone transforms
             turretTransform = turretBone.Transform;
             cannonTransform = cannonBone.Transform;
-
             BoneTransforms = new Matrix[Model.Bones.Count];
 
             base.yaw = base.pitch = base.roll = forwardMoveRatio = 0f;
@@ -86,12 +99,16 @@ namespace IP3D_TPF.Models
             turretRot = MathHelper.Clamp(turretRot, -1.5f, 1.5f);
             cannonPitch = MathHelper.Clamp(cannonPitch, -1f, -0.3f);
 
+            //update model position and its bones
             Model.Root.Transform = WorldMatrix;
             turretBone.Transform = -turretTransform + Matrix.CreateRotationY(turretRot) + Matrix.CreateTranslation(new Vector3(0f, 450f, -80));
             cannonBone.Transform = cannonTransform + Matrix.CreateRotationX(cannonPitch) + Matrix.CreateTranslation(new Vector3(0, 200f, 140));
             cannonTransform = Matrix.CreateTranslation(new Vector3(5f, 100f, 100f));
 
             Model.CopyAbsoluteBoneTransformsTo(BoneTransforms);
+
+            //update bounding sphere position
+            boundingSphere.Center = GetPosition + sphereOffset;
 
         }
 
@@ -135,7 +152,27 @@ namespace IP3D_TPF.Models
                     }                  
                 }
             }
+
+            boundingSphere.Draw(graphics, view, projection);
         }
+
+        #endregion
+
+        #region POSITION AND VELOCITY HELPER FUNCTIONS
+
+        public void SetMoveVelocity(float moveVel)
+        {
+            moveVelocity = moveVel;
+        }
+
+        public void SetPosition(Vector3 position)
+        {
+            Matrix newWorld = WorldMatrix;
+            newWorld.Translation = position;
+            WorldMatrix = newWorld;
+        }
+
+        #endregion
 
         #region ROTATION AND WORLD MATRIX CALC
 
@@ -182,6 +219,7 @@ namespace IP3D_TPF.Models
         #endregion
 
         #region IPLAYER IMPLEMENTATION
+
         public void UpdateInputs(Inputs inputs, GameTime gameTime)
         {
             switch(Player)
@@ -210,6 +248,10 @@ namespace IP3D_TPF.Models
                 case 2:
                     if (inputs.Check(Keys.Up)) forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     if (inputs.Check(Keys.Down)) forwardMoveRatio -= moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    /* Tank rotation inputs */
+                    if (inputs.Check(Keys.Left)) base.yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (inputs.Check(Keys.Right)) base.yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     break;
 
                 default:
@@ -218,12 +260,8 @@ namespace IP3D_TPF.Models
 
             
         }
-        #endregion
 
-        public void SetMoveVelocity(float moveVel)
-        {
-            moveVelocity = moveVel;
-        }
+        #endregion
 
     }
 }
