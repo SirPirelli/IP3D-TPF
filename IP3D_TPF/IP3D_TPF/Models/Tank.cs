@@ -1,6 +1,7 @@
 ﻿
 using System;
 using BoundingSpheresTest;
+using IP3D_TPF.AIBehaviour;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -23,7 +24,21 @@ namespace IP3D_TPF.Models
                     rotationVelocity, forwardMoveRatio,
                     moveVelocity, rotationVelocityFactor;
 
+        bool        isAI;
+
+        /// <summary>
+        /// AI movement class
+        /// </summary>
+        WanderMovement wanderMovement;
+
+        /// <summary>
+        /// Bounding Sphere used for collision handling
+        /// </summary>
         BoundingSphereCls boundingSphere;
+
+        /// <summary>
+        /// Offset of bounding sphere
+        /// </summary>
         Vector3 sphereOffset;
 
         /* ------------------------------------------*/
@@ -44,7 +59,8 @@ namespace IP3D_TPF.Models
             WorldMatrix = this.Translation * this.Rotation;
             this.Scale = Matrix.CreateScale(scale);
             this.moveVelocity = moveVelocity;
-            rotationVelocityFactor = 50f;
+            rotationVelocityFactor = 2f;
+            
             // bounding sphere initialization
             sphereOffset = new Vector3(0, 0.5f, 0);
             boundingSphere = new BoundingSphereCls(GetPosition + sphereOffset, 2.8f);
@@ -77,6 +93,9 @@ namespace IP3D_TPF.Models
             BoneTransforms = new Matrix[Model.Bones.Count];
 
             base.yaw = base.pitch = base.roll = forwardMoveRatio = 0f;
+
+            wanderMovement = new WanderMovement();
+            isAI = true;
         }
 
         public override void Update(GameTime gameTime)
@@ -86,8 +105,22 @@ namespace IP3D_TPF.Models
             forwardMoveRatio = 0f;
             /* ----------------*/
 
+            if (Game1.inputs.Check(Keys.N)) isAI = !isAI;
 
-            UpdateInputs(Game1.inputs, gameTime);
+            if(isAI)
+            {
+                var dir = wanderMovement.Update(gameTime);
+
+                System.Diagnostics.Debug.WriteLine(wanderMovement.DivisionRandomized);
+
+                yaw += dir.X * rotationVelocityFactor * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                forwardMoveRatio += Math.Abs(dir.Y) * moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else
+            {
+                UpdateInputs(Game1.inputs, gameTime);
+
+            }
 
             CalculateAndSetRotationVectors();
 

@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AIBehaviour\WanderMovement.cs" />
     <Compile Include="BoundingSphereCls.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="CameraFolder\CameraManager.cs" />
@@ -49,6 +50,7 @@
     <Compile Include="CameraFolder\SurfaceFollow.cs" />
     <Compile Include="CollisionHandler.cs" />
     <Compile Include="CameraFolder\ICamera.cs" />
+    <Compile Include="Geometry\Circle.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="Utilities\PlayerLabel.cs" />
     <Compile Include="Utilities\FPSCounter.cs" />

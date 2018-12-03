@@ -25,11 +25,12 @@ namespace IP3D_TPF
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
+        public static GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         FPSCounter fpsCounter;
-
+        
         public static Inputs inputs;
+        public static GraphicsDevice graphicsDevice;
 
         int cameraTypeIndex = 1;
         Viewport viewport;
@@ -87,6 +88,7 @@ namespace IP3D_TPF
         protected override void LoadContent()
         {         
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            graphicsDevice = GraphicsDevice;
 
             hasCollided = false;
 
@@ -108,11 +110,13 @@ namespace IP3D_TPF
             Model tankModel = Content.Load<Model>("tank");
             sky = Content.Load<Texture2D>("sky5");
 
-            tank = new Tank(tankModel, new Vector3(50f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 15f, 1);
+            tank = new Tank(tankModel, new Vector3(50f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 8f, 1);
             tank2 = new Tank(tankModel, new Vector3(90f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 15f, 2);
-            playersList = new List<ModelObject>();
-            playersList.Add(tank);
-            playersList.Add(tank2);
+            playersList = new List<ModelObject>
+            {
+                tank,
+                tank2
+            };
 
 
             /* initialize camera */
