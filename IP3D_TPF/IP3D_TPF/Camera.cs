@@ -1,10 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace IP3D_TPF
 {
@@ -146,6 +142,7 @@ namespace IP3D_TPF
             BackwardsCorrected.Y = 30; tankPosition.Y += 5;
 
             position = tankPosition + (BackwardsCorrected);
+            // se a camara estiver fora do terreno, programa crasha pq nao encontra o indice do terreno. criar condiçao caso esteja fora do terreno
             position.Y = MathHelper.Clamp(position.Y, terrain.CalculateHeightOfTerrain(position)+2f, 20f);
 
             viewMatrix = Matrix.CreateLookAt(position, tankPosition, Vector3.Up);

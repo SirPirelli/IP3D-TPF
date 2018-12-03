@@ -79,7 +79,7 @@ namespace IP3D_TPF.Models
             base.yaw = base.pitch = base.roll = forwardMoveRatio = 0f;
         }
 
-        public override void Update(GameTime gameTime, Camera cam)
+        public override void Update(GameTime gameTime)
         {
             //update fields
             rotationVelocity = (float)gameTime.ElapsedGameTime.TotalSeconds * MathHelper.PiOver2 * rotationVelocityFactor;
@@ -153,7 +153,12 @@ namespace IP3D_TPF.Models
                 }
             }
 
+            #region DEBUG BOUNDINGSPHERE
+
             boundingSphere.Draw(graphics, view, projection);
+
+            #endregion
+
         }
 
         #endregion
@@ -199,10 +204,10 @@ namespace IP3D_TPF.Models
             // calcula se a nova world matrix para sabermos a nova posiçao do tanque
             WorldMatrix = GetWorldMatrix();
 
-            float height = base.Terrain.CalculateHeightOfTerrain(WorldMatrix.Translation);
             Vector3 trans = WorldMatrix.Translation;
-            trans.X = MathHelper.Clamp(trans.X, 0, base.Terrain.TerrainBounds.X - base.Terrain.PlaneLength - (base.Terrain.PlaneLength / 2f));
-            trans.Z = MathHelper.Clamp(trans.Z, 0, base.Terrain.TerrainBounds.Y - base.Terrain.PlaneLength - (base.Terrain.PlaneLength / 2f));
+            trans.X = MathHelper.Clamp(trans.X, 0, base.Terrain.TerrainBounds.X - base.Terrain.PlaneLength - (base.Terrain.PlaneLength * 2f));
+            trans.Z = MathHelper.Clamp(trans.Z, 0, base.Terrain.TerrainBounds.Y - base.Terrain.PlaneLength - (base.Terrain.PlaneLength * 2f));
+            float height = base.Terrain.CalculateHeightOfTerrain(WorldMatrix.Translation);
             trans.Y = height + 0.1f;
 
             // create new world matrix to append new translation values and vectors according to rotation

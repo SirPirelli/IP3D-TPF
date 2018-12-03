@@ -32,7 +32,7 @@ namespace IP3D_TPF
 
         public Vector3 GetPosition { get { return WorldMatrix.Translation; } }
 
-        public abstract void Update(GameTime gameTime, Camera cam);
+        public abstract void Update(GameTime gameTime);
         public abstract void LoadContent(ContentManager content);
         public abstract void Draw(GraphicsDevice graphics, Matrix world, Matrix view, float aspectRatio);
 

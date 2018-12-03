@@ -43,13 +43,18 @@
   <ItemGroup>
     <Compile Include="BoundingSphereCls.cs" />
     <Compile Include="Camera.cs" />
+    <Compile Include="CameraFolder\CameraManager.cs" />
+    <Compile Include="CameraFolder\FollowTarget.cs" />
+    <Compile Include="CameraFolder\FreeCamera.cs" />
+    <Compile Include="CameraFolder\SurfaceFollow.cs" />
     <Compile Include="CollisionHandler.cs" />
+    <Compile Include="CameraFolder\ICamera.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="Utilities\PlayerLabel.cs" />
     <Compile Include="Utilities\FPSCounter.cs" />
     <Compile Include="Terrain\HeightMap.cs" />
     <Compile Include="Utilities\Inputs.cs" />
-    <Compile Include="MathHelpers.cs" />
+    <Compile Include="Utilities\MathHelpers.cs" />
     <Compile Include="Models\ModelObject.cs" />
     <Compile Include="Models\Tank.cs" />
     <Compile Include="Terrain\TerrainGenerator.cs" />

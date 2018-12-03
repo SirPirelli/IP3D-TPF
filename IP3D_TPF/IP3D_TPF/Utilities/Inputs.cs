@@ -43,6 +43,8 @@ namespace IP3D_TPF
             currentMouseState = Mouse.GetState();
         }
 
+        #region KEYBOARD FUNCTIONS
+
         /// <summary>
         /// Released the key in the frame function is called.
         /// </summary>
@@ -78,6 +80,25 @@ namespace IP3D_TPF
 
             return false;
         }
+
+        #endregion
+
+        #region MOUSE FUNCTIONS
+
+        public Vector2 GetMouseDeltaPosition(Vector2 position)
+        {
+            Vector2 delta = new Vector2(currentMouseState.X - position.X,
+                                        currentMouseState.Y - position.Y);
+
+            return delta;
+        }
+
+        public void SetMousePosition(Vector2 position)
+        {
+            Mouse.SetPosition((int)position.X, (int)position.Y);
+        }
+
+        #endregion
     }
 
 

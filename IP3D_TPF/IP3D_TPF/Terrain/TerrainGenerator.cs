@@ -34,7 +34,8 @@ namespace IP3D_TPF
 
         #endregion     
 
-        #region CONSTRUCTOR
+        #region CONSTRUCTORS
+
         public TerrainGenerator(GraphicsDevice graphics, float a_planeLength, float a_heightRatio, Texture2D texHeightMap, Texture2D texture)
         {
             effect = new BasicEffect(graphics);
@@ -86,9 +87,11 @@ namespace IP3D_TPF
 
             CreateTerrain(graphics);
         }
+        
         #endregion
 
         #region OVERLOADED METHODS
+
         public void LoadContent(ContentManager content)
         {
 
@@ -124,7 +127,7 @@ namespace IP3D_TPF
 
             }
 
-            /* DEBUG NORMALS */
+            ///* DEBUG NORMALS */
             //for (int j = 0; j < heightMap.Size.X; j++)
             //{
             //    for (int k = 0; k < heightMap.Size.Y; k++)
@@ -430,7 +433,7 @@ namespace IP3D_TPF
         private void SetEffect(GraphicsDevice graphics, Texture2D texture, Matrix worldMatrix)
         {
             // Calcula a aspectRatio, a view matrix e a projeção
-            float aspectRatio = (float)graphics.Viewport.Width / graphics.Viewport.Height;
+            float aspectRatio = (float)graphics.Viewport.AspectRatio;
 
             effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), aspectRatio, 0.1f, 2000.0f);
             effect.World = worldMatrix;
@@ -502,7 +505,6 @@ namespace IP3D_TPF
             float x = position.X; float z = position.Z;
             float x1 = (position.X - (position.X % planeLength)); float x2 = x1 + planeLength;
             float z1 = (position.Z - (position.Z % planeLength)); float z2 = z1 + planeLength;
-
 
             /* Para nao termos de fazer a multiplicaçao do heightRatio todos os frames, podemos introduzir no heightMap logo os valores finais,
              * depois construimos outra vez o terreno. */
