@@ -47,5 +47,25 @@ namespace IP3D_TPF
         {
             return  (Rotation * WorldMatrix * Translation);
         }
+
+        public Vector3 CalculateDirection(Vector3 target)
+        {
+            Vector3 direction = (target - GetPosition);
+            if (direction != Vector3.Zero) direction.Normalize();
+            return direction;
+        }
+
+        public Vector3 CalculateAcceleration(Vector3 targetVelocity, Vector3 velocity)
+        {
+            return targetVelocity - velocity;
+        }
+
+        public Vector3 CalculateAcceleration(Vector3 targetVelocity, Vector3 velocity, Vector3 maxAcceleration)
+        {
+            Vector3 acceleration = CalculateAcceleration(targetVelocity, velocity);
+            if (acceleration != Vector3.Zero) acceleration.Normalize();
+            acceleration *= maxAcceleration;
+            return acceleration;
+        }
     }
 }

@@ -145,6 +145,18 @@ namespace IP3D_TPF
         {
             return (2 * Math.PI / numOfDivisions) * iteration;
         }
+
+        public static double CalculateYaw(Vector2 direction)
+        {
+            var res = Math.Atan2(direction.X, direction.Y);
+            return res;
+        }
+
+        public static double CalculateYaw(Vector3 direction)
+        {
+            var res = Math.Atan2(direction.X, direction.Z);
+            return res;
+        }
     }
 }
 

@@ -1,10 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Microsoft.Xna.Framework;
 using WanderBehaviour.Geometry;
 
 namespace IP3D_TPF.AIBehaviour
@@ -47,7 +42,7 @@ namespace IP3D_TPF.AIBehaviour
             else min = division - divisionStep;
 
             //set max division
-            if (division + divisionStep > maxDivision)
+            if (division + divisionStep > maxDivision && !valueChanged)
             {
                 max = maxDivision;
                 int diff = (division + divisionStep) - maxDivision;

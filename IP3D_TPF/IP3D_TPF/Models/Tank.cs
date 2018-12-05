@@ -14,6 +14,8 @@ namespace IP3D_TPF.Models
         /* FIELDS */
         private int player;
 
+        Game1 game;
+
         ModelBone   turretBone, cannonBone;
 
         Texture2D   tankTexture, tankTurretTexture;
@@ -27,9 +29,16 @@ namespace IP3D_TPF.Models
         bool        isAI;
 
         /// <summary>
-        /// AI movement class
+        /// AI wander movement class
         /// </summary>
         WanderMovement wanderMovement;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        SeekFlee seekFleeMovement;
+
+        AIStates aIStates;
 
         /// <summary>
         /// Bounding Sphere used for collision handling
@@ -47,19 +56,21 @@ namespace IP3D_TPF.Models
         public BoundingSphereCls BoundingSphere { get => boundingSphere; }
         public Vector3 Velocity { get => Rotation.Forward * forwardMoveRatio; }
         public Vector3 Direction { get => Rotation.Forward; }
+        public SeekFlee SeekFlee { get => seekFleeMovement; }
 
         /* -----------------------------------------------*/
         #region CONSTRUCTORS
 
-        public Tank(Model model, Vector3 startPosition, Vector3 rotation, TerrainGenerator terrain, float scale, float moveVelocity, int playerNum)
+        public Tank(Game1 game, Model model, Vector3 startPosition, Vector3 rotation, TerrainGenerator terrain, float scale, float moveVelocity, int playerNum)
         {
+            this.game = game;
             Model = model;
             Translation = Matrix.CreateTranslation(startPosition);
             Rotation = Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z);
             WorldMatrix = this.Translation * this.Rotation;
             this.Scale = Matrix.CreateScale(scale);
             this.moveVelocity = moveVelocity;
-            rotationVelocityFactor = 2f;
+            rotationVelocityFactor = 30f;
             
             // bounding sphere initialization
             sphereOffset = new Vector3(0, 0.5f, 0);
@@ -71,6 +82,7 @@ namespace IP3D_TPF.Models
             /*--------------------------*/
             //terrain reference
             base.Terrain = terrain;
+            
         }
 
         #endregion
@@ -95,7 +107,8 @@ namespace IP3D_TPF.Models
             base.yaw = base.pitch = base.roll = forwardMoveRatio = 0f;
 
             wanderMovement = new WanderMovement();
-            isAI = true;
+            seekFleeMovement = new SeekFlee(this, null, moveVelocity * 1.5f, moveVelocity);
+            isAI = false;
         }
 
         public override void Update(GameTime gameTime)
@@ -105,24 +118,105 @@ namespace IP3D_TPF.Models
             forwardMoveRatio = 0f;
             /* ----------------*/
 
-            if (Game1.inputs.Check(Keys.N)) isAI = !isAI;
+            if(player == 1)
+            {
+                if (Game1.inputs.ReleasedKey(Keys.N)) isAI = !isAI;
+                if (Game1.inputs.ReleasedKey(Keys.M)) aIStates = AIStates.SEEK;
+                if (Game1.inputs.ReleasedKey(Keys.B)) aIStates = AIStates.WANDER;
+            }
+           
 
             if(isAI)
             {
-                var dir = wanderMovement.Update(gameTime);
+                switch (aIStates)
+                {
+                    case AIStates.SEEK:
 
-                System.Diagnostics.Debug.WriteLine(wanderMovement.DivisionRandomized);
+                        var direction = CalculateDirection(seekFleeMovement.Target.GetPosition);
+                        var diffRot = (Rotation.Forward - direction);
+                        //diffRot.Normalize();
 
-                yaw += dir.X * rotationVelocityFactor * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                forwardMoveRatio += Math.Abs(dir.Y) * moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        if(Game1.inputs.ReleasedKey(Keys.L))
+                        {
+                            int i = 0;
+                        }
+
+                        //vou descobrir a distancia entre os vetores do objecto e a posição do target.
+                        //
+                        var distLeft = Vector3.Distance(GetPosition + Rotation.Left * 1f, seekFleeMovement.Target.GetPosition);
+                        var distRight = Vector3.Distance(GetPosition + Rotation.Right * 1f, seekFleeMovement.Target.GetPosition);
+                        var distForw = Vector3.Distance(GetPosition + Rotation.Forward * 1f, seekFleeMovement.Target.GetPosition);
+                        var distBack = Vector3.Distance(GetPosition + Rotation.Backward * 1f, seekFleeMovement.Target.GetPosition);
+
+                        //se o target esta a frente do objecto
+                        if(distForw <= distBack)
+                        {
+                            if(distLeft <= distRight) //se esta à frente e à esquerda
+                            {
+                                yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            }
+                            else    //se esta a direita
+                            {
+                                yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            }
+                        }
+                        else                        // se o target esta atras do objecto
+                        {
+                            if(distLeft <= distRight)   //se esta atras e à esquerda
+                            {
+                                yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            }
+                            else                        //se esta atras e à direita
+
+                            {
+                                yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            }
+                        }
+
+
+                        var deltaYaw = (float)MathHelpersCls.CalculateYaw(diffRot);
+
+                        //yaw += deltaYaw * rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        CalculateAndSetRotationVectors();
+
+                        forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        System.Diagnostics.Debug.WriteLine("deltaYaw " + deltaYaw + " Yaw " + yaw);
+
+                        break;
+
+                    case AIStates.FLEE:
+                        break;
+
+                    case AIStates.WANDER:
+
+                        var dir = wanderMovement.Update(gameTime);
+
+                        yaw += dir.X * rotationVelocityFactor * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        forwardMoveRatio += Math.Abs(dir.Y) * moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+
+                        break;
+                }
+               
             }
             else
             {
                 UpdateInputs(Game1.inputs, gameTime);
+                CalculateAndSetRotationVectors();
+
+                if(player == 1)
+                {
+                    var direction = CalculateDirection(seekFleeMovement.Target.GetPosition);
+                    var diffRot = (Rotation.Forward - direction);
+                    diffRot.Normalize();
+                    var deltaYaw = (float)MathHelpersCls.CalculateYaw(diffRot);
+
+                    System.Diagnostics.Debug.WriteLine("deltaYaw " + deltaYaw + " Yaw " + yaw);
+                }             
 
             }
-
-            CalculateAndSetRotationVectors();
 
             Translation = Matrix.CreateTranslation(Rotation.Forward * forwardMoveRatio);
 
@@ -163,7 +257,7 @@ namespace IP3D_TPF.Models
                         //VertexPositionNormalTexture[] debug = new VertexPositionNormalTexture[2];
                         //debug[0] = new VertexPositionNormalTexture(WorldMatrix.Translation, Vector3.Zero, Vector2.Zero);
                         //debug[1] = new VertexPositionNormalTexture(WorldMatrix.Translation + Rotation.Forward * 20f, Vector3.Zero, Vector2.UnitX);
-                        //graphics.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.LineList, debug, 0, 1);
+                        //graphics.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.LineList, debug, 0, 1);                     
                         ///* ----------------------------------------------------------------------------------------------------------------------------*/
                         #endregion
 
@@ -180,6 +274,8 @@ namespace IP3D_TPF.Models
                         effect.DirectionalLight1.SpecularColor = new Vector3(0.1f, 0.1f, 0.1f);
                         effect.AmbientLightColor = new Vector3(0.9f, 0.9f, 0.9f);
 
+                        effect.VertexColorEnabled = false;
+                        effect.TextureEnabled = true;
                         mesh.Draw();
 
                     }                  

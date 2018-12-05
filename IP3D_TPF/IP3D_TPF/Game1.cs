@@ -56,6 +56,8 @@ namespace IP3D_TPF
 
         CameraManager cameraManager;
 
+        internal List<ModelObject> PlayersList { get => playersList; set => playersList = value; }
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -110,8 +112,8 @@ namespace IP3D_TPF
             Model tankModel = Content.Load<Model>("tank");
             sky = Content.Load<Texture2D>("sky5");
 
-            tank = new Tank(tankModel, new Vector3(50f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 8f, 1);
-            tank2 = new Tank(tankModel, new Vector3(90f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 15f, 2);
+            tank = new Tank(this, tankModel, new Vector3(50f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 8f, 1);
+            tank2 = new Tank(this, tankModel, new Vector3(90f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 15f, 2);
             playersList = new List<ModelObject>
             {
                 tank,
@@ -138,6 +140,7 @@ namespace IP3D_TPF
 
             tank.LoadContent(Content);
             tank2.LoadContent(Content);
+            tank.SeekFlee.Target = tank2;
 
             playerLabel = new PlayerLabel();
             label = Content.Load<Texture2D>("label");
@@ -269,6 +272,7 @@ namespace IP3D_TPF
 
             spriteBatch.Begin();
             spriteBatch.DrawString(font, "Tank1 Position: " + tank.GetPosition, new Vector2(10f, 40f), Color.White);
+            spriteBatch.DrawString(font, "Tank2 Position: " + tank2.GetPosition, new Vector2(10f, 60f), Color.White);
             spriteBatch.End();
 
 
