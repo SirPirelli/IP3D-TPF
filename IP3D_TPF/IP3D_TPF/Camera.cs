@@ -80,10 +80,6 @@ namespace IP3D_TPF
             KeyboardState keyboardState = Game1.inputs.CurrentKeyboardState;
             MouseState mouseState = Game1.inputs.CurrentMouseState;
 
-            //System.Diagnostics.Debug.WriteLine("MousePos: " + mouseState.Position);
-            //System.Diagnostics.Debug.WriteLine("ViewCenter: " + viewportCenter);
-            //System.Diagnostics.Debug.WriteLine("Position: " + position);
-
             #region MOUSE STATE
             int deltaX = mouseState.X - (int)viewportCenter.X;
             int deltaY = mouseState.Y - (int)viewportCenter.Y;

@@ -26,6 +26,11 @@ namespace IP3D_TPF.AIBehaviour
             this.circle = new Circle(Vector3.Zero, 1, Game1.graphicsDevice);
         }
 
+        /// <summary>
+        /// Calculates a new direction vector.
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <returns>Unit direction vector. </returns>
         public Vector2 Update(GameTime gameTime)
         {
             int min, max;

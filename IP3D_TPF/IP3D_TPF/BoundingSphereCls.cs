@@ -25,6 +25,11 @@ namespace BoundingSpheresTest
 
         }
 
+        /// <summary>
+        /// Checks if Arg <see cref="BoundingSphereCls"/> intersects <see langword="this"/> object.
+        /// </summary>
+        /// <param name="sphere"></param>
+        /// <returns></returns>
         public bool Intersects(BoundingSphereCls sphere)
         {
             float sqDis = Vector3.DistanceSquared(sphere.center, center);
@@ -35,6 +40,11 @@ namespace BoundingSpheresTest
                 return true;
         }
 
+        /// <summary>
+        /// Checks ff the other <see cref="BoundingSphereCls"/> is completely contained on <see langword="this"/> object.
+        /// </summary>
+        /// <param name="sphere"></param>
+        /// <returns></returns>
         public bool Contains(BoundingSphereCls sphere)
         {
             float sqDis = Vector3.DistanceSquared(sphere.center, center);
@@ -62,6 +72,12 @@ namespace BoundingSpheresTest
         }
 
 
+        /// <summary>
+        /// Only used for DebugDraw purposes.
+        /// </summary>
+        /// <param name="graphics"></param>
+        /// <param name="view"></param>
+        /// <param name="projection"></param>
         public void Draw(GraphicsDevice graphics, Matrix view, Matrix projection)
         {
             VertexPositionColor[] vertices = new VertexPositionColor[numOfDivisions];

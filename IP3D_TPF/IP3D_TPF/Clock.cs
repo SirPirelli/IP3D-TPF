@@ -2,7 +2,7 @@
 
 namespace IP3D_TPF
 {
-    public class Clock
+    public class Clock //not needed
     {
         private double totalTimeInSeconds;
 

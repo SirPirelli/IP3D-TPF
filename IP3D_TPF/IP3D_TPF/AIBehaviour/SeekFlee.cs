@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace IP3D_TPF.AIBehaviour
 {
+    /// <summary>
+    /// This class is not being properly used (architected).
+    /// </summary>
     class SeekFlee
     {
         ModelObject parent;
@@ -35,15 +38,6 @@ namespace IP3D_TPF.AIBehaviour
             this.maxAcceleration = 20f;
             this.maxVelocity = 10f;
         }
-
-        //public void Update(GameTime gameTime)
-        //{
-        //   Vector3 dir = parent.CalculateDirection(target.GetPosition);
-
-        //    if (Seek)   dir *= maxVelocity;
-        //    else        dir *= -maxVelocity;
-
-        //}
 
     }
 }

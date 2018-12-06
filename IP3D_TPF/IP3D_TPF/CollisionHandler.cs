@@ -11,7 +11,12 @@ namespace IP3D_TPF
     abstract class CollisionHandler
     {
 
-        //sphere - sphere collision
+        /// <summary>
+        /// Checks for intersection between two <see cref="BoundingSphereCls"/>.
+        /// </summary>
+        /// <param name="sphere"></param>
+        /// <param name="sphere2"></param>
+        /// <returns></returns>
         public static bool IsColliding(BoundingSphereCls sphere, BoundingSphereCls sphere2)
         {
             if (sphere.Intersects(sphere2)) return true;

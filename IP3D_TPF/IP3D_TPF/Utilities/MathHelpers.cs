@@ -131,7 +131,11 @@ namespace IP3D_TPF
                                (float)Math.Atan2(matrix.M21, matrix.M22));
         }
 
-        /* funçao estatica que devolve um vector2 a partir de um angulo */
+        /// <summary>
+        /// From an angle calculates the unit position on a circle.
+        /// </summary>
+        /// <param name="angle">Angle in radians.</param>
+        /// <returns></returns>
         public static Vector2 GetPositionFromAngle(double angle)
         {
             float x = (float)Math.Cos(angle);
@@ -140,18 +144,33 @@ namespace IP3D_TPF
             return new Vector2(x, z);
         }
 
-        /* funçao estatica que itera sobre um circulo e devolve o angulo */
+        /// <summary>
+        /// Function that calculates the angle in radians given the numbers of divisions of a circle and the division we want to calculate.
+        /// </summary>
+        /// <param name="numOfDivisions"></param>
+        /// <param name="iteration"></param>
+        /// <returns></returns>
         public static double GetAngleFromCircle(int numOfDivisions, float iteration)
         {
             return (2 * Math.PI / numOfDivisions) * iteration;
         }
 
+        /// <summary>
+        /// Calculate the yaw from a direction unit vector.
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <returns></returns>
         public static double CalculateYaw(Vector2 direction)
         {
             var res = Math.Atan2(direction.X, direction.Y);
             return res;
         }
 
+        /// <summary>
+        /// Calculate the yaw from a direction unit vector.
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <returns></returns>
         public static double CalculateYaw(Vector3 direction)
         {
             var res = Math.Atan2(direction.X, direction.Z);

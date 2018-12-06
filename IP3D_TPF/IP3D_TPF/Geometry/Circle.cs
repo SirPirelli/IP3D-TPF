@@ -17,7 +17,6 @@ namespace WanderBehaviour.Geometry
         BasicEffect effect;
 
         VertexBuffer vertexBuffer;
-        IndexBuffer indexBuffer;
         VertexPositionColor[] vertices;
         VertexPositionColor[] positions;
 
@@ -44,7 +43,7 @@ namespace WanderBehaviour.Geometry
             this.positions = new VertexPositionColor[numOfDivisions];
 
             this.vertexBuffer = new VertexBuffer(graphics, typeof(VertexPositionColor), numOfDivisions, BufferUsage.None);
-            this.WorldMatrix = Matrix.Identity/*Matrix.CreateTranslation(center)*/;
+            this.WorldMatrix = Matrix.Identity;
 
             CreateGeometry();
             SetEffect(graphics);
@@ -52,7 +51,7 @@ namespace WanderBehaviour.Geometry
         #endregion
 
         /// <summary>
-        /// Update function is only used for debug purposes.
+        /// Only used for DebugDraw purposes.
         /// Sets the <see cref="VertexPositionColor"/> ready to be sent to <see cref="VertexBuffer"/>
         /// </summary>
         /// <param name="gameTime"></param>
@@ -68,6 +67,12 @@ namespace WanderBehaviour.Geometry
             vertexBuffer.SetData<VertexPositionColor>(positions);
         }
 
+        /// <summary>
+        /// Only used for DebugDraw purposes.
+        /// </summary>
+        /// <param name="graphics"></param>
+        /// <param name="viewMatrix"></param>
+        /// <param name="projectionMatrix"></param>
         public void Draw(GraphicsDevice graphics, Matrix viewMatrix, Matrix projectionMatrix)
         {
             graphics.SetVertexBuffer(vertexBuffer);

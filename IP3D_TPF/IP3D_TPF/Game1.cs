@@ -116,7 +116,7 @@ namespace IP3D_TPF
             Model tankModel = Content.Load<Model>("tank");
             sky = Content.Load<Texture2D>("sky5");
 
-            tank = new Tank(this, tankModel, new Vector3(50f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 8f, 1);
+            tank = new Tank(this, tankModel, new Vector3(50f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 15f, 1);
             tank2 = new Tank(this, tankModel, new Vector3(90f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 15f, 2);
             playersList = new List<ModelObject>
             {
@@ -145,7 +145,7 @@ namespace IP3D_TPF
 
             tank.LoadContent(Content);
             tank2.LoadContent(Content);
-            tank2.IsAI = true;
+            tank2.IsAI = false;
             tank2.SeekFlee.Target = tank;
 
             playerLabel = new PlayerLabel();
@@ -193,8 +193,6 @@ namespace IP3D_TPF
             tank.Update(gameTime);
             tank2.Update(gameTime);
 
-            if (tank2.AIState == AIBehaviour.AIStates.WANDER) System.Diagnostics.Debug.WriteLine(tank2.Velocity);
-
             #region COLLISION RESPONSE
 
             /* COLLISION RESPONSE TANK - TANK */
@@ -211,7 +209,7 @@ namespace IP3D_TPF
                 Vector3 tankDir2 = tank2.Velocity;
                 if (tankDir2 != Vector3.Zero) tankDir2.Normalize();
                 Vector3 tankPos2 = tank2.WorldMatrix.Translation;
-                Vector3 newTankPos2 = tankPos2 + (tankDir2 * -tank2.Velocity * 1.2f);
+                Vector3 newTankPos2 = tankPos2 - tank2.Velocity;
                 tank2.SetPosition(newTankPos2);
             }
 

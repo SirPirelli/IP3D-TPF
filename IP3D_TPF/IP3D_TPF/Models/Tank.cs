@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using BoundingSpheresTest;
 using IP3D_TPF.AIBehaviour;
 using Microsoft.Xna.Framework;
@@ -77,7 +76,7 @@ namespace IP3D_TPF.Models
             this.Scale = Matrix.CreateScale(scale);
             this.moveVelocity = moveVelocity;
             this.rotationVelocityFactor = 30f;
-            this.wanderRotationalVelFactor = rotationVelocityFactor / 10f;
+            this.wanderRotationalVelFactor = rotationVelocityFactor / 15f;
             
             // bounding sphere initialization
             sphereOffset = new Vector3(0, 0.5f, 0);
@@ -131,113 +130,11 @@ namespace IP3D_TPF.Models
 
             if(isAI)
             {
-
+                //checks if is time to change AI state
                 DefineAIState(gameTime);
 
-                switch (aIStates)
-                {
-                    case AIStates.SEEK:
-
-                        //vou descobrir a distancia entre os vetores do objecto e a posição do target.
-                        var distLeft = Vector3.Distance(GetPosition + Rotation.Left, seekFleeMovement.Target.GetPosition);
-                        var distRight = Vector3.Distance(GetPosition + Rotation.Right, seekFleeMovement.Target.GetPosition);
-                        var distForw = Vector3.Distance(GetPosition + Rotation.Forward, seekFleeMovement.Target.GetPosition);
-                        var distBack = Vector3.Distance(GetPosition + Rotation.Backward, seekFleeMovement.Target.GetPosition);
-
-                        System.Diagnostics.Debug.WriteLine(distForw);
-
-                        //only moves if the distance to target is bigger than a value
-                        if (distBack > 6 && distForw > 6 && distLeft > 6 && distRight > 6)
-                        {
-                            forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                        }
-                        else forwardMoveRatio = 0f;
-
-                        //if the distance value between the distRight and distLeft are less than a value, it doesnt move the yaw.
-                        if(Math.Abs(distLeft - distRight) >= 0.3f)
-                        {
-                            if (distForw <= distBack)            //se o target esta a frente do objecto
-                            {
-                                if (distLeft <= distRight)       //se esta à frente e à esquerda
-                                {
-                                    yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                                }
-                                else                            //se esta a direita
-                                {
-                                    yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                                }
-                            }
-                            else                                // se o target esta atras do objecto
-                            {
-                                if (distLeft <= distRight)       //se esta atras e à esquerda
-                                {
-                                    yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                                }
-                                else                            //se esta atras e à direita
-
-                                {
-                                    yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                                }
-                            }
-                        }
-
-                        
-
-                        break;
-
-                    case AIStates.FLEE:
-
-                        //vou descobrir a distancia entre os vetores do objecto e a posição do target.
-                        distLeft = Vector3.Distance(GetPosition + Rotation.Left, seekFleeMovement.Target.GetPosition);
-                        distRight = Vector3.Distance(GetPosition + Rotation.Right, seekFleeMovement.Target.GetPosition);
-                        distForw = Vector3.Distance(GetPosition + Rotation.Forward, seekFleeMovement.Target.GetPosition);
-                        distBack = Vector3.Distance(GetPosition + Rotation.Backward, seekFleeMovement.Target.GetPosition);
-
-                        //only moves if the distance to target is bigger than a value
-                        if (distBack < 75 && distForw < 75 && distLeft < 75 && distRight < 75)
-                        {
-                            forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                        }
-                        else forwardMoveRatio = 0f;
-
-                        //if the distance value between the distRight and distLeft are less than a value, it doesnt move the yaw.
-                        if (Math.Abs(distLeft - distRight) >= 0.3f)
-                        {
-                            if (distForw <= distBack)            //se o target esta a frente do objecto
-                            {
-                                if (distLeft <= distRight)       //se esta à frente e à esquerda
-                                {
-                                    yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                                }
-                                else                            //se esta a direita
-                                {
-                                    yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                                }
-                            }
-                            else                                // se o target esta atras do objecto
-                            {
-                                if (distLeft <= distRight)       //se esta atras e à esquerda
-                                {
-                                    yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                                }
-                                else                            //se esta atras e à direita
-
-                                {
-                                    yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                                }
-                            }
-                        }
-                        break;
-
-                    case AIStates.WANDER:
-
-                        var dir = wanderMovement.Update(gameTime);
-
-                        yaw += dir.X * wanderRotationalVelFactor * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                        forwardMoveRatio += Math.Abs(dir.Y) * moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                        break;
-                }             
+                //Update AI state
+                UpdateAIState(gameTime);
             }
             else
             {
@@ -264,10 +161,10 @@ namespace IP3D_TPF.Models
 
             //update bounding sphere position
             boundingSphere.Center = GetPosition + sphereOffset;
+            
 
         }
 
-        /* as texturas a utilizar guardamos no objecto, e nao no game. Depois mudar */
         public override void Draw(GraphicsDevice graphics, Matrix view, Matrix projection, float aspectRatio)
         {           
             foreach (ModelMesh mesh in Model.Meshes)
@@ -310,9 +207,9 @@ namespace IP3D_TPF.Models
                 }
             }
 
-            #region DEBUG BOUNDINGSPHERE
+            #region DEBUG BOUNDINGSPHERE (commented)
 
-            boundingSphere.Draw(graphics, view, projection);
+            //boundingSphere.Draw(graphics, view, projection);
 
             #endregion
 
@@ -356,6 +253,11 @@ namespace IP3D_TPF.Models
 
         }
 
+        /// <summary>
+        /// Clamps position given the <see cref="TerrainGenerator"/> bounds and height of Terrain.
+        /// Does not have in account the scale matrix.
+        /// </summary>
+        /// <returns></returns>
         private Matrix CalculateWorldMatrix()
         {
             // calcula se a nova world matrix para sabermos a nova posiçao do tanque
@@ -428,37 +330,37 @@ namespace IP3D_TPF.Models
 
             if(timeSinceLastAIChange > timeToChangeAIState)
             {
-                int state = Game1.random.Next(0, 2);
+                int state = Game1.random.Next(0, 3);
                 int t;
 
                 switch (aIStates)
                 {
                     case AIStates.SEEK:
 
-                        if(state == 0) //wander
+                        if(state == 0) //flee
                         {
-                            t = Game1.random.Next(3, 8);
-                            aIStates = AIStates.WANDER;
-                        }
-                        else    //flee
-                        {
-                            t = Game1.random.Next(1, 5);
+                            t = Game1.random.Next(1,5);
                             aIStates = AIStates.FLEE;
+                        }
+                        else    //wander
+                        {
+                            t = Game1.random.Next(4, 9);
+                            aIStates = AIStates.WANDER;
                         }
 
                         break;
 
                     case AIStates.WANDER:
 
-                        if (state == 0) //seek
+                        if (state == 0) //flee
                         {
-                            t = Game1.random.Next(3, 8);
-                            aIStates = AIStates.SEEK;
-                        }
-                        else    //flee
-                        {
-                            t = Game1.random.Next(1, 5);
+                            t = Game1.random.Next(1,5);
                             aIStates = AIStates.FLEE;
+                        }
+                        else    //seek
+                        {
+                            t = Game1.random.Next(3,8);
+                            aIStates = AIStates.SEEK;
                         }
                         break;
 
@@ -484,6 +386,110 @@ namespace IP3D_TPF.Models
 
                 timeSinceLastAIChange = 0d;
                 timeToChangeAIState = t;
+            }
+        }
+
+        private void UpdateAIState(GameTime gameTime)
+        {
+            switch (aIStates)
+            {
+                case AIStates.SEEK:
+
+                    //vou descobrir a distancia entre os vetores do objecto e a posição do target.
+                    var distLeft = Vector3.Distance(GetPosition + Rotation.Left, seekFleeMovement.Target.GetPosition);
+                    var distRight = Vector3.Distance(GetPosition + Rotation.Right, seekFleeMovement.Target.GetPosition);
+                    var distForw = Vector3.Distance(GetPosition + Rotation.Forward, seekFleeMovement.Target.GetPosition);
+                    var distBack = Vector3.Distance(GetPosition + Rotation.Backward, seekFleeMovement.Target.GetPosition);
+
+                    //only moves if the distance to target is bigger than a value
+                    if (distBack > 6 && distForw > 6 && distLeft > 6 && distRight > 6)
+                    {
+                        forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+                    else forwardMoveRatio = 0f;
+
+                    //if the distance value between the distRight and distLeft are less than a value, it doesnt move the yaw.
+                    if (Math.Abs(distLeft - distRight) >= 0.3f)
+                    {
+                        if (distForw <= distBack)            //se o target esta a frente do objecto
+                        {
+                            if (distLeft <= distRight)       //se esta à frente e à esquerda
+                            {
+                                yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            }
+                            else                            //se esta a direita
+                            {
+                                yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            }
+                        }
+                        else                                // se o target esta atras do objecto
+                        {
+                            if (distLeft <= distRight)       //se esta atras e à esquerda
+                            {
+                                yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            }
+                            else                            //se esta atras e à direita
+
+                            {
+                                yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            }
+                        }
+                    }
+
+                    break;
+
+                case AIStates.FLEE:
+
+                    //vou descobrir a distancia entre os vetores do objecto e a posição do target.
+                    distLeft = Vector3.Distance(GetPosition + Rotation.Left, seekFleeMovement.Target.GetPosition);
+                    distRight = Vector3.Distance(GetPosition + Rotation.Right, seekFleeMovement.Target.GetPosition);
+                    distForw = Vector3.Distance(GetPosition + Rotation.Forward, seekFleeMovement.Target.GetPosition);
+                    distBack = Vector3.Distance(GetPosition + Rotation.Backward, seekFleeMovement.Target.GetPosition);
+
+                    //only moves if the distance to target is bigger than a value
+                    if (distBack < 50 && distForw < 50 && distLeft < 50 && distRight < 50)
+                    {
+                        forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+                    else aIStates = AIStates.WANDER;
+
+                    //if the distance value between the distRight and distLeft are less than a value, it doesnt move the yaw.
+                    if (Math.Abs(distLeft - distRight) >= 0.3f)
+                    {
+                        if (distForw <= distBack)            //se o target esta a frente do objecto
+                        {
+                            if (distLeft <= distRight)       //se esta à frente e à esquerda
+                            {
+                                yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            }
+                            else                            //se esta a direita
+                            {
+                                yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            }
+                        }
+                        else                                // se o target esta atras do objecto
+                        {
+                            if (distLeft <= distRight)       //se esta atras e à esquerda
+                            {
+                                yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            }
+                            else                            //se esta atras e à direita
+
+                            {
+                                yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                            }
+                        }
+                    }
+                    break;
+
+                case AIStates.WANDER:
+
+                    var dir = wanderMovement.Update(gameTime);
+
+                    yaw += dir.X * wanderRotationalVelFactor * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    forwardMoveRatio += Math.Abs(dir.Y) * moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    break;
             }
         }
 
