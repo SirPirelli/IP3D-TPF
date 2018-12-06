@@ -6,7 +6,6 @@ namespace IP3D_TPF.CameraFolder
 {
     class CameraManager
     {
-        Inputs inputs;
 
         FreeCamera freeCamera;
         FollowTarget followTargetCam;
@@ -19,7 +18,6 @@ namespace IP3D_TPF.CameraFolder
         public FollowTarget FollowTarget { get => followTargetCam; }
         public SurfaceFollow SurfaceFollow { get => surfaceFollowCam; }
         public int ActiveCameraIndex { get; protected set; }
-        internal Inputs Inputs { get => inputs; }
 
         private List<ModelObject>PlayersList { get; set; }
 
@@ -32,9 +30,8 @@ namespace IP3D_TPF.CameraFolder
 
 
         #region CONSTRUCTORS
-        public CameraManager(Inputs a_inputs, Viewport viewport, TerrainGenerator terrain, float nearPlaneDistance, float farPlaneDistance, List<ModelObject> playersList)
+        public CameraManager(Viewport viewport, TerrainGenerator terrain, float nearPlaneDistance, float farPlaneDistance, List<ModelObject> playersList)
         {
-            inputs = a_inputs;
             this.Viewport = viewport;
             this.Terrain = terrain;
             PlayersList = playersList;
@@ -87,20 +84,20 @@ namespace IP3D_TPF.CameraFolder
 
         private void CheckInputs()
         {
-            if (inputs.Check(Microsoft.Xna.Framework.Input.Keys.F1))
+            if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.F1))
             {
                 ActiveCameraIndex = 0;
             }
-            else if (inputs.Check(Microsoft.Xna.Framework.Input.Keys.F2))
+            else if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.F2))
             {
                 ActiveCameraIndex = 1;
             }
-            else if (inputs.Check(Microsoft.Xna.Framework.Input.Keys.F3))
+            else if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.F3))
             {
                 followTargetCam.TargetModel = PlayersList[0];
                 ActiveCameraIndex = 2;
             }
-            else if (inputs.Check(Microsoft.Xna.Framework.Input.Keys.F4))
+            else if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.F4))
             {
                 followTargetCam.TargetModel = PlayersList[1];
                 ActiveCameraIndex = 2;

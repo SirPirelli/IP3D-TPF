@@ -53,7 +53,7 @@ namespace IP3D_TPF.CameraFolder
             yaw = yawPitchRoll.X;
             pitch = yawPitchRoll.Y;
 
-            cameraManager.Inputs.SetMousePosition(cameraManager.Viewport.Bounds.Center.ToVector2());
+            Game1.inputs.SetMousePosition(cameraManager.Viewport.Bounds.Center.ToVector2());
         }
         public SurfaceFollow(CameraManager cameraManager, float nearPlaneDistance, float farPlaneDistance)
         {
@@ -75,7 +75,7 @@ namespace IP3D_TPF.CameraFolder
             yaw = yawPitchRoll.X;
             pitch = yawPitchRoll.Y;
 
-            cameraManager.Inputs.SetMousePosition(cameraManager.Viewport.Bounds.Center.ToVector2());
+            Game1.inputs.SetMousePosition(cameraManager.Viewport.Bounds.Center.ToVector2());
 
         }
 
@@ -85,7 +85,7 @@ namespace IP3D_TPF.CameraFolder
         {
             #region MOUSE STATE
 
-            var delta = cameraManager.Inputs.GetMouseDeltaPosition(cameraManager.Viewport.Bounds.Center.ToVector2());
+            var delta = Game1.inputs.GetMouseDeltaPosition(cameraManager.Viewport.Bounds.Center.ToVector2());
 
             yaw -= delta.X * ScaleRadiansPerPixel;
             pitch -= delta.Y * ScaleRadiansPerPixel;
@@ -99,20 +99,20 @@ namespace IP3D_TPF.CameraFolder
             
             Vector3 right = Vector3.Cross(direction, Vector3.Up);
 
-            if (cameraManager.Inputs.Check(Microsoft.Xna.Framework.Input.Keys.NumPad8))
+            if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.NumPad8))
             {
                 Position += direction * Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-            else if (cameraManager.Inputs.Check(Microsoft.Xna.Framework.Input.Keys.NumPad5))
+            else if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.NumPad5))
             {
                 Position -= direction * Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
-            if (cameraManager.Inputs.Check(Microsoft.Xna.Framework.Input.Keys.NumPad4))
+            if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.NumPad4))
             {
                 Position -= right * Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-            else if (cameraManager.Inputs.Check(Microsoft.Xna.Framework.Input.Keys.NumPad6))
+            else if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.NumPad6))
             {
                 Position += right * Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds
 ;
@@ -127,7 +127,7 @@ namespace IP3D_TPF.CameraFolder
 
             ViewMatrix = Matrix.CreateLookAt(Position, Target, Vector3.Up);
 
-            cameraManager.Inputs.SetMousePosition(cameraManager.Viewport.Bounds.Center.ToVector2());
+            Game1.inputs.SetMousePosition(cameraManager.Viewport.Bounds.Center.ToVector2());
         }
     }
 }

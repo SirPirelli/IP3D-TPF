@@ -60,8 +60,13 @@ namespace IP3D_TPF.CameraFolder
             var target = TargetModel.GetPosition + Vector3.Up * 5;
 
             cameraRotationalTarget = (cameraRotationalTarget * 20f) + offset;
-            position = TargetModel.GetPosition + cameraRotationalTarget + Vector3.Up * 20; ;
-            position.Y = MathHelper.Clamp(position.Y, cameraManager.Terrain.CalculateHeightOfTerrain(position) + 2f, 20f);
+            position = TargetModel.GetPosition + cameraRotationalTarget + Vector3.Up * 15;
+
+            if (position.X > 0 && position.X < cameraManager.Terrain.TerrainBounds.X && position.Z > 0 && position.Z < cameraManager.Terrain.TerrainBounds.Y)
+            {
+                position.Y = MathHelper.Clamp(position.Y, cameraManager.Terrain.CalculateHeightOfTerrain(position) + 2f, 20f);
+            }
+            
 
             ViewMatrix = Matrix.CreateLookAt(position, target, Vector3.Up);
 

@@ -32,7 +32,6 @@ namespace IP3D_TPF
         public static Inputs inputs;
         public static GraphicsDevice graphicsDevice;
 
-        int cameraTypeIndex = 1;
         Viewport viewport;
         bool hasCollided;
 
@@ -120,6 +119,8 @@ namespace IP3D_TPF
                 tank2
             };
 
+            //initialize inputs class
+            inputs = new Inputs();
 
             /* initialize camera */
             Vector3 startCamPos = new Vector3(50f, 30f, 68f);
@@ -131,11 +132,10 @@ namespace IP3D_TPF
             float nearPlane = 0.1f;
             float farPlane = 2000f;
             float fovAngleDeg = 45f;
-            //cam = new Camera(startCamPos, camTarget, viewportCenter, radiansPP, camVelocity, terrainGen, offsetY,
-            //                fovAngleDeg, nearPlane, farPlane, aspectRatio);
-            inputs = new Inputs();
             viewport = GraphicsDevice.Viewport;
-            cameraManager = new CameraManager(inputs, viewport, terrainGen, nearPlane, farPlane, playersList);
+
+            cameraManager = new CameraManager(viewport, terrainGen, nearPlane, farPlane, playersList);
+
             /*-------------------------------------*/
 
             tank.LoadContent(Content);
@@ -171,35 +171,7 @@ namespace IP3D_TPF
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
             inputs.Update();
-
-            #region OLD CameraSelection
-            ////Logic for cameraSelection
-            //if (inputs.CurrentKeyboardState.IsKeyDown(Keys.F1)) cameraTypeIndex = 1;
-            //if (inputs.CurrentKeyboardState.IsKeyDown(Keys.F2)) cameraTypeIndex = 2;
-            //if (inputs.CurrentKeyboardState.IsKeyDown(Keys.F3)) cameraTypeIndex = 3;
-            //if (inputs.CurrentKeyboardState.IsKeyDown(Keys.F4)) cameraTypeIndex = 4;
-            //// Switch Logic for camera update()
-            //switch (cameraTypeIndex)
-            //{
-            //    case 1:
-            //        cam.UpdateFreeCamera(gameTime, terrainGen);
-            //        break;
-            //    case 2:
-            //        cam.UpdateFollow(gameTime, tank.WorldMatrix.Translation, tank.CameraRotationalTarget);
-            //        break;
-            //    case 3:
-            //        cam.UpdateSurfaceFollow(gameTime, terrainGen, inputs);
-            //        break;
-            //    case 4:
-            //        cam.UpdateFollow(gameTime, tank2.WorldMatrix.Translation, tank2.CameraRotationalTarget);
-            //        break;
-            //    default:
-
-            //        break;
-            //}
-            #endregion
 
             #region PLAYER LABEL
             // PLAYER LABELS
@@ -236,6 +208,11 @@ namespace IP3D_TPF
 
             #endregion
 
+            if(inputs.ReleasedKey(Keys.Q))
+            {
+                int i = 0;
+            }
+
             cameraManager.Update(gameTime);
 
             base.Update(gameTime);
@@ -266,7 +243,7 @@ namespace IP3D_TPF
             terrainGen.Draw(GraphicsDevice, cameraManager.ActiveViewMatrix);
             tank.Draw(GraphicsDevice, cameraManager.ActiveViewMatrix, cameraManager.ActiveProjectionMatrix, aspectRatio);
             tank2.Draw(GraphicsDevice, cameraManager.ActiveViewMatrix, cameraManager.ActiveProjectionMatrix, aspectRatio);
-            fpsCounter.Draw(spriteBatch, hasCollided, cameraTypeIndex);
+            fpsCounter.Draw(spriteBatch, hasCollided, cameraManager.ActiveCameraIndex);
 
             //playerLabel.DrawLabel(GraphicsDevice, spriteBatch, cameraTypeIndex, label, label2, cam, aspectRatio, tank, tank2);
 
@@ -274,7 +251,6 @@ namespace IP3D_TPF
             spriteBatch.DrawString(font, "Tank1 Position: " + tank.GetPosition, new Vector2(10f, 40f), Color.White);
             spriteBatch.DrawString(font, "Tank2 Position: " + tank2.GetPosition, new Vector2(10f, 60f), Color.White);
             spriteBatch.End();
-
 
             base.Draw(gameTime);
         }

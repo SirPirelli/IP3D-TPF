@@ -132,57 +132,40 @@ namespace IP3D_TPF.Models
                 {
                     case AIStates.SEEK:
 
-                        var direction = CalculateDirection(seekFleeMovement.Target.GetPosition);
-                        var diffRot = (Rotation.Forward - direction);
-                        //diffRot.Normalize();
-
-                        if(Game1.inputs.ReleasedKey(Keys.L))
-                        {
-                            int i = 0;
-                        }
-
                         //vou descobrir a distancia entre os vetores do objecto e a posição do target.
                         //
                         var distLeft = Vector3.Distance(GetPosition + Rotation.Left * 1f, seekFleeMovement.Target.GetPosition);
                         var distRight = Vector3.Distance(GetPosition + Rotation.Right * 1f, seekFleeMovement.Target.GetPosition);
                         var distForw = Vector3.Distance(GetPosition + Rotation.Forward * 1f, seekFleeMovement.Target.GetPosition);
                         var distBack = Vector3.Distance(GetPosition + Rotation.Backward * 1f, seekFleeMovement.Target.GetPosition);
-
-                        //se o target esta a frente do objecto
-                        if(distForw <= distBack)
+                        
+                        if(distForw <= distBack)            //se o target esta a frente do objecto
                         {
-                            if(distLeft <= distRight) //se esta à frente e à esquerda
+                            if(distLeft <= distRight)       //se esta à frente e à esquerda
                             {
                                 yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                             }
-                            else    //se esta a direita
+                            else                            //se esta a direita
                             {
                                 yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                             }
                         }
-                        else                        // se o target esta atras do objecto
+                        else                                // se o target esta atras do objecto
                         {
-                            if(distLeft <= distRight)   //se esta atras e à esquerda
+                            if(distLeft <= distRight)       //se esta atras e à esquerda
                             {
                                 yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                             }
-                            else                        //se esta atras e à direita
+                            else                            //se esta atras e à direita
 
                             {
                                 yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                             }
                         }
-
-
-                        var deltaYaw = (float)MathHelpersCls.CalculateYaw(diffRot);
-
-                        //yaw += deltaYaw * rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                         CalculateAndSetRotationVectors();
 
                         forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                        System.Diagnostics.Debug.WriteLine("deltaYaw " + deltaYaw + " Yaw " + yaw);
 
                         break;
 
