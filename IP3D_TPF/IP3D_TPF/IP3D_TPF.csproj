@@ -50,6 +50,7 @@
     <Compile Include="CameraFolder\FollowTarget.cs" />
     <Compile Include="CameraFolder\FreeCamera.cs" />
     <Compile Include="CameraFolder\SurfaceFollow.cs" />
+    <Compile Include="Clock.cs" />
     <Compile Include="CollisionHandler.cs" />
     <Compile Include="CameraFolder\ICamera.cs" />
     <Compile Include="Geometry\Circle.cs" />

@@ -36,14 +36,14 @@ namespace IP3D_TPF.AIBehaviour
             this.maxVelocity = 10f;
         }
 
-        public void Update(GameTime gameTime)
-        {
-           Vector3 dir = parent.CalculateDirection(target.GetPosition);
+        //public void Update(GameTime gameTime)
+        //{
+        //   Vector3 dir = parent.CalculateDirection(target.GetPosition);
 
-            if (Seek)   dir *= maxVelocity;
-            else        dir *= -maxVelocity;
+        //    if (Seek)   dir *= maxVelocity;
+        //    else        dir *= -maxVelocity;
 
-        }
+        //}
 
     }
 }

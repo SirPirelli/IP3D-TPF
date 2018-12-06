@@ -17,6 +17,7 @@ using IP3D_TPF.Models;
 using BoundingSpheresTest;
 using System.Collections.Generic;
 using IP3D_TPF.CameraFolder;
+using System;
 
 namespace IP3D_TPF
 {
@@ -28,9 +29,11 @@ namespace IP3D_TPF
         public static GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         FPSCounter fpsCounter;
-        
+
+        public static Clock clock;
         public static Inputs inputs;
         public static GraphicsDevice graphicsDevice;
+        public static Random random;
 
         Viewport viewport;
         bool hasCollided;
@@ -90,6 +93,8 @@ namespace IP3D_TPF
         {         
             spriteBatch = new SpriteBatch(GraphicsDevice);
             graphicsDevice = GraphicsDevice;
+            random = new Random();
+            clock = new Clock();
 
             hasCollided = false;
 
@@ -100,7 +105,7 @@ namespace IP3D_TPF
 
             /* initialize terrain */
             float planeLength = 1f;
-            float heightRatio = 0.06f;
+            float heightRatio = 0.006f;
             Texture2D heightMapTex = Content.Load<Texture2D>("lh3d1");
             Texture2D terrainTex = Content.Load<Texture2D>("Diffuse2");
             terrainGen = new TerrainGenerator(GraphicsDevice, planeLength, heightRatio, heightMapTex, terrainTex);
@@ -140,7 +145,8 @@ namespace IP3D_TPF
 
             tank.LoadContent(Content);
             tank2.LoadContent(Content);
-            tank.SeekFlee.Target = tank2;
+            tank2.IsAI = true;
+            tank2.SeekFlee.Target = tank;
 
             playerLabel = new PlayerLabel();
             label = Content.Load<Texture2D>("label");
@@ -171,6 +177,7 @@ namespace IP3D_TPF
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            clock.Update(gameTime);
             inputs.Update();
 
             #region PLAYER LABEL
@@ -185,6 +192,8 @@ namespace IP3D_TPF
             fpsCounter.Update(gameTime);
             tank.Update(gameTime);
             tank2.Update(gameTime);
+
+            if (tank2.AIState == AIBehaviour.AIStates.WANDER) System.Diagnostics.Debug.WriteLine(tank2.Velocity);
 
             #region COLLISION RESPONSE
 
@@ -202,16 +211,11 @@ namespace IP3D_TPF
                 Vector3 tankDir2 = tank2.Velocity;
                 if (tankDir2 != Vector3.Zero) tankDir2.Normalize();
                 Vector3 tankPos2 = tank2.WorldMatrix.Translation;
-                Vector3 newTankPos2 = tankPos2 + (tankDir2 * -tank2.Velocity * 1.1f);
+                Vector3 newTankPos2 = tankPos2 + (tankDir2 * -tank2.Velocity * 1.2f);
                 tank2.SetPosition(newTankPos2);
             }
 
             #endregion
-
-            if(inputs.ReleasedKey(Keys.Q))
-            {
-                int i = 0;
-            }
 
             cameraManager.Update(gameTime);
 

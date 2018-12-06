@@ -26,7 +26,13 @@ namespace IP3D_TPF.Models
                     rotationVelocity, forwardMoveRatio,
                     moveVelocity, rotationVelocityFactor;
 
+        float       wanderRotationalVelFactor;
+
+        //AI vars
         bool        isAI;
+        double timeSinceLastAIChange;
+        int timeToChangeAIState;
+        AIStates aIStates;
 
         /// <summary>
         /// AI wander movement class
@@ -37,8 +43,6 @@ namespace IP3D_TPF.Models
         /// 
         /// </summary>
         SeekFlee seekFleeMovement;
-
-        AIStates aIStates;
 
         /// <summary>
         /// Bounding Sphere used for collision handling
@@ -57,6 +61,8 @@ namespace IP3D_TPF.Models
         public Vector3 Velocity { get => Rotation.Forward * forwardMoveRatio; }
         public Vector3 Direction { get => Rotation.Forward; }
         public SeekFlee SeekFlee { get => seekFleeMovement; }
+        public bool IsAI { get => isAI; set => isAI = value; }
+        public AIStates AIState { get => aIStates; }
 
         /* -----------------------------------------------*/
         #region CONSTRUCTORS
@@ -67,10 +73,11 @@ namespace IP3D_TPF.Models
             Model = model;
             Translation = Matrix.CreateTranslation(startPosition);
             Rotation = Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z);
-            WorldMatrix = this.Translation * this.Rotation;
+            WorldMatrix = this.Rotation * this.Translation;
             this.Scale = Matrix.CreateScale(scale);
             this.moveVelocity = moveVelocity;
-            rotationVelocityFactor = 30f;
+            this.rotationVelocityFactor = 30f;
+            this.wanderRotationalVelFactor = rotationVelocityFactor / 10f;
             
             // bounding sphere initialization
             sphereOffset = new Vector3(0, 0.5f, 0);
@@ -82,6 +89,9 @@ namespace IP3D_TPF.Models
             /*--------------------------*/
             //terrain reference
             base.Terrain = terrain;
+
+            this.timeSinceLastAIChange = 0d;
+            this.timeToChangeAIState = 3;
             
         }
 
@@ -109,6 +119,7 @@ namespace IP3D_TPF.Models
             wanderMovement = new WanderMovement();
             seekFleeMovement = new SeekFlee(this, null, moveVelocity * 1.5f, moveVelocity);
             isAI = false;
+            aIStates = AIStates.WANDER;
         }
 
         public override void Update(GameTime gameTime)
@@ -118,88 +129,122 @@ namespace IP3D_TPF.Models
             forwardMoveRatio = 0f;
             /* ----------------*/
 
-            if(player == 1)
-            {
-                if (Game1.inputs.ReleasedKey(Keys.N)) isAI = !isAI;
-                if (Game1.inputs.ReleasedKey(Keys.M)) aIStates = AIStates.SEEK;
-                if (Game1.inputs.ReleasedKey(Keys.B)) aIStates = AIStates.WANDER;
-            }
-           
-
             if(isAI)
             {
+
+                DefineAIState(gameTime);
+
                 switch (aIStates)
                 {
                     case AIStates.SEEK:
 
                         //vou descobrir a distancia entre os vetores do objecto e a posição do target.
-                        //
-                        var distLeft = Vector3.Distance(GetPosition + Rotation.Left * 1f, seekFleeMovement.Target.GetPosition);
-                        var distRight = Vector3.Distance(GetPosition + Rotation.Right * 1f, seekFleeMovement.Target.GetPosition);
-                        var distForw = Vector3.Distance(GetPosition + Rotation.Forward * 1f, seekFleeMovement.Target.GetPosition);
-                        var distBack = Vector3.Distance(GetPosition + Rotation.Backward * 1f, seekFleeMovement.Target.GetPosition);
+                        var distLeft = Vector3.Distance(GetPosition + Rotation.Left, seekFleeMovement.Target.GetPosition);
+                        var distRight = Vector3.Distance(GetPosition + Rotation.Right, seekFleeMovement.Target.GetPosition);
+                        var distForw = Vector3.Distance(GetPosition + Rotation.Forward, seekFleeMovement.Target.GetPosition);
+                        var distBack = Vector3.Distance(GetPosition + Rotation.Backward, seekFleeMovement.Target.GetPosition);
+
+                        System.Diagnostics.Debug.WriteLine(distForw);
+
+                        //only moves if the distance to target is bigger than a value
+                        if (distBack > 6 && distForw > 6 && distLeft > 6 && distRight > 6)
+                        {
+                            forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        }
+                        else forwardMoveRatio = 0f;
+
+                        //if the distance value between the distRight and distLeft are less than a value, it doesnt move the yaw.
+                        if(Math.Abs(distLeft - distRight) >= 0.3f)
+                        {
+                            if (distForw <= distBack)            //se o target esta a frente do objecto
+                            {
+                                if (distLeft <= distRight)       //se esta à frente e à esquerda
+                                {
+                                    yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                }
+                                else                            //se esta a direita
+                                {
+                                    yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                }
+                            }
+                            else                                // se o target esta atras do objecto
+                            {
+                                if (distLeft <= distRight)       //se esta atras e à esquerda
+                                {
+                                    yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                }
+                                else                            //se esta atras e à direita
+
+                                {
+                                    yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                }
+                            }
+                        }
+
                         
-                        if(distForw <= distBack)            //se o target esta a frente do objecto
-                        {
-                            if(distLeft <= distRight)       //se esta à frente e à esquerda
-                            {
-                                yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                            }
-                            else                            //se esta a direita
-                            {
-                                yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                            }
-                        }
-                        else                                // se o target esta atras do objecto
-                        {
-                            if(distLeft <= distRight)       //se esta atras e à esquerda
-                            {
-                                yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                            }
-                            else                            //se esta atras e à direita
-
-                            {
-                                yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                            }
-                        }
-
-                        CalculateAndSetRotationVectors();
-
-                        forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                         break;
 
                     case AIStates.FLEE:
+
+                        //vou descobrir a distancia entre os vetores do objecto e a posição do target.
+                        distLeft = Vector3.Distance(GetPosition + Rotation.Left, seekFleeMovement.Target.GetPosition);
+                        distRight = Vector3.Distance(GetPosition + Rotation.Right, seekFleeMovement.Target.GetPosition);
+                        distForw = Vector3.Distance(GetPosition + Rotation.Forward, seekFleeMovement.Target.GetPosition);
+                        distBack = Vector3.Distance(GetPosition + Rotation.Backward, seekFleeMovement.Target.GetPosition);
+
+                        //only moves if the distance to target is bigger than a value
+                        if (distBack < 75 && distForw < 75 && distLeft < 75 && distRight < 75)
+                        {
+                            forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        }
+                        else forwardMoveRatio = 0f;
+
+                        //if the distance value between the distRight and distLeft are less than a value, it doesnt move the yaw.
+                        if (Math.Abs(distLeft - distRight) >= 0.3f)
+                        {
+                            if (distForw <= distBack)            //se o target esta a frente do objecto
+                            {
+                                if (distLeft <= distRight)       //se esta à frente e à esquerda
+                                {
+                                    yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                }
+                                else                            //se esta a direita
+                                {
+                                    yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                }
+                            }
+                            else                                // se o target esta atras do objecto
+                            {
+                                if (distLeft <= distRight)       //se esta atras e à esquerda
+                                {
+                                    yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                }
+                                else                            //se esta atras e à direita
+
+                                {
+                                    yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                }
+                            }
+                        }
                         break;
 
                     case AIStates.WANDER:
 
                         var dir = wanderMovement.Update(gameTime);
 
-                        yaw += dir.X * rotationVelocityFactor * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        yaw += dir.X * wanderRotationalVelFactor * (float)gameTime.ElapsedGameTime.TotalSeconds;
                         forwardMoveRatio += Math.Abs(dir.Y) * moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-
                         break;
-                }
-               
+                }             
             }
             else
             {
                 UpdateInputs(Game1.inputs, gameTime);
-                CalculateAndSetRotationVectors();
-
-                if(player == 1)
-                {
-                    var direction = CalculateDirection(seekFleeMovement.Target.GetPosition);
-                    var diffRot = (Rotation.Forward - direction);
-                    diffRot.Normalize();
-                    var deltaYaw = (float)MathHelpersCls.CalculateYaw(diffRot);
-
-                    System.Diagnostics.Debug.WriteLine("deltaYaw " + deltaYaw + " Yaw " + yaw);
-                }             
-
             }
+
+            CalculateAndSetRotationVectors();
 
             Translation = Matrix.CreateTranslation(Rotation.Forward * forwardMoveRatio);
 
@@ -374,8 +419,72 @@ namespace IP3D_TPF.Models
                 default:
                     throw new Exception("Player number is not assigned to a valid number.");
             }
-
             
+        }
+
+        private void DefineAIState(GameTime gameTime)
+        {
+            timeSinceLastAIChange += gameTime.ElapsedGameTime.TotalSeconds;
+
+            if(timeSinceLastAIChange > timeToChangeAIState)
+            {
+                int state = Game1.random.Next(0, 2);
+                int t;
+
+                switch (aIStates)
+                {
+                    case AIStates.SEEK:
+
+                        if(state == 0) //wander
+                        {
+                            t = Game1.random.Next(3, 8);
+                            aIStates = AIStates.WANDER;
+                        }
+                        else    //flee
+                        {
+                            t = Game1.random.Next(1, 5);
+                            aIStates = AIStates.FLEE;
+                        }
+
+                        break;
+
+                    case AIStates.WANDER:
+
+                        if (state == 0) //seek
+                        {
+                            t = Game1.random.Next(3, 8);
+                            aIStates = AIStates.SEEK;
+                        }
+                        else    //flee
+                        {
+                            t = Game1.random.Next(1, 5);
+                            aIStates = AIStates.FLEE;
+                        }
+                        break;
+
+                    case AIStates.FLEE:
+                        if (state == 0) //wander
+                        {
+                            t = Game1.random.Next(3, 8);
+                            aIStates = AIStates.WANDER;
+
+                        }
+                        else    //seek
+                        {
+                            t = Game1.random.Next(1, 5);
+                            aIStates = AIStates.SEEK;
+                        }
+                        break;
+
+                    default:
+                        System.Diagnostics.Debug.WriteLine("CANT RECOGNIZE AISTATE VALUE IN TANK CLASS: DEFINEAISTATE");
+                        t = timeToChangeAIState;
+                        break;
+                }
+
+                timeSinceLastAIChange = 0d;
+                timeToChangeAIState = t;
+            }
         }
 
         #endregion
