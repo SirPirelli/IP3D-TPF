@@ -4,11 +4,17 @@ namespace IP3D_TPF.CameraFolder
 {
     class FollowTarget : ICamera
     {
-        CameraManager cameraManager;
+        #region FIELDS
+
+        private CameraManager cameraManager;
 
         private Vector3 position;
         private Vector3 target;
         private Vector3 offset;
+
+        #endregion
+
+        #region PROPERTIES
 
         public Vector3 Position { get => position; set => position = value; }
         public Vector3 Target { get => target; set => target = value; }
@@ -20,6 +26,9 @@ namespace IP3D_TPF.CameraFolder
         public float FarPlaneDistance { get; set; }
         public float FieldOfViewDegrees { get; set; }
 
+        #endregion
+
+        #region CONSTRUCTORS
         public FollowTarget(CameraManager cameraManager, ModelObject targetModel, float nearPlaneDistance, float farPlaneDistance)
         {
 
@@ -35,6 +44,7 @@ namespace IP3D_TPF.CameraFolder
             this.ViewMatrix = Matrix.CreateLookAt(position, target, Vector3.Up);
 
         }
+
         public FollowTarget(CameraManager cameraManager, float nearPlaneDistance, float farPlaneDistance)
         {
             this.cameraManager = cameraManager;
@@ -48,17 +58,20 @@ namespace IP3D_TPF.CameraFolder
             this.ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(FieldOfViewDegrees), cameraManager.Viewport.AspectRatio, nearPlaneDistance, farPlaneDistance);
             this.ViewMatrix = Matrix.CreateLookAt(position, target, Vector3.Up);
         }
+        #endregion
 
 
         public void Update(GameTime gameTime)
         {
             if (TargetModel == null) System.Diagnostics.Debug.WriteLine("FOLLOW TARGET CAM: TARGET MODEL IS NULL");
 
+
             Vector3 cameraRotationalTarget = -TargetModel.Rotation.Forward;
             cameraRotationalTarget.Normalize();
 
             var target = TargetModel.GetPosition + Vector3.Up * 5;
 
+                                               //UNIT VECTOR * SCALAR VALUE
             cameraRotationalTarget = (cameraRotationalTarget * 20f) + offset;
             position = TargetModel.GetPosition + cameraRotationalTarget + Vector3.Up * 15;
 
@@ -67,9 +80,7 @@ namespace IP3D_TPF.CameraFolder
                 position.Y = MathHelper.Clamp(position.Y, cameraManager.Terrain.CalculateHeightOfTerrain(position) + 2f, 20f);
             }
             
-
             ViewMatrix = Matrix.CreateLookAt(position, target, Vector3.Up);
-
         }
     }
 }

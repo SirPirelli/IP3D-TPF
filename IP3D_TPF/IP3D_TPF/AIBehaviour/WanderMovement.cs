@@ -15,6 +15,11 @@ namespace IP3D_TPF.AIBehaviour
         public Circle Circle { get => circle; set => circle = value; }
         public int DivisionRandomized { get => division; }
 
+        //change setters so it doesnt allow to set maxDivision values lower than minDivision and vice versa
+        public int MinDivision { get => minDivision; set => minDivision = value; }
+        public int MaxDivision { get => maxDivision; set => maxDivision = value; }
+        public int DivisionStep { get => divisionStep; set => divisionStep = value; }
+
         public WanderMovement()
         {
             this.numOfDivisions = 256;
@@ -26,12 +31,13 @@ namespace IP3D_TPF.AIBehaviour
             this.circle = new Circle(Vector3.Zero, 1, Game1.graphicsDevice);
         }
 
+        
         /// <summary>
         /// Calculates a new direction vector.
         /// </summary>
         /// <param name="gameTime"></param>
         /// <returns>Unit direction vector. </returns>
-        public Vector2 Update(GameTime gameTime)
+        public Vector2 GeneratePoint()
         {
             int min, max;
             bool valueChanged = false;
@@ -55,7 +61,7 @@ namespace IP3D_TPF.AIBehaviour
             }
             else max = division + divisionStep;
 
-            division = random.Next(min, max);
+            division = random.Next(min, max + 1);
             Vector2 point = MathHelpersCls.GetPositionFromAngle(MathHelpersCls.GetAngleFromCircle(numOfDivisions, division));
 
             return point;

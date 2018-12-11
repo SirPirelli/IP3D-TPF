@@ -78,6 +78,7 @@ namespace IP3D_TPF.CameraFolder
 
             Matrix rotation = Matrix.CreateFromYawPitchRoll(yaw, pitch, 0);
             Vector3 direction = Vector3.Transform(-Vector3.UnitZ, rotation);
+
             #endregion
 
             #region KEYBOARD STATE
@@ -91,18 +92,15 @@ namespace IP3D_TPF.CameraFolder
             else if(Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.NumPad2))
             {
                 Position -= direction * Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             }
 
             if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.NumPad4))
             {
                 Position -= right * Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             }
             else if(Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.NumPad6))
             {
                 Position += right * Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             }
             #endregion
 

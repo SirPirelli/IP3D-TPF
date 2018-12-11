@@ -30,7 +30,6 @@ namespace IP3D_TPF
         SpriteBatch spriteBatch;
         FPSCounter fpsCounter;
 
-        public static Clock clock;
         public static Inputs inputs;
         public static GraphicsDevice graphicsDevice;
         public static Random random;
@@ -57,6 +56,9 @@ namespace IP3D_TPF
         SpriteFont font;
 
         CameraManager cameraManager;
+
+        Model shell;
+        ShotManager shotManager;
 
         internal List<ModelObject> PlayersList { get => playersList; set => playersList = value; }
 
@@ -94,7 +96,6 @@ namespace IP3D_TPF
             spriteBatch = new SpriteBatch(GraphicsDevice);
             graphicsDevice = GraphicsDevice;
             random = new Random();
-            clock = new Clock();
 
             hasCollided = false;
 
@@ -105,7 +106,7 @@ namespace IP3D_TPF
 
             /* initialize terrain */
             float planeLength = 1f;
-            float heightRatio = 0.006f;
+            float heightRatio = 0.06f;
             Texture2D heightMapTex = Content.Load<Texture2D>("lh3d1");
             Texture2D terrainTex = Content.Load<Texture2D>("Diffuse2");
             terrainGen = new TerrainGenerator(GraphicsDevice, planeLength, heightRatio, heightMapTex, terrainTex);
@@ -114,10 +115,15 @@ namespace IP3D_TPF
             /* load meshes */
             Texture2D CubeTexture = Content.Load<Texture2D>("Sunteste");
             Model tankModel = Content.Load<Model>("tank");
+            shell = Content.Load<Model>("shell");
             sky = Content.Load<Texture2D>("sky5");
 
             tank = new Tank(this, tankModel, new Vector3(50f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 15f, 1);
             tank2 = new Tank(this, tankModel, new Vector3(90f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 15f, 2);
+            tank.LoadContent(Content);
+            tank2.LoadContent(Content);
+            tank2.IsAI = true;
+            tank2.SeekFlee.Target = tank;
             playersList = new List<ModelObject>
             {
                 tank,
@@ -131,22 +137,11 @@ namespace IP3D_TPF
             Vector3 startCamPos = new Vector3(50f, 30f, 68f);
             Vector3 camTarget = new Vector3(50f, 10f, 50f);
             Vector2 viewportCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
-            float radiansPP = MathHelper.Pi / 1000f;
-            float camVelocity = 30f;
-            float offsetY = 3f;
             float nearPlane = 0.1f;
             float farPlane = 2000f;
-            float fovAngleDeg = 45f;
             viewport = GraphicsDevice.Viewport;
-
             cameraManager = new CameraManager(viewport, terrainGen, nearPlane, farPlane, playersList);
-
             /*-------------------------------------*/
-
-            tank.LoadContent(Content);
-            tank2.LoadContent(Content);
-            tank2.IsAI = false;
-            tank2.SeekFlee.Target = tank;
 
             playerLabel = new PlayerLabel();
             label = Content.Load<Texture2D>("label");
@@ -155,6 +150,9 @@ namespace IP3D_TPF
             sphere = new BoundingSphereCls(tank.GetPosition + Vector3.UnitY, 2.5f);
 
             font = Content.Load<SpriteFont>("Font");
+
+            shotManager = new ShotManager(tank, tank2, shell);
+
 
         }
 
@@ -177,7 +175,6 @@ namespace IP3D_TPF
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            clock.Update(gameTime);
             inputs.Update();
 
             #region PLAYER LABEL
@@ -215,6 +212,8 @@ namespace IP3D_TPF
 
             #endregion
 
+            shotManager.UpdateShots(gameTime);
+
             cameraManager.Update(gameTime);
 
             base.Update(gameTime);
@@ -238,21 +237,28 @@ namespace IP3D_TPF
 
             #endregion
 
+            #region GRAPHICS DEVICE PARAMETERS
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-      
+            #endregion
+
             terrainGen.Draw(GraphicsDevice, cameraManager.ActiveViewMatrix);
             tank.Draw(GraphicsDevice, cameraManager.ActiveViewMatrix, cameraManager.ActiveProjectionMatrix, aspectRatio);
             tank2.Draw(GraphicsDevice, cameraManager.ActiveViewMatrix, cameraManager.ActiveProjectionMatrix, aspectRatio);
-            fpsCounter.Draw(spriteBatch, hasCollided, cameraManager.ActiveCameraIndex);
+
+            shotManager.DrawParticles(cameraManager.ActiveViewMatrix, label, aspectRatio);
+
+            fpsCounter.Draw(spriteBatch, hasCollided, cameraManager.ActiveCameraIndex, tank2);
 
             //playerLabel.DrawLabel(GraphicsDevice, spriteBatch, cameraTypeIndex, label, label2, cam, aspectRatio, tank, tank2);
 
+            //DEBUG PURPOSES
             spriteBatch.Begin();
             spriteBatch.DrawString(font, "Tank1 Position: " + tank.GetPosition, new Vector2(10f, 40f), Color.White);
             spriteBatch.DrawString(font, "Tank2 Position: " + tank2.GetPosition, new Vector2(10f, 60f), Color.White);
             spriteBatch.End();
+            //--------------
 
             base.Draw(gameTime);
         }

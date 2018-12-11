@@ -50,11 +50,14 @@
     <Compile Include="CameraFolder\FollowTarget.cs" />
     <Compile Include="CameraFolder\FreeCamera.cs" />
     <Compile Include="CameraFolder\SurfaceFollow.cs" />
-    <Compile Include="Clock.cs" />
     <Compile Include="CollisionHandler.cs" />
     <Compile Include="CameraFolder\ICamera.cs" />
     <Compile Include="Geometry\Circle.cs" />
     <Compile Include="IPlayer.cs" />
+    <Compile Include="ParticleSystem\Particle.cs" />
+    <Compile Include="ParticleSystem\ParticleSystem.cs" />
+    <Compile Include="ShotSystem\Shot.cs" />
+    <Compile Include="ShotSystem\ShotManager.cs" />
     <Compile Include="Utilities\PlayerLabel.cs" />
     <Compile Include="Utilities\FPSCounter.cs" />
     <Compile Include="Terrain\HeightMap.cs" />

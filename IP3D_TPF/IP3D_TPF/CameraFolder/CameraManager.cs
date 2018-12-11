@@ -82,6 +82,9 @@ namespace IP3D_TPF.CameraFolder
 
         }
 
+        /// <summary>
+        /// Queries for keyboard input to change camera index.
+        /// </summary>
         private void CheckInputs()
         {
             if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.F1))

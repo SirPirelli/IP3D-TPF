@@ -41,7 +41,7 @@ namespace BoundingSpheresTest
         }
 
         /// <summary>
-        /// Checks ff the other <see cref="BoundingSphereCls"/> is completely contained on <see langword="this"/> object.
+        /// Checks if the <see cref="BoundingSphereCls"/> is completely contained on <see langword="this"/> object.
         /// </summary>
         /// <param name="sphere"></param>
         /// <returns></returns>

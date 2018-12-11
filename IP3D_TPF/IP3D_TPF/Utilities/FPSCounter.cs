@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using IP3D_TPF.Models;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -39,13 +40,13 @@ namespace IP3D_TPF
 
         }
 
-        public void Draw(SpriteBatch spriteBatch, bool collision, int cameraIndex)
+        public void Draw(SpriteBatch spriteBatch, bool collision, int cameraIndex, Tank tank)
         {
             _total_frames++;
 
             spriteBatch.Begin();
 
-            spriteBatch.DrawString(_spr_font, string.Format("FPS={0} | Collision:" + collision + " | Camera Index: " + cameraIndex, _fps),
+            spriteBatch.DrawString(_spr_font, string.Format("FPS={0} | Collision:" + collision + " | Camera Index: " + cameraIndex, _fps + " | Tank Health: " + tank.Health),
                 new Vector2(10.0f, 20.0f), Color.White);
 
             spriteBatch.End();

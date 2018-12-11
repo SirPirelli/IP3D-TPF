@@ -10,10 +10,11 @@ namespace IP3D_TPF.Models
 {
     class Tank : ModelObject, IPlayer
     {
-        /* FIELDS */
+
+        #region FIELDS
         private int player;
 
-        Game1 game;
+        readonly Game1 game;
 
         ModelBone   turretBone, cannonBone;
 
@@ -21,7 +22,7 @@ namespace IP3D_TPF.Models
 
         Matrix      turretTransform, cannonTransform;
 
-        float       turretRot, cannonPitch,
+        internal float       turretRot, cannonPitch,
                     rotationVelocity, forwardMoveRatio,
                     moveVelocity, rotationVelocityFactor;
 
@@ -53,7 +54,11 @@ namespace IP3D_TPF.Models
         /// </summary>
         Vector3 sphereOffset;
 
-        /* ------------------------------------------*/
+        Vector3 startPosition, startRotation;
+        ParticleSystem particleSystem;
+        #endregion
+
+        #region PROPERTIES
         public int Player { get => player; protected set { player = value; } }
         public Vector3 CameraRotationalTarget { get { return -Rotation.Forward; } }
         public BoundingSphereCls BoundingSphere { get => boundingSphere; }
@@ -63,13 +68,18 @@ namespace IP3D_TPF.Models
         public bool IsAI { get => isAI; set => isAI = value; }
         public AIStates AIState { get => aIStates; }
 
-        /* -----------------------------------------------*/
+        public float Health { get; set; }
+        public bool Dead { get; set; }
+        #endregion
+
         #region CONSTRUCTORS
 
         public Tank(Game1 game, Model model, Vector3 startPosition, Vector3 rotation, TerrainGenerator terrain, float scale, float moveVelocity, int playerNum)
         {
             this.game = game;
             Model = model;
+            this.startPosition = startPosition;
+            this.startRotation = rotation;
             Translation = Matrix.CreateTranslation(startPosition);
             Rotation = Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z);
             WorldMatrix = this.Rotation * this.Translation;
@@ -91,6 +101,7 @@ namespace IP3D_TPF.Models
 
             this.timeSinceLastAIChange = 0d;
             this.timeToChangeAIState = 3;
+            this.Health = 100;
             
         }
 
@@ -107,6 +118,7 @@ namespace IP3D_TPF.Models
             //store model bones
             turretBone = Model.Bones["turret_geo"];
             cannonBone = Model.Bones["canon_geo"];
+            var particle = content.Load<Model>("Mud");
 
             //store bone transforms
             turretTransform = turretBone.Transform;
@@ -119,10 +131,18 @@ namespace IP3D_TPF.Models
             seekFleeMovement = new SeekFlee(this, null, moveVelocity * 1.5f, moveVelocity);
             isAI = false;
             aIStates = AIStates.WANDER;
+
+            particleSystem = new ParticleSystem(this, particle);
+
         }
 
         public override void Update(GameTime gameTime)
         {
+
+            if (Dead == true)
+            {
+                Reset();
+            }
             //update fields
             rotationVelocity = (float)gameTime.ElapsedGameTime.TotalSeconds * MathHelper.PiOver2 * rotationVelocityFactor;
             forwardMoveRatio = 0f;
@@ -161,12 +181,14 @@ namespace IP3D_TPF.Models
 
             //update bounding sphere position
             boundingSphere.Center = GetPosition + sphereOffset;
-            
+            particleSystem.Update(gameTime, this.WorldMatrix);
 
         }
 
         public override void Draw(GraphicsDevice graphics, Matrix view, Matrix projection, float aspectRatio)
-        {           
+        {
+            particleSystem.DrawParticles(view, projection, tankTexture);
+
             foreach (ModelMesh mesh in Model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
@@ -216,6 +238,15 @@ namespace IP3D_TPF.Models
         }
 
         #endregion
+
+        void Reset()
+        {
+            Translation = Matrix.CreateTranslation(startPosition);
+            Rotation = Matrix.CreateFromYawPitchRoll(startRotation.X, startRotation.Y, startRotation.Z);
+            WorldMatrix = this.Rotation * this.Translation;
+            Dead = false;
+            Health = 100;
+        }
 
         #region POSITION AND VELOCITY HELPER FUNCTIONS
 
@@ -324,11 +355,15 @@ namespace IP3D_TPF.Models
             
         }
 
+        #endregion
+
+        #region AI METHODS
+
         private void DefineAIState(GameTime gameTime)
         {
             timeSinceLastAIChange += gameTime.ElapsedGameTime.TotalSeconds;
 
-            if(timeSinceLastAIChange > timeToChangeAIState)
+            if (timeSinceLastAIChange > timeToChangeAIState)
             {
                 int state = Game1.random.Next(0, 3);
                 int t;
@@ -337,9 +372,9 @@ namespace IP3D_TPF.Models
                 {
                     case AIStates.SEEK:
 
-                        if(state == 0) //flee
+                        if (state == 0) //flee
                         {
-                            t = Game1.random.Next(1,5);
+                            t = Game1.random.Next(1, 5);
                             aIStates = AIStates.FLEE;
                         }
                         else    //wander
@@ -354,12 +389,12 @@ namespace IP3D_TPF.Models
 
                         if (state == 0) //flee
                         {
-                            t = Game1.random.Next(1,5);
+                            t = Game1.random.Next(1, 5);
                             aIStates = AIStates.FLEE;
                         }
                         else    //seek
                         {
-                            t = Game1.random.Next(3,8);
+                            t = Game1.random.Next(3, 8);
                             aIStates = AIStates.SEEK;
                         }
                         break;
@@ -484,7 +519,7 @@ namespace IP3D_TPF.Models
 
                 case AIStates.WANDER:
 
-                    var dir = wanderMovement.Update(gameTime);
+                    var dir = wanderMovement.GeneratePoint();
 
                     yaw += dir.X * wanderRotationalVelFactor * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     forwardMoveRatio += Math.Abs(dir.Y) * moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
