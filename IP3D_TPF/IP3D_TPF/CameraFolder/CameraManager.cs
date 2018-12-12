@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using IP3D_TPF.Models;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
@@ -17,9 +18,9 @@ namespace IP3D_TPF.CameraFolder
         public FreeCamera FreeCamera { get => freeCamera; }
         public FollowTarget FollowTarget { get => followTargetCam; }
         public SurfaceFollow SurfaceFollow { get => surfaceFollowCam; }
-        public int ActiveCameraIndex { get; protected set; }
+        public int ActiveCameraIndex { get; set; }
 
-        private List<ModelObject>PlayersList { get; set; }
+        private List<Tank>PlayersList { get; set; }
 
         /* ESTAS PROPRIEDADES SAO TEMPORARIAS 
          Como ao fazer listas de interfaces, nao temos acesso à instancia do objecto,
@@ -30,7 +31,7 @@ namespace IP3D_TPF.CameraFolder
 
 
         #region CONSTRUCTORS
-        public CameraManager(Viewport viewport, TerrainGenerator terrain, float nearPlaneDistance, float farPlaneDistance, List<ModelObject> playersList)
+        public CameraManager(Viewport viewport, TerrainGenerator terrain, float nearPlaneDistance, float farPlaneDistance, List<Tank> playersList)
         {
             this.Viewport = viewport;
             this.Terrain = terrain;

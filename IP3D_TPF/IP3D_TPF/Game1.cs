@@ -43,7 +43,7 @@ namespace IP3D_TPF
         //Camera cam;
         Tank tank;
         Tank tank2;
-        List<ModelObject> playersList;
+        List<Tank> playersList;
 
         PlayerLabel playerLabel;
         Texture2D label, label2;
@@ -60,7 +60,7 @@ namespace IP3D_TPF
         Model shell;
         ShotManager shotManager;
 
-        internal List<ModelObject> PlayersList { get => playersList; set => playersList = value; }
+        internal List<Tank> PlayersList { get => playersList; set => playersList = value; }
 
         public Game1()
         {
@@ -118,13 +118,16 @@ namespace IP3D_TPF
             shell = Content.Load<Model>("shell");
             sky = Content.Load<Texture2D>("sky5");
 
-            tank = new Tank(this, tankModel, new Vector3(50f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 15f, 1);
-            tank2 = new Tank(this, tankModel, new Vector3(90f, 40f, 50f), Vector3.Zero, terrainGen, 0.008f, 15f, 2);
+            Vector3 tank1Pos = new Vector3(terrainGen.HeightMap.Size.X * 0.8f, 20, terrainGen.HeightMap.Size.Y * 0.15f);
+            Vector3 tank2Pos = new Vector3(terrainGen.HeightMap.Size.X * 0.2f, 20, terrainGen.HeightMap.Size.Y * 0.85f);
+
+            tank = new Tank(this, tankModel, tank1Pos, tank2Pos, terrainGen, 0.008f, 15f, 1);
+            tank2 = new Tank(this, tankModel, tank2Pos, tank1Pos, terrainGen, 0.008f, 15f, 2);
             tank.LoadContent(Content);
             tank2.LoadContent(Content);
-            tank2.IsAI = true;
+            tank2.IsAI = false;
             tank2.SeekFlee.Target = tank;
-            playersList = new List<ModelObject>
+            playersList = new List<Tank>
             {
                 tank,
                 tank2
@@ -141,6 +144,8 @@ namespace IP3D_TPF
             float farPlane = 2000f;
             viewport = GraphicsDevice.Viewport;
             cameraManager = new CameraManager(viewport, terrainGen, nearPlane, farPlane, playersList);
+            cameraManager.ActiveCameraIndex = 2;
+            cameraManager.FollowTarget.TargetModel = tank;
             /*-------------------------------------*/
 
             playerLabel = new PlayerLabel();
@@ -174,6 +179,15 @@ namespace IP3D_TPF
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            foreach(Tank player in playersList)
+            {
+                if(player.Dead)
+                {
+                    foreach (Tank p in playersList) p.Reset();
+                    break;
+                }
+            }
 
             inputs.Update();
 
@@ -255,8 +269,8 @@ namespace IP3D_TPF
 
             //DEBUG PURPOSES
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, "Tank1 Position: " + tank.GetPosition, new Vector2(10f, 40f), Color.White);
-            spriteBatch.DrawString(font, "Tank2 Position: " + tank2.GetPosition, new Vector2(10f, 60f), Color.White);
+            spriteBatch.DrawString(font, "Player Health: " + tank.Health, new Vector2(10f, 60f), Color.White);
+            spriteBatch.DrawString(font, "AI Health: " + tank2.Health, new Vector2(viewport.Bounds.Width - 120f, 60f), Color.White);
             spriteBatch.End();
             //--------------
 

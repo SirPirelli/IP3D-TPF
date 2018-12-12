@@ -35,8 +35,7 @@ namespace IP3D_TPF
 
             fowardHorizontal = Vector3.Transform(Vector3.UnitZ, Matrix.CreateRotationY(Tank.yaw + Tank.turretRot));
             right = Vector3.Cross(fowardHorizontal, Tank.Rotation.Up);
-            forwardCorrected = Vector3.Cross(right, Tank.Rotation.Up);
-          
+            forwardCorrected = Vector3.Cross(right, Tank.Rotation.Up);         
 
             ////Forward Matrix of the tank
             Direction = forwardCorrected;
@@ -50,18 +49,15 @@ namespace IP3D_TPF
         #region MAIN METHODS
         public void UpdateParticle(GameTime gameTime)
         {
+            Direction.Y= -5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
             //Makes the model move in the direction of the transformed vector3
-            ScalarDirection += Direction * 2.2f;
-
-            ////Faked Gravity
-            ScalarDirection.Y -= 0.3f;
+            ScalarDirection += Direction;
 
             //Accumulation of all matrix as the world matrix
-            WorldMatrix = Matrix.CreateTranslation(Direction.X, 7, Direction.Z)* Matrix.CreateScale(10) * parentTank.GetWorldMatrix() * Matrix.CreateTranslation(ScalarDirection)* Matrix.CreateTranslation(Direction.X, 2, Direction.Z);
-
+            WorldMatrix = Matrix.CreateTranslation(Direction.X, 8, Direction.Z)* Matrix.CreateScale(10) * parentTank.GetWorldMatrix() * Matrix.CreateTranslation(ScalarDirection)* Matrix.CreateTranslation(Direction);
+           
             //System.Diagnostics.Debug.WriteLine(Direction);
             bulletCollider.Center = this.WorldMatrix.Translation;
-
 
         }
 

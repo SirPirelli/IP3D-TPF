@@ -87,6 +87,12 @@ namespace IP3D_TPF.Models
             this.moveVelocity = moveVelocity;
             this.rotationVelocityFactor = 30f;
             this.wanderRotationalVelFactor = rotationVelocityFactor / 15f;
+
+            var m = Matrix.CreateLookAt(startPosition, rotation, Vector3.Up);
+            var ypr = MathHelpersCls.ExtractYawPitchRoll(m);
+
+            base.yaw = ypr.X;
+            base.pitch = base.roll = 0f;
             
             // bounding sphere initialization
             sphereOffset = new Vector3(0, 0.5f, 0);
@@ -125,7 +131,7 @@ namespace IP3D_TPF.Models
             cannonTransform = cannonBone.Transform;
             BoneTransforms = new Matrix[Model.Bones.Count];
 
-            base.yaw = base.pitch = base.roll = forwardMoveRatio = 0f;
+            forwardMoveRatio = 0f;
 
             wanderMovement = new WanderMovement();
             seekFleeMovement = new SeekFlee(this, null, moveVelocity * 1.5f, moveVelocity);
@@ -139,10 +145,6 @@ namespace IP3D_TPF.Models
         public override void Update(GameTime gameTime)
         {
 
-            if (Dead == true)
-            {
-                Reset();
-            }
             //update fields
             rotationVelocity = (float)gameTime.ElapsedGameTime.TotalSeconds * MathHelper.PiOver2 * rotationVelocityFactor;
             forwardMoveRatio = 0f;
@@ -239,7 +241,7 @@ namespace IP3D_TPF.Models
 
         #endregion
 
-        void Reset()
+        public void Reset()
         {
             Translation = Matrix.CreateTranslation(startPosition);
             Rotation = Matrix.CreateFromYawPitchRoll(startRotation.X, startRotation.Y, startRotation.Z);

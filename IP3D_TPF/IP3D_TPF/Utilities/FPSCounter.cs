@@ -37,7 +37,6 @@ namespace IP3D_TPF
                 _total_frames = 0;
                 _elapsed_time = 0;
             }
-
         }
 
         public void Draw(SpriteBatch spriteBatch, bool collision, int cameraIndex, Tank tank)
@@ -46,8 +45,7 @@ namespace IP3D_TPF
 
             spriteBatch.Begin();
 
-            spriteBatch.DrawString(_spr_font, string.Format("FPS={0} | Collision:" + collision + " | Camera Index: " + cameraIndex, _fps + " | Tank Health: " + tank.Health),
-                new Vector2(10.0f, 20.0f), Color.White);
+            spriteBatch.DrawString(_spr_font, string.Format("FPS={0} ", _fps), new Vector2(10.0f, 20.0f), Color.White);
 
             spriteBatch.End();
         }

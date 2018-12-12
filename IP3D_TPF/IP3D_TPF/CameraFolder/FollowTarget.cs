@@ -36,7 +36,7 @@ namespace IP3D_TPF.CameraFolder
             this.TargetModel = targetModel;
             this.position = Vector3.Zero;
             this.target = Vector3.Zero;
-            this.offset = Vector3.Up * 3;
+            this.offset = Vector3.Up * 2;
             this.NearPlaneDistance = nearPlaneDistance;
             this.FarPlaneDistance = farPlaneDistance;
             this.FieldOfViewDegrees = 45;
