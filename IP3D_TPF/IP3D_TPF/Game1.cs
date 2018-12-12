@@ -108,7 +108,7 @@ namespace IP3D_TPF
             float planeLength = 1f;
             float heightRatio = 0.06f;
             Texture2D heightMapTex = Content.Load<Texture2D>("lh3d1");
-            Texture2D terrainTex = Content.Load<Texture2D>("Diffuse2");
+            Texture2D terrainTex = Content.Load<Texture2D>("RGB");
             terrainGen = new TerrainGenerator(GraphicsDevice, planeLength, heightRatio, heightMapTex, terrainTex);
             /* ----------------------------------- */
 

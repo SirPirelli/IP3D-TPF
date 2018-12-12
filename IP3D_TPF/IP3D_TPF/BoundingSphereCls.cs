@@ -55,22 +55,6 @@ namespace BoundingSpheresTest
                 return false;
         }
 
-        public bool Equals(BoundingSphereCls sphere)
-        {
-            if (center == sphere.center && radius == sphere.radius)
-                return true;
-
-            return false;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is BoundingSphereCls)
-                return this.Equals(obj);
-            
-                return false;
-        }
-
 
         /// <summary>
         /// Only used for DebugDraw purposes.

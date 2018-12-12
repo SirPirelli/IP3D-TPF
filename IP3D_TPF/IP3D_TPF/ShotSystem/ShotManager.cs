@@ -48,8 +48,6 @@ namespace IP3D_TPF
                 pressable = true;
             }
 
-            System.Diagnostics.Debug.WriteLine(pressable);
-
             foreach (Shot shot in bulletList)
             {
                 shot.UpdateParticle(gameTime);

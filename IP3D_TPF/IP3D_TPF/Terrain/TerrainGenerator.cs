@@ -349,7 +349,8 @@ namespace IP3D_TPF
 
         private void SetVertices(GraphicsDevice device)
         {
-            int index, texX, texY;
+            int index;
+            float texX, texY;
 
             vertices = new VertexPositionNormalTexture[heightMap.Values.Length];
 
@@ -361,11 +362,8 @@ namespace IP3D_TPF
                 for (int j = 0; j < heightMap.Size.Y; j++)
                 {
                     /* definir o valor da textura */
-                    if (i % 2 == 0) texX = 0;
-                    else texX = 1;
-
-                    if (j % 2 == 0) texY = 0;
-                    else texY = 1;
+                    texY = (1 / heightMap.Size.Y) * i;
+                    texX = (1 / heightMap.Size.X) * j;
                     /* ---------------------------*/
 
                     index = i * (int)heightMap.Size.Y + j;
