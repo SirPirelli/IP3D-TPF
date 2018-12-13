@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BoundingSpheresTest;
 using IP3D_TPF.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,9 +12,11 @@ namespace IP3D_TPF
         List<Shot> bulletList;
         Model shell;
         Tank tank, tank2;
-        float timer;
+        float timer, timer2;
         bool pressed;
         bool pressable;
+
+        BoundingSphereCls shotRadius;
 
         public ShotManager(Tank tank, Tank tank2,Model shell)
         {
@@ -23,14 +26,15 @@ namespace IP3D_TPF
             this.tank2 = tank2;
             pressed = false;
             pressable = true;
+            timer2 = 5;
+
+            shotRadius = new BoundingSphereCls(tank2.GetPosition, 30);
 
         }
 
         public void UpdateShots(GameTime gameTime)
         {
-            float x = tank.Terrain.TerrainBounds.X - tank.Terrain.PlaneLength - 5;
-            float z = tank.Terrain.TerrainBounds.Y - tank.Terrain.PlaneLength - 5;
-
+            #region TANK1
             if (Game1.inputs.Check(Keys.Space) && pressable == true)
             {
                 timer = (float)gameTime.TotalGameTime.TotalSeconds;
@@ -43,10 +47,34 @@ namespace IP3D_TPF
             {
                 pressable = true;
             }
+            #endregion
+
+            #region TANK2 AI
+
+            if(tank2.IsAI)
+            {
+
+                if (gameTime.TotalGameTime.TotalSeconds > timer2)
+                {
+
+                    shotRadius.Center = tank2.GetPosition;
+                    if(shotRadius.Intersects(tank.BoundingSphere))
+                    {
+
+                        timer2 = (float)gameTime.TotalGameTime.TotalSeconds + Game1.random.Next(1, 6);
+                        bulletList.Add(new Shot(tank2, shell));
+                        System.Diagnostics.Debug.WriteLine("FIRE");
+                    }             
+                }
+            }
+
+            #endregion
 
             foreach (Shot shot in bulletList)
             {
                 shot.UpdateParticle(gameTime);
+                if (shot.Parent == tank2) System.Diagnostics.Debug.WriteLine(shot.WorldMatrix.Translation);
+
             }
 
             for (int i = 0; i < bulletList.Count; i++)
@@ -71,24 +99,37 @@ namespace IP3D_TPF
                 }
 
                 /* checks for collision */
-                if (CollisionHandler.IsColliding(bulletList[i].bulletCollider, tank2.BoundingSphere) == true)
+                if(bulletList[i].Parent != tank2)
                 {
-                    bulletList.Remove(bulletList[i]);
-                    tank2.Health -= 10;
-                    if (tank2.Health <= 0) tank2.Dead = true;
+
+                    if (CollisionHandler.IsColliding(bulletList[i].bulletCollider, tank2.BoundingSphere) == true)
+                    {
+                        bulletList.Remove(bulletList[i]);
+                        tank2.Health -= 10;
+                        if (tank2.Health <= 0) tank2.Dead = true;
+                    }
+
+                }
+                else
+                {
+                    if (CollisionHandler.IsColliding(bulletList[i].bulletCollider, tank.BoundingSphere) == true)
+                    {
+                        bulletList.Remove(bulletList[i]);
+                        tank.Health -= 10;
+                        if (tank.Health <= 0) tank.Dead = true;
+                    }
                 }
 
-
-            }
-
-            if(bulletList.Count > 0)
-            {
-                System.Diagnostics.Debug.WriteLine(bulletList[0].WorldMatrix.Translation);
             }
         }
 
         public void DrawParticles(GraphicsDevice device,Matrix viewMatrix , Texture2D texture, float aspectRatio)
         {
+
+            #region DEBUG SHOT RADIUS
+            //shotRadius.Draw(device, viewMatrix, Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), aspectRatio, 0.1f, 4000.0f));
+            #endregion
+
             foreach (Shot shot in bulletList)
             {
                 shot.DrawParticle(device,viewMatrix, Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), aspectRatio, 0.1f, 4000.0f), texture);

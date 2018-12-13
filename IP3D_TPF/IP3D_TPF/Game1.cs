@@ -78,8 +78,8 @@ namespace IP3D_TPF
         protected override void Initialize()
         {
 
-            graphics.PreferredBackBufferWidth = 1366;
-            graphics.PreferredBackBufferHeight = 768;
+            graphics.PreferredBackBufferWidth = 1024;
+            graphics.PreferredBackBufferHeight = 576;
             //   graphics.GraphicsProfile = GraphicsProfile.HiDef;
           
             graphics.ApplyChanges();

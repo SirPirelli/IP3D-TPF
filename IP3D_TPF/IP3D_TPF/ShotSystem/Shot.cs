@@ -13,7 +13,7 @@ namespace IP3D_TPF
 {
     class Shot
     {
-        ModelObject Tank;
+        Tank Tank;
         Model shell;
         public Matrix WorldMatrix;
         Matrix rotationMatrix;
@@ -27,11 +27,12 @@ namespace IP3D_TPF
         Matrix tankW;
         Vector3 Translate;
 
+        public Tank Parent { get => Tank; }
 
         public Shot(Tank Tank, Model shell)
         {
 
-            bulletCollider = new BoundingSpheresTest.BoundingSphereCls(WorldMatrix.Translation, 1);
+            bulletCollider = new BoundingSpheresTest.BoundingSphereCls(WorldMatrix.Translation, 0.35f);
             this.Tank = Tank;
             this.shell = shell;
 
@@ -48,7 +49,6 @@ namespace IP3D_TPF
             Direction.Normalize();
             tankW = Tank.GetWorldMatrix();
 
-
         }
 
 
@@ -58,16 +58,10 @@ namespace IP3D_TPF
             Direction.Y -= 1.2f * (float)gameTime.ElapsedGameTime.TotalSeconds;
             ScalarDirection += Direction * 1.2f;
 
-
-            System.Diagnostics.Debug.WriteLine(ScalarDirection.Y);
-            //  y = gt2 / 2
             //Accumulation of all matrix as the world matrix
             WorldMatrix = Matrix.CreateTranslation(0, 35, 0) * Matrix.CreateScale(10) * tankW * Matrix.CreateTranslation(ScalarDirection);
-            //System.Diagnostics.Debug.WriteLine(Direction);
-
 
             bulletCollider.Center = this.WorldMatrix.Translation;
-
 
         }
 
@@ -75,6 +69,7 @@ namespace IP3D_TPF
         //Regular Draw model method
         public void DrawParticle(GraphicsDevice device, Matrix view, Matrix projection, Texture2D texture)
         {
+            bulletCollider.Draw(device, view, projection);
 
             foreach (ModelMesh mesh in shell.Meshes)
             {
