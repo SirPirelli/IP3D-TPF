@@ -44,7 +44,7 @@ namespace IP3D_TPF
         Tank tank;
         Tank tank2;
         List<Tank> playersList;
-
+        Flag flag1;
         PlayerLabel playerLabel;
         Texture2D label, label2;
 
@@ -59,6 +59,7 @@ namespace IP3D_TPF
 
         Model shell;
         ShotManager shotManager;
+        Texture2D cover;
 
         internal List<Tank> PlayersList { get => playersList; set => playersList = value; }
 
@@ -77,9 +78,10 @@ namespace IP3D_TPF
         protected override void Initialize()
         {
 
-            graphics.PreferredBackBufferWidth = 1280;
-            graphics.PreferredBackBufferHeight =720;
-            graphics.GraphicsProfile = GraphicsProfile.HiDef;
+            graphics.PreferredBackBufferWidth = 1366;
+            graphics.PreferredBackBufferHeight = 768;
+            //   graphics.GraphicsProfile = GraphicsProfile.HiDef;
+          
             graphics.ApplyChanges();
 
             aspectRatio = (float)graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight;
@@ -92,7 +94,11 @@ namespace IP3D_TPF
         /// all of your content.
         /// </summary>
         protected override void LoadContent()
-        {         
+        {
+
+            
+            flag1 = new Flag();
+            flag1.LoadContent(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
             graphicsDevice = GraphicsDevice;
             random = new Random();
@@ -106,7 +112,7 @@ namespace IP3D_TPF
 
             /* initialize terrain */
             float planeLength = 1f;
-            float heightRatio = 0.06f;
+            float heightRatio = 0.018f;
             Texture2D heightMapTex = Content.Load<Texture2D>("lh3d1");
             Texture2D terrainTex = Content.Load<Texture2D>("RGB");
             terrainGen = new TerrainGenerator(GraphicsDevice, planeLength, heightRatio, heightMapTex, terrainTex);
@@ -154,10 +160,10 @@ namespace IP3D_TPF
 
             sphere = new BoundingSphereCls(tank.GetPosition + Vector3.UnitY, 2.5f);
 
-            font = Content.Load<SpriteFont>("Font");
+            font = Content.Load<SpriteFont>("Conthrax");
 
             shotManager = new ShotManager(tank, tank2, shell);
-
+            cover = Content.Load<Texture2D>("CoverFase3");
 
         }
 
@@ -180,16 +186,9 @@ namespace IP3D_TPF
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            foreach(Tank player in playersList)
-            {
-                if(player.Dead)
-                {
-                    foreach (Tank p in playersList) p.Reset();
-                    break;
-                }
-            }
-
             inputs.Update();
+
+            if (inputs.ReleasedKey(Keys.Y)) tank2.IsAI = !tank2.IsAI;
 
             #region PLAYER LABEL
             // PLAYER LABELS
@@ -200,9 +199,16 @@ namespace IP3D_TPF
             /* -------------------------------------*/
             #endregion
 
-            fpsCounter.Update(gameTime);
-            tank.Update(gameTime);
-            tank2.Update(gameTime);
+            foreach (Tank t in playersList)
+            {
+                if (t.Dead)
+                {
+                    foreach (Tank p in playersList) p.Reset();
+                    break;
+                }
+
+                t.Update(gameTime);
+            }
 
             #region COLLISION RESPONSE
 
@@ -229,6 +235,7 @@ namespace IP3D_TPF
             shotManager.UpdateShots(gameTime);
 
             cameraManager.Update(gameTime);
+            fpsCounter.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -239,13 +246,15 @@ namespace IP3D_TPF
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Gray);
+            GraphicsDevice.Clear(Color.DarkGray);
 
             #region SPRITE BATCH
 
             spriteBatch.Begin();
-
+                
             spriteBatch.Draw(sky, Vector2.Zero, Color.White);
+          
+
 
             spriteBatch.End();
 
@@ -260,20 +269,24 @@ namespace IP3D_TPF
             terrainGen.Draw(GraphicsDevice, cameraManager.ActiveViewMatrix);
             tank.Draw(GraphicsDevice, cameraManager.ActiveViewMatrix, cameraManager.ActiveProjectionMatrix, aspectRatio);
             tank2.Draw(GraphicsDevice, cameraManager.ActiveViewMatrix, cameraManager.ActiveProjectionMatrix, aspectRatio);
+            flag1.Draw(Vector3.Zero, GraphicsDevice, cameraManager.ActiveProjectionMatrix, cameraManager.ActiveViewMatrix, aspectRatio, sky);
+            shotManager.DrawParticles(GraphicsDevice,cameraManager.ActiveViewMatrix, label, aspectRatio);
 
-            shotManager.DrawParticles(cameraManager.ActiveViewMatrix, label, aspectRatio);
+           
 
-            fpsCounter.Draw(spriteBatch, hasCollided, cameraManager.ActiveCameraIndex, tank2);
-
-            //playerLabel.DrawLabel(GraphicsDevice, spriteBatch, cameraTypeIndex, label, label2, cam, aspectRatio, tank, tank2);
+            
+            playerLabel.DrawLabel(GraphicsDevice, spriteBatch,cameraManager.CameraIndex  , label, label2, cameraManager.ActiveViewMatrix, aspectRatio, tank, tank2);
 
             //DEBUG PURPOSES
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, "Player Health: " + tank.Health, new Vector2(10f, 60f), Color.White);
-            spriteBatch.DrawString(font, "AI Health: " + tank2.Health, new Vector2(viewport.Bounds.Width - 120f, 60f), Color.White);
+            spriteBatch.Draw(cover, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+         
+            spriteBatch.DrawString(font, tank2.Health.ToString() , new Vector2(90f, 67f), Color.White);
+  
+     
             spriteBatch.End();
             //--------------
-
+            fpsCounter.Draw(font, spriteBatch, hasCollided, cameraManager.ActiveCameraIndex, tank2);
             base.Draw(gameTime);
         }
     }

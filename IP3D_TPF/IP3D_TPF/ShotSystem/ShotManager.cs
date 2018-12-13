@@ -57,7 +57,7 @@ namespace IP3D_TPF
                     bulletList[i].WorldMatrix.Translation.X > tank.Terrain.TerrainBounds.X ||
                     bulletList[i].WorldMatrix.Translation.Z > tank.Terrain.TerrainBounds.Y)
                 {
-                    if (bulletList[i].WorldMatrix.Translation.Y <= 0)
+                    if (bulletList[i].WorldMatrix.Translation.Y <= -50)
                     {
                         bulletList.Remove(bulletList[i]);
                         continue;
@@ -71,7 +71,7 @@ namespace IP3D_TPF
                 }
 
                 /* checks for collision */
-                if (CollisionHandler.IsColliding(bulletList[i].BoundingSphere, tank2.BoundingSphere) == true)
+                if (CollisionHandler.IsColliding(bulletList[i].bulletCollider, tank2.BoundingSphere) == true)
                 {
                     bulletList.Remove(bulletList[i]);
                     tank2.Health -= 10;
@@ -87,11 +87,11 @@ namespace IP3D_TPF
             }
         }
 
-        public void DrawParticles(Matrix viewMatrix , Texture2D texture, float aspectRatio)
+        public void DrawParticles(GraphicsDevice device,Matrix viewMatrix , Texture2D texture, float aspectRatio)
         {
             foreach (Shot shot in bulletList)
             {
-                shot.DrawParticle(viewMatrix, Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), aspectRatio, 0.1f, 4000.0f), texture);
+                shot.DrawParticle(device,viewMatrix, Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), aspectRatio, 0.1f, 4000.0f), texture);
             }
         }
     }

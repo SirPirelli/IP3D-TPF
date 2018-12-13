@@ -102,6 +102,15 @@ namespace IP3D_TPF.CameraFolder
             {
                 Position += right * Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
+
+            if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.NumPad7))
+            {
+                Position += Vector3.Up * Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.NumPad1))
+            {
+                Position -= Vector3.Up * Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
             #endregion
 
             Target = Position + direction;

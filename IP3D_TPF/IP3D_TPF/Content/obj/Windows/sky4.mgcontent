@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Users/jose_/Desktop/EDJD/2 Ano/1 Semestre/Introdução à Programação 3D/IP3D - TPF/IP3D_TPFMeshModel2/IP3D - TPF/IP3D_TPF/IP3D_TPF/Content/sky4.png</SourceFile>
-  <SourceTime>2018-11-07T11:52:57.9641507+00:00</SourceTime>
+  <SourceTime>2018-12-12T16:35:54+00:00</SourceTime>
   <DestFile>C:/Users/jose_/Desktop/EDJD/2 Ano/1 Semestre/Introdução à Programação 3D/IP3D - TPF/IP3D_TPFMeshModel2/IP3D - TPF/IP3D_TPF/IP3D_TPF/Content/bin/Windows/sky4.xnb</DestFile>
-  <DestTime>2018-11-07T11:53:29.8992951+00:00</DestTime>
+  <DestTime>2018-12-13T12:40:39.9295809+00:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-03-01T15:05:36+00:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

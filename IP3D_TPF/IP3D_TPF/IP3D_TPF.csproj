@@ -41,7 +41,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AIBehaviour\AIStates.cs" />
+    <Compile Include="Structs.cs" />
+    <Compile Include="Utilities\Enums.cs" />
     <Compile Include="AIBehaviour\SeekFlee.cs" />
     <Compile Include="AIBehaviour\WanderMovement.cs" />
     <Compile Include="BoundingSphereCls.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="CameraFolder\SurfaceFollow.cs" />
     <Compile Include="CollisionHandler.cs" />
     <Compile Include="CameraFolder\ICamera.cs" />
+    <Compile Include="Flag.cs" />
     <Compile Include="Geometry\Circle.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="ParticleSystem\Particle.cs" />

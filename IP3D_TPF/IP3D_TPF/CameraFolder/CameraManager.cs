@@ -12,6 +12,7 @@ namespace IP3D_TPF.CameraFolder
         FollowTarget followTargetCam;
         SurfaceFollow surfaceFollowCam;
         int previousActiveCameraIndex;
+        int cameraIndex;
 
         public TerrainGenerator Terrain { get; set; }
         public Viewport Viewport { get; set; }
@@ -19,7 +20,7 @@ namespace IP3D_TPF.CameraFolder
         public FollowTarget FollowTarget { get => followTargetCam; }
         public SurfaceFollow SurfaceFollow { get => surfaceFollowCam; }
         public int ActiveCameraIndex { get; set; }
-
+        public int CameraIndex { get =>cameraIndex;  }
         private List<Tank>PlayersList { get; set; }
 
         /* ESTAS PROPRIEDADES SAO TEMPORARIAS 
@@ -44,7 +45,7 @@ namespace IP3D_TPF.CameraFolder
             ActiveCameraIndex = 0;
             ActiveViewMatrix = freeCamera.ViewMatrix;
             ActiveProjectionMatrix = freeCamera.ProjectionMatrix;
-
+            cameraIndex = 3;
         }
         #endregion
 
@@ -88,23 +89,28 @@ namespace IP3D_TPF.CameraFolder
         /// </summary>
         private void CheckInputs()
         {
+           
             if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.F1))
             {
                 ActiveCameraIndex = 0;
+                cameraIndex =1;
             }
             else if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.F2))
             {
                 ActiveCameraIndex = 1;
+                cameraIndex = 2;
             }
             else if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.F3))
             {
                 followTargetCam.TargetModel = PlayersList[0];
                 ActiveCameraIndex = 2;
+                cameraIndex = 3;
             }
             else if (Game1.inputs.Check(Microsoft.Xna.Framework.Input.Keys.F4))
             {
                 followTargetCam.TargetModel = PlayersList[1];
                 ActiveCameraIndex = 2;
+                cameraIndex = 4;
             }
         }
     }

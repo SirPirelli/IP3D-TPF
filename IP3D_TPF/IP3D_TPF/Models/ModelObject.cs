@@ -1,6 +1,7 @@
 ﻿/* Created by José Pereira on 06/11/2018 
     jose_miguel_pereira@hotmail.com        */
 
+using IP3D_TPF.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -67,5 +68,21 @@ namespace IP3D_TPF
             acceleration *= maxAcceleration;
             return acceleration;
         }
+
+        /// <summary>
+        /// Calculates distance from the four sides (left, right, forward, backward) of the object to the target.
+        /// </summary>
+        /// <param name="targetPosition"></param>
+        /// <returns></returns>
+        public RelativePosition CalculateDistance(Vector3 targetPosition)
+        {
+            float distLeft = Vector3.Distance(GetPosition + Rotation.Left, targetPosition);
+            float distRight = Vector3.Distance(GetPosition + Rotation.Right, targetPosition);
+            float distForw = Vector3.Distance(GetPosition + Rotation.Forward, targetPosition);
+            float distBack = Vector3.Distance(GetPosition + Rotation.Backward, targetPosition);
+
+            return new RelativePosition(distForw, distBack, distLeft, distRight);
+        }
+
     }
 }

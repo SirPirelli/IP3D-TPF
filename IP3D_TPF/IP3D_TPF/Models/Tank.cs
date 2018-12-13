@@ -1,6 +1,7 @@
 ﻿using System;
 using BoundingSpheresTest;
 using IP3D_TPF.AIBehaviour;
+using IP3D_TPF.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,9 +22,9 @@ namespace IP3D_TPF.Models
         Texture2D   tankTexture, tankTurretTexture;
 
         Matrix      turretTransform, cannonTransform;
-
-        internal float       turretRot, cannonPitch,
-                    rotationVelocity, forwardMoveRatio,
+       
+        float turretRot, cannonPitch,
+        rotationVelocity, forwardMoveRatio,
                     moveVelocity, rotationVelocityFactor;
 
         float       wanderRotationalVelFactor;
@@ -66,6 +67,8 @@ namespace IP3D_TPF.Models
         public Vector3 Direction { get => Rotation.Forward; }
         public SeekFlee SeekFlee { get => seekFleeMovement; }
         public bool IsAI { get => isAI; set => isAI = value; }
+        public float TurretRot { get => turretRot; }
+        public float CannonPitch { get => cannonPitch; }
         public AIStates AIState { get => aIStates; }
 
         public float Health { get; set; }
@@ -170,13 +173,13 @@ namespace IP3D_TPF.Models
             WorldMatrix = CalculateWorldMatrix();
 
             /* SEPARATE MESHES TRANSFORMS AND ROTATIONS (TURRET AND CANNON) */
-            turretRot = MathHelper.Clamp(turretRot, -1.5f, 1.5f);
-            cannonPitch = MathHelper.Clamp(cannonPitch, -1f, -0.3f);
+            turretRot = MathHelper.Clamp(turretRot, -0.6f, 0.6f);
+            cannonPitch = MathHelper.Clamp(cannonPitch, -0.4f, 0.2f);
 
             //update model position and its bones
             Model.Root.Transform = WorldMatrix;
             turretBone.Transform = -turretTransform + Matrix.CreateRotationY(turretRot) + Matrix.CreateTranslation(new Vector3(0f, 450f, -80));
-            cannonBone.Transform = cannonTransform + Matrix.CreateRotationX(cannonPitch) + Matrix.CreateTranslation(new Vector3(0, 200f, 140));
+            cannonBone.Transform = -cannonTransform + Matrix.CreateRotationX(cannonPitch) + Matrix.CreateTranslation(new Vector3(0, 200f, 140));
             cannonTransform = Matrix.CreateTranslation(new Vector3(5f, 100f, 100f));
 
             Model.CopyAbsoluteBoneTransformsTo(BoneTransforms);
@@ -319,16 +322,17 @@ namespace IP3D_TPF.Models
 
         public void UpdateInputs(Inputs inputs, GameTime gameTime)
         {
-            switch(Player)
+
+            switch (Player)
             {
                 case 1:
                     /* Turret Rotation inputs */
-                    if (inputs.Check(Keys.Q)) turretRot += 0.04f;
-                    if (inputs.Check(Keys.E)) turretRot -= 0.04f;
+                    if (inputs.Check(Keys.Left)) turretRot += 0.04f;
+                    if (inputs.Check(Keys.Right)) turretRot -= 0.04f;
 
                     /* Cannon Pitch inputs */
-                    if (inputs.Check(Keys.T)) cannonPitch += 0.04f;
-                    if (inputs.Check(Keys.Y)) cannonPitch -= 0.04f;
+                    if (inputs.Check(Keys.Down)) cannonPitch += 0.04f;
+                    if (inputs.Check(Keys.Up)) cannonPitch -= 0.04f;
 
 
                     /* Tank rotation inputs */
@@ -343,12 +347,12 @@ namespace IP3D_TPF.Models
                     break;
 
                 case 2:
-                    if (inputs.Check(Keys.Up)) forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    if (inputs.Check(Keys.Down)) forwardMoveRatio -= moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (inputs.Check(Keys.I)) forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (inputs.Check(Keys.K)) forwardMoveRatio -= moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     /* Tank rotation inputs */
-                    if (inputs.Check(Keys.Left)) base.yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    if (inputs.Check(Keys.Right)) base.yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (inputs.Check(Keys.J)) base.yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (inputs.Check(Keys.L)) base.yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     break;
 
                 default:
@@ -428,97 +432,94 @@ namespace IP3D_TPF.Models
 
         private void UpdateAIState(GameTime gameTime)
         {
+            RelativePosition rp;
+            RELATIVEPOSITION relPos;
+
+            #region UPDATE BODY MOVEMENT
+
             switch (aIStates)
             {
                 case AIStates.SEEK:
 
-                    //vou descobrir a distancia entre os vetores do objecto e a posição do target.
-                    var distLeft = Vector3.Distance(GetPosition + Rotation.Left, seekFleeMovement.Target.GetPosition);
-                    var distRight = Vector3.Distance(GetPosition + Rotation.Right, seekFleeMovement.Target.GetPosition);
-                    var distForw = Vector3.Distance(GetPosition + Rotation.Forward, seekFleeMovement.Target.GetPosition);
-                    var distBack = Vector3.Distance(GetPosition + Rotation.Backward, seekFleeMovement.Target.GetPosition);
+                    rp = CalculateDistance(seekFleeMovement.Target.GetPosition);
 
                     //only moves if the distance to target is bigger than a value
-                    if (distBack > 6 && distForw > 6 && distLeft > 6 && distRight > 6)
+                    if (rp.backwardDist > 6 && rp.forwardDist > 6 && rp.leftDist > 6 && rp.rightDist > 6)
                     {
                         forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     }
                     else forwardMoveRatio = 0f;
 
                     //if the distance value between the distRight and distLeft are less than a value, it doesnt move the yaw.
-                    if (Math.Abs(distLeft - distRight) >= 0.3f)
+                    if (Math.Abs(rp.leftDist - rp.rightDist) >= 0.3f)
                     {
-                        if (distForw <= distBack)            //se o target esta a frente do objecto
-                        {
-                            if (distLeft <= distRight)       //se esta à frente e à esquerda
-                            {
-                                yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                            }
-                            else                            //se esta a direita
-                            {
-                                yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                            }
-                        }
-                        else                                // se o target esta atras do objecto
-                        {
-                            if (distLeft <= distRight)       //se esta atras e à esquerda
-                            {
-                                yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                            }
-                            else                            //se esta atras e à direita
 
-                            {
+                        relPos = MathHelpersCls.GetRelativePosition(rp);
+
+                        switch (relPos)
+                        {
+                            case RELATIVEPOSITION.FORWARDLEFT:
+                                yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                break;
+
+                            case RELATIVEPOSITION.FORWARDRIGHT:
                                 yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                            }
+                                break;
+
+                            case RELATIVEPOSITION.BACKWARDLEFT:
+                                yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                break;
+
+                            case RELATIVEPOSITION.BACKWARDRIGHT:
+                                yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                break;
                         }
                     }
 
                     break;
-
+                ////////////////////////////////////////////////////////////////////////////////////////////////
+                ///
                 case AIStates.FLEE:
 
                     //vou descobrir a distancia entre os vetores do objecto e a posição do target.
-                    distLeft = Vector3.Distance(GetPosition + Rotation.Left, seekFleeMovement.Target.GetPosition);
-                    distRight = Vector3.Distance(GetPosition + Rotation.Right, seekFleeMovement.Target.GetPosition);
-                    distForw = Vector3.Distance(GetPosition + Rotation.Forward, seekFleeMovement.Target.GetPosition);
-                    distBack = Vector3.Distance(GetPosition + Rotation.Backward, seekFleeMovement.Target.GetPosition);
+                    rp = CalculateDistance(seekFleeMovement.Target.GetPosition);
+
 
                     //only moves if the distance to target is bigger than a value
-                    if (distBack < 50 && distForw < 50 && distLeft < 50 && distRight < 50)
+                    if (rp.backwardDist < 50 && rp.forwardDist < 50 && rp.leftDist < 50 && rp.rightDist < 50)
                     {
                         forwardMoveRatio += moveVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     }
                     else aIStates = AIStates.WANDER;
 
                     //if the distance value between the distRight and distLeft are less than a value, it doesnt move the yaw.
-                    if (Math.Abs(distLeft - distRight) >= 0.3f)
+                    if (Math.Abs(rp.leftDist - rp.rightDist) >= 0.3f)
                     {
-                        if (distForw <= distBack)            //se o target esta a frente do objecto
-                        {
-                            if (distLeft <= distRight)       //se esta à frente e à esquerda
-                            {
-                                yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                            }
-                            else                            //se esta a direita
-                            {
-                                yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                            }
-                        }
-                        else                                // se o target esta atras do objecto
-                        {
-                            if (distLeft <= distRight)       //se esta atras e à esquerda
-                            {
-                                yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                            }
-                            else                            //se esta atras e à direita
+                        relPos = MathHelpersCls.GetRelativePosition(rp);
 
-                            {
+                        switch (relPos)
+                        {
+                            case RELATIVEPOSITION.FORWARDLEFT:
+                                yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                break;
+
+                            case RELATIVEPOSITION.FORWARDRIGHT:
                                 yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                            }
+                                break;
+
+                            case RELATIVEPOSITION.BACKWARDLEFT:
+                                yaw -= rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                break;
+
+                            case RELATIVEPOSITION.BACKWARDRIGHT:
+                                yaw += rotationVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                                break;
                         }
                     }
+
                     break;
 
+                //////////////////////////////////////////////////////////////////////////////////////////////////
                 case AIStates.WANDER:
 
                     var dir = wanderMovement.GeneratePoint();
@@ -528,6 +529,40 @@ namespace IP3D_TPF.Models
 
                     break;
             }
+
+            #endregion
+
+            #region UPDATE CANNON YAW AND PITCH
+
+            Matrix wt = Matrix.CreateWorld(GetPosition, Vector3.Transform(WorldMatrix.Forward, -Matrix.CreateRotationY(turretRot)), WorldMatrix.Up);
+            rp = MathHelpersCls.CalculateDistance(wt, seekFleeMovement.Target.GetPosition);
+            relPos = MathHelpersCls.GetRelativePosition(rp);
+
+            switch(relPos)
+            {
+                case RELATIVEPOSITION.FORWARDLEFT:
+                    turretRot += 0.04f;
+                    break;
+
+                case RELATIVEPOSITION.FORWARDRIGHT:
+                    turretRot -= 0.04f;
+                    break;
+
+                case RELATIVEPOSITION.BACKWARDLEFT:
+                    turretRot += 0.04f;
+                    break;
+
+                case RELATIVEPOSITION.BACKWARDRIGHT:
+                    turretRot -= 0.04f;
+                    break;
+
+                default:
+                    System.Diagnostics.Debug.WriteLine("UPDATE AI CANNON YAW: DIDNT ASSIGN A RELATIVE POSITION");
+                    break;
+            }
+
+            #endregion
+
         }
 
         #endregion

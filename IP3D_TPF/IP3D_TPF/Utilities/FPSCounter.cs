@@ -39,13 +39,13 @@ namespace IP3D_TPF
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, bool collision, int cameraIndex, Tank tank)
+        public void Draw(SpriteFont font ,SpriteBatch spriteBatch, bool collision, int cameraIndex, Tank tank)
         {
             _total_frames++;
 
             spriteBatch.Begin();
 
-            spriteBatch.DrawString(_spr_font, string.Format("FPS={0} ", _fps), new Vector2(10.0f, 20.0f), Color.White);
+            spriteBatch.DrawString(font,  _fps.ToString(), new Vector2(90.0f, 40.0f), Color.White);
 
             spriteBatch.End();
         }

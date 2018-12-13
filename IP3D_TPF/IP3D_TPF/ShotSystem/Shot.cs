@@ -1,15 +1,19 @@
-﻿using BoundingSpheresTest;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using IP3D_TPF.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+
 
 namespace IP3D_TPF
 {
     class Shot
     {
-
-        #region FIELDS
-        ModelObject parentTank;
+        ModelObject Tank;
         Model shell;
         public Matrix WorldMatrix;
         Matrix rotationMatrix;
@@ -19,52 +23,59 @@ namespace IP3D_TPF
         Vector3 forward;
         Vector3 right;
         Vector3 forwardCorrected;
-        BoundingSphereCls bulletCollider;
-        #endregion
+        public BoundingSpheresTest.BoundingSphereCls bulletCollider;
+        Matrix tankW;
+        Vector3 Translate;
 
-        #region PROPERTIES
-        public BoundingSphereCls BoundingSphere { get => bulletCollider; }
-        #endregion
 
-        #region CONSTRUCTORS
         public Shot(Tank Tank, Model shell)
         {
-            bulletCollider = new BoundingSphereCls(WorldMatrix.Translation, 1);
-            this.parentTank = Tank;
+
+            bulletCollider = new BoundingSpheresTest.BoundingSphereCls(WorldMatrix.Translation, 1);
+            this.Tank = Tank;
             this.shell = shell;
 
-            fowardHorizontal = Vector3.Transform(Vector3.UnitZ, Matrix.CreateRotationY(Tank.yaw + Tank.turretRot));
+            fowardHorizontal = Vector3.Transform(Tank.WorldMatrix.Forward, Matrix.CreateRotationY(Tank.TurretRot));
             right = Vector3.Cross(fowardHorizontal, Tank.Rotation.Up);
-            forwardCorrected = Vector3.Cross(right, Tank.Rotation.Up);         
+            forwardCorrected = Vector3.Cross(right, Tank.Rotation.Up);
 
+            forwardCorrected.Y += -Tank.CannonPitch * 0.01f;
             ////Forward Matrix of the tank
             Direction = forwardCorrected;
 
             //////Transformation of the Direction Matrix
             //Direction = Vector3.Transform(Direction, rotationMatrix);
             Direction.Normalize();
-        }
-        #endregion
+            tankW = Tank.GetWorldMatrix();
 
-        #region MAIN METHODS
+
+        }
+
+
+
         public void UpdateParticle(GameTime gameTime)
         {
-            Direction.Y= -5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            //Makes the model move in the direction of the transformed vector3
-            ScalarDirection += Direction;
+            Direction.Y -= 1.2f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            ScalarDirection += Direction * 1.2f;
 
+
+            System.Diagnostics.Debug.WriteLine(ScalarDirection.Y);
+            //  y = gt2 / 2
             //Accumulation of all matrix as the world matrix
-            WorldMatrix = Matrix.CreateTranslation(Direction.X, 8, Direction.Z)* Matrix.CreateScale(10) * parentTank.GetWorldMatrix() * Matrix.CreateTranslation(ScalarDirection)* Matrix.CreateTranslation(Direction);
-           
+            WorldMatrix = Matrix.CreateTranslation(0, 35, 0) * Matrix.CreateScale(10) * tankW * Matrix.CreateTranslation(ScalarDirection);
             //System.Diagnostics.Debug.WriteLine(Direction);
+
+
             bulletCollider.Center = this.WorldMatrix.Translation;
+
 
         }
 
 
         //Regular Draw model method
-        public void DrawParticle(Matrix view, Matrix projection, Texture2D texture)
+        public void DrawParticle(GraphicsDevice device, Matrix view, Matrix projection, Texture2D texture)
         {
+
             foreach (ModelMesh mesh in shell.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
@@ -95,7 +106,5 @@ namespace IP3D_TPF
                 mesh.Draw();
             }
         }
-        #endregion
-
     }
 }

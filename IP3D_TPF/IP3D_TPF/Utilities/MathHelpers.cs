@@ -1,4 +1,5 @@
 ﻿using System;
+using IP3D_TPF.Utilities;
 using Microsoft.Xna.Framework;
 
 namespace IP3D_TPF
@@ -174,6 +175,58 @@ namespace IP3D_TPF
             var res = Math.Atan2(direction.X, direction.Z);
             return res;
         }
+
+        #region RELATIVE POSITION
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="transform"></param>
+        /// <param name="targetPosition"></param>
+        /// <returns></returns>
+        public static RelativePosition CalculateDistance(Matrix transform, Vector3 targetPosition)
+        {
+            float distLeft = Vector3.Distance(transform.Translation + transform.Left, targetPosition);
+            float distRight = Vector3.Distance(transform.Translation + transform.Right, targetPosition);
+            float distForw = Vector3.Distance(transform.Translation + transform.Forward, targetPosition);
+            float distBack = Vector3.Distance(transform.Translation + transform.Backward, targetPosition);
+
+            return new RelativePosition(distForw, distBack, distLeft, distRight);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rp"></param>
+        /// <returns></returns>
+        public static RELATIVEPOSITION GetRelativePosition(RelativePosition rp)
+        {
+            if (rp.forwardDist <= rp.backwardDist)            //se o target esta a frente do objecto
+            {
+                if (rp.leftDist <= rp.rightDist)       //se esta à frente e à esquerda
+                {
+                    return RELATIVEPOSITION.FORWARDLEFT;
+                }
+                else                            //se esta a direita
+                {
+                    return RELATIVEPOSITION.FORWARDRIGHT;
+                }
+            }
+            else                                // se o target esta atras do objecto
+            {
+                if (rp.leftDist <= rp.rightDist)       //se esta atras e à esquerda
+                {
+                    return RELATIVEPOSITION.BACKWARDLEFT;
+                }
+                else                            //se esta atras e à direita
+                {
+                    return RELATIVEPOSITION.BACKWARDRIGHT;
+                }
+            }
+        }
+
+        #endregion
+
     }
 }
 

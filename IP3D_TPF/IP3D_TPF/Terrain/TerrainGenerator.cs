@@ -420,8 +420,9 @@ namespace IP3D_TPF
             effect.DirectionalLight1.Enabled = true;
             effect.DirectionalLight1.DiffuseColor = new Vector3(0.19f, 0.12f, 0.08f);
             effect.DirectionalLight1.Direction = new Vector3(-0.7f, -0.9f, 0.5f);
-            //effect.DirectionalLight1.SpecularColor = new Vector3(0, 0, 0);
-            effect.AmbientLightColor = new Vector3(0.1f, 0.08f, 0.01f);
+            effect.DirectionalLight1.SpecularColor = new Vector3(0, 0, 0);
+            effect.AmbientLightColor = new Vector3(0.67f, 0.67f, 0.67f);
+
             effect.FogEnabled = true;
             effect.FogColor = Color.Gray.ToVector3(); // For best results, ake this color whatever your background is.
             effect.FogStart = 0f;
