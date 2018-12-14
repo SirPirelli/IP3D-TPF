@@ -472,5 +472,6 @@ C:\Users\jose_\Downloads\SirPirelli-ip3d-tpf-ee68bfb09e30\SirPirelli-ip3d-tpf-ee
 C:\Users\jose_\Downloads\SirPirelli-ip3d-tpf-ee68bfb09e30\SirPirelli-ip3d-tpf-ee68bfb09e30\SirPirelli-ip3d-tpf-ee68bfb09e30\IP3D_TPF\IP3D_TPF\obj\x86\Debug\IP3D_TPF.pdb
 C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\AmericanFlagUV.xnb
 C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Conthrax.xnb
-C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\CoverFase3.xnb
 C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\flag.xnb
+C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\cover.xnb
+C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\cover_controls.xnb

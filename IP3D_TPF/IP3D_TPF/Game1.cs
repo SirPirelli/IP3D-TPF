@@ -60,6 +60,9 @@ namespace IP3D_TPF
         Model shell;
         ShotManager shotManager;
         Texture2D cover;
+        Texture2D coverControls;
+
+        bool showControls;
 
         internal List<Tank> PlayersList { get => playersList; set => playersList = value; }
 
@@ -78,8 +81,8 @@ namespace IP3D_TPF
         protected override void Initialize()
         {
 
-            graphics.PreferredBackBufferWidth = 1024;
-            graphics.PreferredBackBufferHeight = 576;
+            graphics.PreferredBackBufferWidth = 1366;
+            graphics.PreferredBackBufferHeight = 768;
             //   graphics.GraphicsProfile = GraphicsProfile.HiDef;
           
             graphics.ApplyChanges();
@@ -104,6 +107,7 @@ namespace IP3D_TPF
             random = new Random();
 
             hasCollided = false;
+            showControls = false;
 
             /* FPS COUNTER */
             fpsCounter = new FPSCounter();
@@ -163,7 +167,8 @@ namespace IP3D_TPF
             font = Content.Load<SpriteFont>("Conthrax");
 
             shotManager = new ShotManager(tank, tank2, shell);
-            cover = Content.Load<Texture2D>("CoverFase3");
+            cover = Content.Load<Texture2D>("cover");
+            coverControls = Content.Load<Texture2D>("cover_controls");
 
         }
 
@@ -188,6 +193,8 @@ namespace IP3D_TPF
 
             inputs.Update();
 
+            if (inputs.ReleasedKey(Keys.Enter)) showControls = !showControls;
+
             if (inputs.ReleasedKey(Keys.Y)) tank2.IsAI = !tank2.IsAI;
 
             #region PLAYER LABEL
@@ -199,40 +206,45 @@ namespace IP3D_TPF
             /* -------------------------------------*/
             #endregion
 
-            foreach (Tank t in playersList)
+            if(!showControls)
             {
-                if (t.Dead)
+
+                foreach (Tank t in playersList)
                 {
-                    foreach (Tank p in playersList) p.Reset();
-                    break;
+                    if (t.Dead)
+                    {
+                        foreach (Tank p in playersList) p.Reset();
+                        break;
+                    }
+
+                    t.Update(gameTime);
                 }
 
-                t.Update(gameTime);
+                #region COLLISION RESPONSE
+
+                /* COLLISION RESPONSE TANK - TANK */
+                hasCollided = CollisionHandler.IsColliding(tank.BoundingSphere, tank2.BoundingSphere);
+                if (hasCollided)
+                {
+                    Vector3 tankDir = tank.Velocity;
+                    if (tankDir != Vector3.Zero) tankDir.Normalize();
+                    Vector3 tankPos = tank.WorldMatrix.Translation;
+                    Vector3 newTankPos = tankPos - tank.Velocity;
+                    tank.SetPosition(newTankPos);
+
+
+                    Vector3 tankDir2 = tank2.Velocity;
+                    if (tankDir2 != Vector3.Zero) tankDir2.Normalize();
+                    Vector3 tankPos2 = tank2.WorldMatrix.Translation;
+                    Vector3 newTankPos2 = tankPos2 - tank2.Velocity;
+                    tank2.SetPosition(newTankPos2);
+                }
+
+                #endregion
+
+                shotManager.UpdateShots(gameTime);
             }
-
-            #region COLLISION RESPONSE
-
-            /* COLLISION RESPONSE TANK - TANK */
-            hasCollided = CollisionHandler.IsColliding(tank.BoundingSphere, tank2.BoundingSphere);
-            if (hasCollided)
-            {
-                Vector3 tankDir = tank.Velocity;
-                if (tankDir != Vector3.Zero) tankDir.Normalize();
-                Vector3 tankPos = tank.WorldMatrix.Translation;
-                Vector3 newTankPos = tankPos - tank.Velocity;
-                tank.SetPosition(newTankPos);
-
-
-                Vector3 tankDir2 = tank2.Velocity;
-                if (tankDir2 != Vector3.Zero) tankDir2.Normalize();
-                Vector3 tankPos2 = tank2.WorldMatrix.Translation;
-                Vector3 newTankPos2 = tankPos2 - tank2.Velocity;
-                tank2.SetPosition(newTankPos2);
-            }
-
-            #endregion
-
-            shotManager.UpdateShots(gameTime);
+            
 
             cameraManager.Update(gameTime);
             fpsCounter.Update(gameTime);
@@ -271,19 +283,18 @@ namespace IP3D_TPF
             tank2.Draw(GraphicsDevice, cameraManager.ActiveViewMatrix, cameraManager.ActiveProjectionMatrix, aspectRatio);
             flag1.Draw(Vector3.Zero, GraphicsDevice, cameraManager.ActiveProjectionMatrix, cameraManager.ActiveViewMatrix, aspectRatio, sky);
             shotManager.DrawParticles(GraphicsDevice,cameraManager.ActiveViewMatrix, label, aspectRatio);
-
            
-
-            
             playerLabel.DrawLabel(GraphicsDevice, spriteBatch,cameraManager.CameraIndex  , label, label2, cameraManager.ActiveViewMatrix, aspectRatio, tank, tank2);
 
             //DEBUG PURPOSES
             spriteBatch.Begin();
             spriteBatch.Draw(cover, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
-         
+
+            if (showControls) spriteBatch.Draw(coverControls, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+
             spriteBatch.DrawString(font, tank2.Health.ToString() , new Vector2(90f, 67f), Color.White);
-  
-     
+            spriteBatch.DrawString(font, tank.Health.ToString(), new Vector2(90f, 100f), Color.White);
+    
             spriteBatch.End();
             //--------------
             fpsCounter.Draw(font, spriteBatch, hasCollided, cameraManager.ActiveCameraIndex, tank2);
