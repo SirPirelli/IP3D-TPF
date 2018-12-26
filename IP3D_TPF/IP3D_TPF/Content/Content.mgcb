@@ -344,3 +344,27 @@
 /processorParam:TextureFormat=Color
 /build:cover_controls.png
 
+#begin Fire.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Fire.wav
+
+#begin Hit.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Hit.wav
+
+#begin battlesong.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:battlesong.wav
+
+#begin tankMoving.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:tankMoving.wav
+

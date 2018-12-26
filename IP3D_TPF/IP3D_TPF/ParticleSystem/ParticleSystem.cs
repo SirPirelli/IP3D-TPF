@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Audio;
 
 namespace IP3D_TPF
 {
@@ -14,7 +16,8 @@ namespace IP3D_TPF
         #region FIELDS
         List<Particle> particleList;
         float timer;
-
+        SoundEffect tankTrack;
+        SoundEffectInstance tankTrackInstance;
         ModelObject Tank;
         Random rand;
         Vector3 position;
@@ -37,7 +40,13 @@ namespace IP3D_TPF
             position = Tank.Translation.Translation;
         }
 
+        public void LoadContent(ContentManager content)
+        {
 
+            tankTrack = content.Load<SoundEffect>("tankMoving");
+            tankTrackInstance = tankTrack.CreateInstance();
+
+        }
         //Draws the particles available in the list of particles
         public void DrawParticles(Matrix viewMatrix, Matrix projectionMatrix, Texture2D texture)
         {
@@ -53,8 +62,11 @@ namespace IP3D_TPF
 
         public void Update(GameTime gameTime, Matrix WorldMatrix)
         {
+            tankTrackInstance.Play();
+            tankTrackInstance.Pause();
             if (position != Tank.Translation.Translation)
             {
+                tankTrackInstance.Resume();
                 //Timer that its defined trough the density given in constructor and after each cycle of time is completed the particles get added to the list
                 timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 while (timer > 0)
@@ -63,6 +75,7 @@ namespace IP3D_TPF
                     particleList.Add(new Particle(Tank, Particle, gameTime, rand));
                 }
             }
+            else tankTrackInstance.Pause();
 
             //Removing particles when reaching certain limit(Limitation on bottom only, since gravity is negative)
             for (int i = 0; i < particleList.Count; i++)

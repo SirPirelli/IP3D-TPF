@@ -14,22 +14,21 @@ namespace IP3D_TPF
 {
     class Flag: ModelObject
     {
-    
+        #region Fields
         Model flag;
         Texture2D america;
-       
-   
+        #endregion
 
-        public override void Update(GameTime gameTime)
-        {
-           
-        }
 
+        #region LoadContent
         public override void LoadContent(ContentManager content)
         {
             flag = content.Load<Model>("flag");
             america = content.Load<Texture2D>("AmericanFlagUV");
         }
+        #endregion
+
+
 
         public void Draw(Vector3 position, GraphicsDevice graphics, Matrix projection, Matrix view, float aspectRatio,Texture2D texture)
         {
@@ -64,12 +63,16 @@ namespace IP3D_TPF
             }
         }
 
+        #region Overrided MethodfromHierarchy
+        public override void Update(GameTime gameTime)
+        {
+            throw new Exception();
+        }
+
         public override void Draw(GraphicsDevice graphics, Matrix world, Matrix view, float aspectRatio)
         {
             throw new NotImplementedException();
         }
     }
-
-
- 
+        #endregion
 }

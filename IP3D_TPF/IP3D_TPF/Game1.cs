@@ -13,6 +13,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 using IP3D_TPF.Models;
 using BoundingSpheresTest;
 using System.Collections.Generic;
@@ -26,45 +27,44 @@ namespace IP3D_TPF
     /// </summary>
     public class Game1 : Game
     {
+        #region Variables
         public static GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        FPSCounter fpsCounter;
-
         public static Inputs inputs;
         public static GraphicsDevice graphicsDevice;
         public static Random random;
 
+        SpriteBatch spriteBatch;
+        FPSCounter fpsCounter;
+
+        SoundEffect battleSong;
+        SoundEffectInstance battleSongInstance;
         Viewport viewport;
+
         bool hasCollided;
+        bool showControls;
 
         float aspectRatio;
 
         TerrainGenerator terrainGen;
-        //Camera cam;
+   
         Tank tank;
         Tank tank2;
         List<Tank> playersList;
         Flag flag1;
         PlayerLabel playerLabel;
         Texture2D label, label2;
-
         Texture2D sky;
-
-        Vector2 clientResult;
-
-        BoundingSphereCls sphere;
-        SpriteFont font;
-
-        CameraManager cameraManager;
-
-        Model shell;
-        ShotManager shotManager;
         Texture2D cover;
         Texture2D coverControls;
-
-        bool showControls;
+        BoundingSphereCls sphere;
+        SpriteFont font;
+        CameraManager cameraManager;
+        Model shell;
+        ShotManager shotManager;
 
         internal List<Tank> PlayersList { get => playersList; set => playersList = value; }
+        #endregion
+
 
         public Game1()
         {
@@ -80,13 +80,12 @@ namespace IP3D_TPF
         /// </summary>
         protected override void Initialize()
         {
-
+            //Sets graphics preferred Backbuffer Size
             graphics.PreferredBackBufferWidth = 1366;
             graphics.PreferredBackBufferHeight = 768;
-            //   graphics.GraphicsProfile = GraphicsProfile.HiDef;
-          
             graphics.ApplyChanges();
-
+           
+            //Calculates value of aspect ratio based on previous numbers
             aspectRatio = (float)graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight;
 
             base.Initialize();
@@ -98,14 +97,24 @@ namespace IP3D_TPF
         /// </summary>
         protected override void LoadContent()
         {
-
-            
-            flag1 = new Flag();
-            flag1.LoadContent(Content);
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            graphicsDevice = GraphicsDevice;
+            //System random initilization
             random = new Random();
 
+            //Loads sound effects and sets properties
+            battleSong = Content.Load<SoundEffect>("battlesong");
+            battleSongInstance = battleSong.CreateInstance();
+            battleSongInstance.IsLooped = true;
+            battleSongInstance.Play();
+
+            //Sets Graphic Device and initilializes spritebatch
+            graphicsDevice = GraphicsDevice;
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            //Setup of new Flag Model
+            flag1 = new Flag();
+            flag1.LoadContent(Content);
+          
+            //Setup of initial bool values
             hasCollided = false;
             showControls = false;
 
@@ -116,7 +125,7 @@ namespace IP3D_TPF
 
             /* initialize terrain */
             float planeLength = 1f;
-            float heightRatio = 0.018f;
+            float heightRatio = 0.06f;
             Texture2D heightMapTex = Content.Load<Texture2D>("lh3d1");
             Texture2D terrainTex = Content.Load<Texture2D>("RGB");
             terrainGen = new TerrainGenerator(GraphicsDevice, planeLength, heightRatio, heightMapTex, terrainTex);
@@ -128,15 +137,21 @@ namespace IP3D_TPF
             shell = Content.Load<Model>("shell");
             sky = Content.Load<Texture2D>("sky5");
 
+            //Setup of initial tank position
             Vector3 tank1Pos = new Vector3(terrainGen.HeightMap.Size.X * 0.8f, 20, terrainGen.HeightMap.Size.Y * 0.15f);
             Vector3 tank2Pos = new Vector3(terrainGen.HeightMap.Size.X * 0.2f, 20, terrainGen.HeightMap.Size.Y * 0.85f);
 
+            //Initializes Tanks
             tank = new Tank(this, tankModel, tank1Pos, tank2Pos, terrainGen, 0.008f, 15f, 1);
             tank2 = new Tank(this, tankModel, tank2Pos, tank1Pos, terrainGen, 0.008f, 15f, 2);
+
+            //Takes care of initial content loader and Ai targets and states
             tank.LoadContent(Content);
             tank2.LoadContent(Content);
             tank2.IsAI = false;
             tank2.SeekFlee.Target = tank;
+
+            //Adds tanks to the list of players
             playersList = new List<Tank>
             {
                 tank,
@@ -158,15 +173,23 @@ namespace IP3D_TPF
             cameraManager.FollowTarget.TargetModel = tank;
             /*-------------------------------------*/
 
+
+            //Setup of label and texture loading
             playerLabel = new PlayerLabel();
             label = Content.Load<Texture2D>("label");
             label2 = Content.Load<Texture2D>("label2");
 
+            //Sets Bounding sphere for tank2 shooting range
             sphere = new BoundingSphereCls(tank.GetPosition + Vector3.UnitY, 2.5f);
 
+            //Font loading
             font = Content.Load<SpriteFont>("Conthrax");
 
+            //Initializes shotManager and loads content
             shotManager = new ShotManager(tank, tank2, shell);
+            shotManager.LoadContent(Content);
+
+            //Load of UI textures
             cover = Content.Load<Texture2D>("cover");
             coverControls = Content.Load<Texture2D>("cover_controls");
 
@@ -191,20 +214,13 @@ namespace IP3D_TPF
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            //Input update
             inputs.Update();
 
+            #region UIBehaviour
             if (inputs.ReleasedKey(Keys.Enter)) showControls = !showControls;
 
             if (inputs.ReleasedKey(Keys.Y)) tank2.IsAI = !tank2.IsAI;
-
-            #region PLAYER LABEL
-            // PLAYER LABELS
-            //Vector3 TankSpace = new Vector3(tank.WorldMatrix.Translation.X, tank.WorldMatrix.Translation.Y + 120, tank.WorldMatrix.Translation.Z);
-            //Vector3 vector = viewport.Project(tank.WorldMatrix.Translation, Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), aspectRatio, 0.1f, 4000.0f), cam.ViewMatrix, Matrix.CreateTranslation(0, 10, 0));
-            //clientResult.X = vector.X;
-            //clientResult.Y = vector.Y;
-            /* -------------------------------------*/
-            #endregion
 
             if(!showControls)
             {
@@ -244,8 +260,10 @@ namespace IP3D_TPF
 
                 shotManager.UpdateShots(gameTime);
             }
-            
 
+            #endregion
+
+            //classes updates
             cameraManager.Update(gameTime);
             fpsCounter.Update(gameTime);
 
@@ -278,6 +296,7 @@ namespace IP3D_TPF
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             #endregion
 
+            #region ModelAndTextureDraws
             terrainGen.Draw(GraphicsDevice, cameraManager.ActiveViewMatrix);
             tank.Draw(GraphicsDevice, cameraManager.ActiveViewMatrix, cameraManager.ActiveProjectionMatrix, aspectRatio);
             tank2.Draw(GraphicsDevice, cameraManager.ActiveViewMatrix, cameraManager.ActiveProjectionMatrix, aspectRatio);
@@ -298,6 +317,8 @@ namespace IP3D_TPF
             spriteBatch.End();
             //--------------
             fpsCounter.Draw(font, spriteBatch, hasCollided, cameraManager.ActiveCameraIndex, tank2);
+            #endregion
+
             base.Draw(gameTime);
         }
     }

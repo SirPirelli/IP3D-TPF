@@ -475,3 +475,125 @@ C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP
 C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\flag.xnb
 C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\cover.xnb
 C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\cover_controls.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\engine_diff_tex.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\engine_diff_tex_0.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Mud.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\tank.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\turret_alt_diff_tex.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\turret_alt_diff_tex_0.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\AmericanFlagUV.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Conthrax.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\cover.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\cover_controls.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Diffuse2.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\flag.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Font.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\GridTexture.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\label.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\label2.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\lh3d1.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\RGB.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Sand.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\shell.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\sky2.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\sky3.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\sky4.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\sky5.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Sun.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Sunteste.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\tankCorrected.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\TankUnity.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\transferir.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\transferir2.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\IP3D_TPF.exe
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\IP3D_TPF.pdb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\MonoGame.Framework.dll
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.MediaFoundation.dll
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.dll
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.XAudio2.dll
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.DXGI.dll
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.Direct3D11.dll
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.Direct2D1.dll
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.XInput.dll
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.Direct3D9.dll
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\MonoGame.Framework.xml
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.MediaFoundation.xml
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.xml
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.XAudio2.xml
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.DXGI.xml
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.Direct3D11.xml
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.Direct2D1.xml
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.XInput.xml
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.Direct3D9.xml
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\obj\x86\Debug\IP3D_TPF.csprojAssemblyReference.cache
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\obj\x86\Debug\IP3D_TPF.csproj.CoreCompileInputs.cache
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\obj\x86\Debug\IP3D_TPF.csproj.CopyComplete
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\obj\x86\Debug\IP3D_TPF.exe
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\obj\x86\Debug\IP3D_TPF.pdb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\battlesong.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Fire.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Hit.xnb
+C:\Users\Igor Lima\Desktop\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\tankMoving.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\engine_diff_tex.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\engine_diff_tex_0.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Mud.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\tank.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\turret_alt_diff_tex.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\turret_alt_diff_tex_0.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\AmericanFlagUV.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\battlesong.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Conthrax.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\cover.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\cover_controls.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Diffuse2.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Fire.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\flag.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Font.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\GridTexture.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Hit.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\label.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\label2.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\lh3d1.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\RGB.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Sand.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\shell.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\sky2.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\sky3.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\sky4.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\sky5.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Sun.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Sunteste.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\tankCorrected.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\tankMoving.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\TankUnity.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\transferir.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\transferir2.xnb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\IP3D_TPF.exe
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\IP3D_TPF.pdb
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\MonoGame.Framework.dll
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.MediaFoundation.dll
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.dll
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.XAudio2.dll
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.DXGI.dll
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.Direct3D11.dll
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.Direct2D1.dll
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.XInput.dll
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.Direct3D9.dll
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\MonoGame.Framework.xml
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.MediaFoundation.xml
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.xml
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.XAudio2.xml
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.DXGI.xml
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.Direct3D11.xml
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.Direct2D1.xml
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.XInput.xml
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\SharpDX.Direct3D9.xml
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\obj\x86\Debug\IP3D_TPF.csprojAssemblyReference.cache
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\obj\x86\Debug\IP3D_TPF.csproj.CoreCompileInputs.cache
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\obj\x86\Debug\IP3D_TPF.csproj.CopyComplete
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\obj\x86\Debug\IP3D_TPF.exe
+C:\Users\jose_\Downloads\IP3DFile\SirPirelli-ip3d-tpf-0cbd92c4c4d6\SirPirelli-ip3d-tpf-0cbd92c4c4d6\IP3D_TPF\IP3D_TPF\obj\x86\Debug\IP3D_TPF.pdb
+C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\battlesong.xnb
+C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Fire.xnb
+C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\Hit.xnb
+C:\Users\jose_\Desktop\EDJD\2 Ano\1 Semestre\Introdução à Programação 3D\IP3D - TPF\IP3D_TPFMeshModel2\IP3D - TPF\IP3D_TPF\IP3D_TPF\bin\Windows\x86\Debug\Content\tankMoving.xnb

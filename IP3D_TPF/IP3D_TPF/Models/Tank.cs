@@ -142,7 +142,7 @@ namespace IP3D_TPF.Models
             aIStates = AIStates.WANDER;
 
             particleSystem = new ParticleSystem(this, particle);
-
+            particleSystem.LoadContent(content);
         }
 
         public override void Update(GameTime gameTime)

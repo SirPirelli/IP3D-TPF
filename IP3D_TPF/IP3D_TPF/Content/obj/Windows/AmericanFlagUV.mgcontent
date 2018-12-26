@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Users/jose_/Desktop/EDJD/2 Ano/1 Semestre/Introdução à Programação 3D/IP3D - TPF/IP3D_TPFMeshModel2/IP3D - TPF/IP3D_TPF/IP3D_TPF/Content/AmericanFlagUV.png</SourceFile>
-  <SourceTime>2018-10-10T16:41:37.6534026+01:00</SourceTime>
+  <SourceTime>2018-12-14T14:17:13+00:00</SourceTime>
   <DestFile>C:/Users/jose_/Desktop/EDJD/2 Ano/1 Semestre/Introdução à Programação 3D/IP3D - TPF/IP3D_TPFMeshModel2/IP3D - TPF/IP3D_TPF/IP3D_TPF/Content/bin/Windows/AmericanFlagUV.xnb</DestFile>
-  <DestTime>2018-12-13T12:40:45.9762491+00:00</DestTime>
+  <DestTime>2018-12-26T16:02:52.8590104+00:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-03-01T15:05:36+00:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
